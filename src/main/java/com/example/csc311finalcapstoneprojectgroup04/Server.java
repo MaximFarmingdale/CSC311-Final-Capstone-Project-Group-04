@@ -3,7 +3,7 @@ package com.example.csc311finalcapstoneprojectgroup04;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-
+///  this is jyst some experimentation with dealing with a server
 public class Server {
     private ServerSocket serverSocket;
 

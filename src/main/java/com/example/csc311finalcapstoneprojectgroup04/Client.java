@@ -4,8 +4,8 @@ import java.io.*;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Scanner;
-
-
+/// testing out network and socket programming.
+/// ## Work in progress
 public class Client {
     private Socket socket;
     private BufferedReader BufferedReader;

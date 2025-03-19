@@ -3,7 +3,9 @@ package com.example.csc311finalcapstoneprojectgroup04;
 import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
-
+/// testing out network and socket programming.
+/// ## Work in progress
+/// uses threads to handle multiple users at the same time
 public class ClientHandler implements Runnable {
     private static ArrayList<ClientHandler> clients = new ArrayList<>();
     private Socket socket;
