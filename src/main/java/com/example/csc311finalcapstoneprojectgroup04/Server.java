@@ -3,7 +3,7 @@ package com.example.csc311finalcapstoneprojectgroup04;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-///  this is jyst some experimentation with dealing with a server
+///  this is just some experimentation with dealing with a server
 public class Server {
     private ServerSocket serverSocket;
 
@@ -16,10 +16,8 @@ public class Server {
                 Socket socket = serverSocket.accept();
                 System.out.println("Accepted connection from " + socket.getRemoteSocketAddress());
                 ClientHandler clientHandler = new ClientHandler(socket);
-
                 Thread thread = new Thread(clientHandler);
                 thread.start();
-
             }
         } catch (IOException e) {
             throw new RuntimeException(e);

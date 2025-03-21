@@ -1,124 +1,81 @@
 package com.example.csc311finalcapstoneprojectgroup04;
 
 import java.io.*;
+import java.io.*;
 import java.net.Socket;
-import java.net.UnknownHostException;
-import java.util.Scanner;
-/// testing out network and socket programming.
-/// ## Work in progress
+
 public class Client {
     private Socket socket;
-    private BufferedReader BufferedReader;
-    private BufferedWriter BufferedWriter;
+    private BufferedReader bufferedReader;
+    private BufferedWriter bufferedWriter;
     private String username;
-    private String password;
 
-    public Client(Socket socket, String username, String password) {
+    public Client(Socket socket, String username) {
         try {
             this.socket = socket;
-            this.BufferedWriter= new BufferedWriter(
-                    new OutputStreamWriter(socket.getOutputStream()));
-            this.BufferedReader = new BufferedReader(
-                    new InputStreamReader(socket.getInputStream()));
+            this.bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+            this.bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             this.username = username;
-            this.password = password;
-        }
-        catch (Exception e) {
-            closeClient(socket, BufferedWriter, BufferedReader);
+            bufferedWriter.write(username);
+            bufferedWriter.newLine();
+            bufferedWriter.flush();
+        } catch (IOException e) {
+            closeClient();
         }
     }
+
     public void sendMessage(String message) {
         try {
-            BufferedWriter.write(username);
-            BufferedWriter.newLine();
-            BufferedWriter.flush();
-
-            Scanner scanner = new Scanner(System.in);
-            while (socket.isConnected()) {
-                String line = scanner.nextLine();
-                BufferedWriter.write(username + ": " + message);
-                BufferedWriter.newLine();
-                BufferedWriter.flush();
+            if (socket.isConnected()) {
+                bufferedWriter.write(username + ": " + message);
+                bufferedWriter.newLine();
+                bufferedWriter.flush();
             }
         } catch (IOException e) {
-            closeClient(socket, BufferedWriter, BufferedReader);
+            closeClient();
         }
     }
+
     public void sendRaceUpdate(double percentage) {
         try {
-            BufferedWriter.write(username);
-            BufferedWriter.newLine();
-            BufferedWriter.flush();
-
-            Scanner scanner = new Scanner(System.in);
-            while (socket.isConnected()) {
-                String line = scanner.nextLine();
-                BufferedWriter.write(percentage + ": " + username);
-                BufferedWriter.newLine();
-                BufferedWriter.flush();
+            if (socket.isConnected()) {
+                bufferedWriter.write("UPDATE " + username + " " + percentage);
+                bufferedWriter.newLine();
+                bufferedWriter.flush();
             }
-        }
-        catch (IOException e) {
-            closeClient(socket, BufferedWriter, BufferedReader);
+        } catch (IOException e) {
+            closeClient();
         }
     }
 
-    public void closeClient(Socket socket, BufferedWriter bufferedWriter, BufferedReader bufferedReader) {
+    public void getMessage() {
+        new Thread(() -> {
+            try {
+                while (true) {
+                    String receivedMessage = bufferedReader.readLine();
+                    if (receivedMessage == null)
+                        break;
+                    System.out.println(receivedMessage);
+                }
+            } catch (IOException e) {
+                closeClient();
+            }
+        }).start();
+    }
+
+    public void closeClient() {
         try {
-            if(BufferedWriter != null) {
+            if (bufferedWriter != null) {
                 bufferedWriter.close();
             }
-            if(BufferedReader != null) {
-                BufferedReader.close();
+            if (bufferedReader != null) {
+                bufferedReader.close();
             }
-            if(socket != null) {
+            if (socket != null) {
                 socket.close();
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-    public boolean valid_login() {
-        return true;
-    }
-    public void getMessage() {
-        new Thread(new Runnable() {
-            public void run() {
-                String sentMessage;
-                while(socket.isConnected()) {
-                    try {
-                        sentMessage = BufferedReader.readLine();
-                        if (isRaceupdate())
-                            updateRace(sentMessage);
-                        System.out.println(sentMessage);
-                    } catch (IOException e) {
-                        closeClient(socket, BufferedWriter, BufferedReader);
-                    }
-                }
-            }
-        }).start();
-    }
-    public static void main(String[] args) throws IOException {
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Enter your username: ");
-        String username = scanner.nextLine();
-        if (username.equals("")) {
-
-        }
-        System.out.println("Enter your password: ");
-        String password = scanner.nextLine();
-        Socket socket = new Socket("localhost", 1234);
-        Client client = new Client(socket, username, password);
-        client.getMessage();
-        client.sendMessage("hi");
-    }
-    public boolean existingUsername(String username) {
-        return true;
-    }
-    public boolean isRaceupdate() {
-        return true;
-    }
-    public void updateRace(String message) {
-
     }
 }

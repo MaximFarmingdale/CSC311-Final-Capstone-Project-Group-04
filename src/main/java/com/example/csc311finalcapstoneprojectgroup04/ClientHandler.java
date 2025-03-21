@@ -1,14 +1,19 @@
 package com.example.csc311finalcapstoneprojectgroup04;
 
+import javafx.scene.control.TextField;
+import javafx.scene.text.TextFlow;
+
 import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
+
 /// testing out network and socket programming.
 /// ## Work in progress
 /// uses threads to handle multiple users at the same time
 public class ClientHandler implements Runnable {
-    private static ArrayList<ClientHandler> clients = new ArrayList<>();
-    private Socket socket;
+    private static List<ClientHandler> clients = new CopyOnWriteArrayList<>();    private Socket socket;
     private BufferedReader BufferedReader;
     private BufferedWriter BufferedWriter;
     private PrintWriter PrintWriter;
@@ -23,7 +28,7 @@ public class ClientHandler implements Runnable {
                     new InputStreamReader(socket.getInputStream()));
             this.clienUserName = BufferedReader.readLine();
             clients.add(this);
-            sendMessage(clienUserName + "has entered the game");
+            sendMessage(clienUserName + " has entered the game");
 
         } catch (Exception e) {
             closeClient(socket, BufferedWriter, BufferedReader);
@@ -49,7 +54,7 @@ public class ClientHandler implements Runnable {
             try {
                 if(!client.clienUserName.equals(clienUserName)) {
                     client.BufferedWriter.write(message);
-                    client.BufferedWriter.newLine(); //not needed for this game
+                    client.BufferedWriter.newLine();
                     client.BufferedWriter.flush();
                 }
             }
@@ -60,7 +65,7 @@ public class ClientHandler implements Runnable {
     }
     public void removeClient() {
         clients.remove(this);
-        sendMessage("User: " + clienUserName + " has left!");
+        sendMessage("user: " + clienUserName + " has left!");
     }
     public void closeClient(Socket socket, BufferedWriter bufferedWriter, BufferedReader bufferedReader) {
         removeClient();
