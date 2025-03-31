@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+
+<BorderPane prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.csc311finalcapstoneprojectgroup04.SplashScreenTestController">
+   <top>
+      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Welcome to Typing Racer" wrappingWidth="590.1366062164307" BorderPane.alignment="CENTER">
+         <font>
+            <Font size="52.0" />
+         </font>
+      </Text>
+   </top>
+   <center>
+      <VBox alignment="CENTER" prefHeight="500.0" prefWidth="1280.0" BorderPane.alignment="CENTER">
+         <children>
+            <Text nodeOrientation="LEFT_TO_RIGHT" strokeType="OUTSIDE" strokeWidth="0.0" text="Sign in to your account Using your username and password" wrappingWidth="767.0254096984863">
+               <font>
+                  <Font size="27.0" />
+               </font>
+            </Text>
+            <HBox alignment="CENTER" prefHeight="42.0" prefWidth="1280.0">
+               <children>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Don't have an account? " wrappingWidth="255.0255527496338">
+                     <font>
+                        <Font size="24.0" />
+                     </font>
+                  </Text>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="SIgnup" underline="true" wrappingWidth="82.58120536804199">
+                     <font>
+                        <Font size="24.0" />
+                     </font>
+                  </Text>
+               </children>
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
+            </HBox>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Username" wrappingWidth="82.62414169311523">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Text>
+            <TextField alignment="CENTER" nodeOrientation="LEFT_TO_RIGHT" prefHeight="25.0" prefWidth="1216.0" />
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Password">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Text>
+            <TextField />
+         </children>
+      </VBox>
+   </center>
+</BorderPane>
