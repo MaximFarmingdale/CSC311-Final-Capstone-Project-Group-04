@@ -10,13 +10,14 @@ import java.util.stream.IntStream;
 /// ## Work in progress
 /// uses threads to handle multiple users at the same time
 public class ClientHandler implements Runnable {
-    private static List<ClientHandler> clients = new CopyOnWriteArrayList<>();    private Socket socket;
+    public static List<ClientHandler> clients = new CopyOnWriteArrayList<>();
+    private Socket socket;
     private BufferedReader chatBufferedReader;
     private BufferedWriter chatBufferedWriter;
     private BufferedReader raceBufferedReader;
     private BufferedWriter raceBufferedWriter;
     private PrintWriter PrintWriter;
-    private String clienUserName;
+    public String clienUserName;
 
     public ClientHandler(Socket socket) {
         try {
@@ -26,8 +27,7 @@ public class ClientHandler implements Runnable {
             this.chatBufferedReader = new BufferedReader(
                     new InputStreamReader(socket.getInputStream()));
             this.raceBufferedWriter = new BufferedWriter(
-                    new OutputStreamWriter(socket.getOutputStream())
-            );
+                    new OutputStreamWriter(socket.getOutputStream()));
             this.clienUserName = chatBufferedReader.readLine();
             clients.add(this);
             sendMessage(clienUserName + " has entered the game");
@@ -35,12 +35,6 @@ public class ClientHandler implements Runnable {
         } catch (Exception e) {
             closeClient(socket, chatBufferedWriter, chatBufferedReader);
         }
-    }
-    public void testExample() {
-        IntStream.rangeClosed(1, 10)
-                .map(x -> x * x)
-                .filter(x -> x % 2 == 0)
-                .forEach(System.out::println);
     }
     @Override
     public void run() {
@@ -94,6 +88,5 @@ public class ClientHandler implements Runnable {
     public static void main(String[] args) throws IOException {
         ClientHandler clientHandler = new ClientHandler(new Socket("localhost", 1234
         ));
-        clientHandler.testExample();
     }
 }

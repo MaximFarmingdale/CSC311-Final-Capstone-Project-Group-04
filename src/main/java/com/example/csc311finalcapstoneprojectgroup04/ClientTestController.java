@@ -1,7 +1,9 @@
 package com.example.csc311finalcapstoneprojectgroup04;
 
+import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Array;
+import java.net.InetAddress;
 import java.net.Socket;
 import java.net.URL;
 import java.net.UnknownHostException;
@@ -11,12 +13,18 @@ import java.util.ResourceBundle;
 import java.util.Scanner;
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.text.TextFlow;
+import javafx.stage.Stage;
+import javafx.stage.Window;
 
 import javax.imageio.IIOException;
 
@@ -62,12 +70,27 @@ Its fleece was white as snow.""";
             if (username.isEmpty()) {
                 username = inputField.getText();
                 pastLabel.setText(text);
-                socket = new Socket("localhost", 1234);
-                client = new Client(socket, username);
-                client.getMessage();
+
+                Window window = ((Node) event.getSource()).getScene().getWindow();
+                Stage stage = (Stage) window;
+                changeController(stage);
             }
         }
     }
+    public void changeController(Stage stage) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("WaitingRoomTestController.fxml"));
+            Parent newRoot = loader.load();
+            WaitingRoomTestController controller = loader.getController();
+            controller.enterWaitingRoom(username);
+            Scene scene = new Scene(newRoot, 1270, 720);
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
