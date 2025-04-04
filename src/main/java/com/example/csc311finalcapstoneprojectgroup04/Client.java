@@ -36,17 +36,6 @@ public class Client {
         }
     }
 
-    public void sendRaceUpdate(double percentage) {
-        try {
-            if (socket.isConnected()) {
-                bufferedWriter.write("UPDATE " + username + " " + percentage);
-                bufferedWriter.newLine();
-                bufferedWriter.flush();
-            }
-        } catch (IOException e) {
-            closeClient();
-        }
-    }
 
     public void getMessage() {
         new Thread(() -> {

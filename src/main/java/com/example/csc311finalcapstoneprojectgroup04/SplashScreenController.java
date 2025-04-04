@@ -53,8 +53,20 @@ public class SplashScreenController implements Initializable {
 
     @FXML
     void login(ActionEvent event) {
+        //null-pointer check
+        if(usernameField.getText().equals("")) {
+            problemText.setText("Username is empty!");
+            errorColor(usernameField);
+            return;
+        }
         String username = usernameField.getText();
+        if(passwordField.getText().equals("")) {
+            problemText.setText("Password is empty!");
+            errorColor(passwordField);
+            return;
+        }
         String password = passwordField.getText();
+        //if the user is signing up
         if(newUser) {
             if (checkUniqueUsername(username)) {
                 users.add(new User(username, password));
@@ -64,6 +76,7 @@ public class SplashScreenController implements Initializable {
                 errorColor(usernameField);
             }
         }
+        //if the user is logging in
         else {
             if (!checkUniqueUsername(username)) {
                 if(getUser(username).checkPassword(password)) {
@@ -81,6 +94,7 @@ public class SplashScreenController implements Initializable {
             }
         }
     }
+    //checks if the username is already in use or not
     private boolean checkUniqueUsername(String username) {
         if (username == null || username.trim().isEmpty()) {
             return false;
@@ -92,6 +106,7 @@ public class SplashScreenController implements Initializable {
         }
         return true;
     }
+    //helper method to get back a user object with a given username
     private User getUser(String username) {
         for (User user : users) {
             if(user.username.equals(username)) {
@@ -100,6 +115,8 @@ public class SplashScreenController implements Initializable {
         }
         return null;
     }
+    //changes the color of an incorrect field to make the user know they filled it in wrong
+    //change the name of this method later
     private void errorColor(TextField field) {
         if (field.equals(usernameField)) {
             passwordField.setStyle("-fx-border-color: null");
@@ -110,6 +127,7 @@ public class SplashScreenController implements Initializable {
             passwordField.setStyle("-fx-border-color: RED");
         }
     }
+    //Lets the user switch from signing in to logging in and vice versa
     @FXML
     void switchModes(MouseEvent event) {
         if(newUser) {
@@ -145,6 +163,7 @@ public class SplashScreenController implements Initializable {
         }
     }
      */
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         //add code to get user class from a database
