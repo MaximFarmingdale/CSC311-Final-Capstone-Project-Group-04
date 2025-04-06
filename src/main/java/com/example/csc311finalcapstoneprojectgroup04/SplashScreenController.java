@@ -147,14 +147,13 @@ public class SplashScreenController implements Initializable {
             signUpText.setText("Log In");
         }
     }
-    //add when you make the next controller
-    /*
-    public void changeController(Stage stage) {
+
+    public void changeController(Stage stage, User currentUser) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("WaitingRoomTestController.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("HostOrJoin.fxml"));
             Parent newRoot = loader.load();
-            WaitingRoomTestController controller = loader.getController();
-            controller.enterWaitingRoom(user);
+            HostOrJoinController controller = loader.getController();
+            controller.enterHostOrJoin(currentUser);
             Scene scene = new Scene(newRoot, 1270, 720);
             stage.setScene(scene);
             stage.show();
@@ -162,7 +161,6 @@ public class SplashScreenController implements Initializable {
             e.printStackTrace();
         }
     }
-     */
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {

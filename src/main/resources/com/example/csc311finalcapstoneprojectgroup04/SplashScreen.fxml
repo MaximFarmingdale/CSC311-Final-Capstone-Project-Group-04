@@ -53,7 +53,7 @@
                   <Font size="16.0" />
                </font>
             </Text>
-            <TextField fx:id="passwordField" />
+            <TextField fx:id="passwordField" alignment="CENTER" />
             <Button fx:id="signInButton" mnemonicParsing="false" onAction="#login" prefHeight="25.0" prefWidth="349.0" text="SIgn in" />
             <Text fx:id="problemText" strokeType="OUTSIDE" strokeWidth="0.0" />
          </children>
