@@ -8,7 +8,7 @@ public class Client {
     private ObjectOutputStream objectOutputStream;
     private ObjectInputStream objectInputStream;
     private String username;
-
+    /// Client class which is used by users who are joining a lobby
     public Client(Socket socket, String username) {
         try {
             this.socket = socket;

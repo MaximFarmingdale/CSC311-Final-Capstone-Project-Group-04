@@ -2,8 +2,9 @@ package com.example.csc311finalcapstoneprojectgroup04;
 
 import java.io.Serializable;
 
-/// User Object which pulls from the database and is also sent to other users
-/// to update race progress
+/// User Object, which pulls from the database and is also sent to other users
+/// to update race progress.
+/// get rid of password in the final version
 public class User implements Serializable {
     public String username;
     private String password;

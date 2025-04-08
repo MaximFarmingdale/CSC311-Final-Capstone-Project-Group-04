@@ -28,10 +28,7 @@ import javafx.stage.Window;
 
 import javax.imageio.IIOException;
 
-/// test controller to test networking
-/// ## Not to be used for anything other than experimenting
-/// So far very basic implementation of the network sending over user input in
-/// a text field to other clients.
+/// this is a former test class which I will be getting rid of
 public class ClientTestController implements Initializable {
 
 
@@ -73,10 +70,11 @@ Its fleece was white as snow.""";
 
                 Window window = ((Node) event.getSource()).getScene().getWindow();
                 Stage stage = (Stage) window;
-                changeController(stage);
+                //changeController(stage);
             }
         }
     }
+    /*
     public void changeController(Stage stage) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("WaitingRoomTestController.fxml"));
@@ -90,7 +88,7 @@ Its fleece was white as snow.""";
             e.printStackTrace();
         }
     }
-
+*/
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {

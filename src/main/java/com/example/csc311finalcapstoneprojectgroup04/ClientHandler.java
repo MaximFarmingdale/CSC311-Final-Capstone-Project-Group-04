@@ -5,8 +5,6 @@ import java.net.Socket;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-/// testing out network and socket programming.
-/// ## Work in progress
 /// uses threads to handle multiple users at the same time
 public class ClientHandler implements Runnable {
     public static List<ClientHandler> clients = new CopyOnWriteArrayList<>();
@@ -15,15 +13,14 @@ public class ClientHandler implements Runnable {
     private ObjectInputStream objectInputStream;
     public String clientUserName;
 
-    public ClientHandler(Socket socket) {
+    public ClientHandler(Socket socket, String clientUserName) {
         try {
             this.socket = socket;
             this.objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
             this.objectInputStream = new ObjectInputStream(socket.getInputStream());
-            this.clientUserName = objectInputStream.readObject().toString();
+            this.clientUserName = clientUserName;
             clients.add(this);
             sendMessage(new Message(clientUserName, clientUserName + " has entered the game"));
-
         } catch (Exception e) {
             closeClient();
         }
@@ -33,7 +30,7 @@ public class ClientHandler implements Runnable {
         Message message;
         while (socket.isConnected()) {
             try {
-                message = new Message(clientUserName, objectInputStream.readLine());
+                message = new Message(clientUserName, objectInputStream.readLine()); //change this
                 sendMessage(message);
             }
              catch (IOException e) {
@@ -87,11 +84,10 @@ public class ClientHandler implements Runnable {
                 socket.close();
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            e.printStackTrace(); //add better logging
         }
     }
     public static void main(String[] args) throws IOException {
-        ClientHandler clientHandler = new ClientHandler(new Socket("localhost", 1234
-        ));
+        //ClientHandler clientHandler = new ClientHandler(new Socket("localhost", 1234));
     }
 }
