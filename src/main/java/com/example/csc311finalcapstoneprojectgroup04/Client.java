@@ -3,22 +3,20 @@ package com.example.csc311finalcapstoneprojectgroup04;
 import java.io.*;
 import java.io.*;
 import java.net.Socket;
-
 public class Client {
     private Socket socket;
-    private BufferedReader bufferedReader;
-    private BufferedWriter bufferedWriter;
+    private ObjectOutputStream objectOutputStream;
+    private ObjectInputStream objectInputStream;
     private String username;
-
+    /// Client class which is used by users who are joining a lobby
     public Client(Socket socket, String username) {
         try {
             this.socket = socket;
-            this.bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
-            this.bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            this.objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
+            this.objectInputStream = new ObjectInputStream(socket.getInputStream());
             this.username = username;
-            bufferedWriter.write(username);
-            bufferedWriter.newLine();
-            bufferedWriter.flush();
+            objectOutputStream.writeObject(username);//check if its necessary to send a new line
+            objectOutputStream.flush();
         } catch (IOException e) {
             closeClient();
         }
@@ -27,37 +25,41 @@ public class Client {
     public void sendMessage(String message) {
         try {
             if (socket.isConnected()) {
-                bufferedWriter.write(username + ": " + message);
-                bufferedWriter.newLine();
-                bufferedWriter.flush();
+                objectOutputStream.writeObject(username + ": " + message);
+                objectOutputStream.flush();
             }
+        } catch (IOException e) {
+            closeClient();
+        }
+    }
+    public void sendMessage(User user) {
+        try {
+            objectOutputStream.writeObject(user);
+            objectOutputStream.flush();
         } catch (IOException e) {
             closeClient();
         }
     }
 
-    public void sendRaceUpdate(double percentage) {
-        try {
-            if (socket.isConnected()) {
-                bufferedWriter.write("UPDATE " + username + " " + percentage);
-                bufferedWriter.newLine();
-                bufferedWriter.flush();
-            }
-        } catch (IOException e) {
-            closeClient();
-        }
-    }
 
     public void getMessage() {
         new Thread(() -> {
             try {
                 while (true) {
-                    String receivedMessage = bufferedReader.readLine();
-                    if (receivedMessage == null)
-                        break;
+                    User user;
+                    String receivedMessage = "";
+                    Object receivedObject = objectInputStream.readObject();
+                    if(receivedObject instanceof User) {
+                        user = (User) receivedObject;
+                    }
+                    if(receivedObject instanceof String) {
+                        receivedMessage = (String) receivedObject;
+                    }
                     System.out.println(receivedMessage);
                 }
             } catch (IOException e) {
+                closeClient();
+            } catch (ClassNotFoundException e) {
                 closeClient();
             }
         }).start();
@@ -65,11 +67,11 @@ public class Client {
 
     public void closeClient() {
         try {
-            if (bufferedWriter != null) {
-                bufferedWriter.close();
+            if (objectOutputStream != null) {
+                objectOutputStream.close();
             }
-            if (bufferedReader != null) {
-                bufferedReader.close();
+            if (objectInputStream != null) {
+                objectInputStream.close();
             }
             if (socket != null) {
                 socket.close();
