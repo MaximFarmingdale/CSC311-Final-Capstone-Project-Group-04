@@ -1,4 +1,8 @@
-package com.example.csc311finalcapstoneprojectgroup04;
+package com.example.csc311finalcapstoneprojectgroup04.TCPNetworking;
+
+import com.example.csc311finalcapstoneprojectgroup04.NetworkMessagesandUpdate.Message;
+import com.example.csc311finalcapstoneprojectgroup04.NetworkMessagesandUpdate.Ping;
+import com.example.csc311finalcapstoneprojectgroup04.User;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -6,7 +10,7 @@ import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-import static com.example.csc311finalcapstoneprojectgroup04.ClientHandler.clients;
+import static com.example.csc311finalcapstoneprojectgroup04.TCPNetworking.ClientHandler.clients;
 
 /// Server class which takes in input from the user and uses a client handler to send those inputs to every user
 /// Make sure to add a way to send over the amount of users later when a server pings the lobby

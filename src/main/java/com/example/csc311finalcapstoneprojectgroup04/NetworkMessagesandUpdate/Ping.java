@@ -1,4 +1,4 @@
-package com.example.csc311finalcapstoneprojectgroup04;
+package com.example.csc311finalcapstoneprojectgroup04.NetworkMessagesandUpdate;
 /// ping enum for sending pings
 public class Ping {
     enum PingStatus {
