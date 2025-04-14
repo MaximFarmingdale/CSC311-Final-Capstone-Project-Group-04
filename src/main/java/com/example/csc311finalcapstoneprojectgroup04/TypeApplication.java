@@ -4,9 +4,11 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.io.IOException;
 /// Application
+@SpringBootApplication
 public class TypeApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
