@@ -1,5 +1,6 @@
 package com.example.csc311finalcapstoneprojectgroup04.Eureka;
 
+import com.netflix.appinfo.InstanceInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -8,9 +9,8 @@ import org.springframework.cloud.netflix.eureka.EurekaInstanceConfigBean;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
-
-@Service
-public class ClientEureka implements CommandLineRunner {
+@SpringBootApplication
+class ClientEureka implements CommandLineRunner {
 
     @Autowired
     private EurekaInstanceConfigBean instance;
@@ -19,9 +19,10 @@ public class ClientEureka implements CommandLineRunner {
         metadata.put("host-name", username);
         metadata.put("current-players", String.valueOf(numPlayers));
         metadata.put("active-game", String.valueOf(active));
+        instance.setMetadataMap(metadata);
     }
     public static void main(String[] args) {
-        SpringApplication.run(EurekaServer.class, args);
+        SpringApplication.run(ClientEureka.class, args);
     }
 
     @Override

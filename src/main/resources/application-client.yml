@@ -4,9 +4,9 @@ spring:
 
 eureka:
   client:
-    #set register to false as we are going to enable it if the user is hosting
-    register-with-eureka: false
-    fetch-registry: false
+    #set register to false in the future
+    register-with-eureka: true
+    fetch-registry: true
     service-url:
       defaultZone: http://localhost:8761/eureka
   instance:
@@ -14,4 +14,4 @@ eureka:
     metadata-map:
       host-name: "Max"
       current-players: "0"
-      active-game: true
+      active-game: "true"
