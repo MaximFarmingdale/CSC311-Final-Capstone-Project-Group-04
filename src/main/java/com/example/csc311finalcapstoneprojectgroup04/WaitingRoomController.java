@@ -11,15 +11,8 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import java.util.List;
 
 /// controller for the lobby select mode
-@SpringBootApplication
-@EnableDiscoveryClient
-public class WaitingRoomController {
-    @Autowired
-    private EurekaClient eurekaClient;
 
-    public List<InstanceInfo> getLobbies() {
-        return eurekaClient
-                .getApplication("lobby").getInstances();
-    }
+public class WaitingRoomController {
+
 
 }

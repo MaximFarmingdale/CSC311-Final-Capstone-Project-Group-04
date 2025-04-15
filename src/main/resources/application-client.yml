@@ -1,11 +1,12 @@
 spring:
   application:
-    name: lobby
+    name: csc311finalcapstoneprojectgroup04
 
 eureka:
   client:
-    register-with-eureka: true
-    fetch-registry: true
+    #set register to false as we are going to enable it if the user is hosting
+    register-with-eureka: false
+    fetch-registry: false
     service-url:
       defaultZone: http://localhost:8761/eureka
   instance:
