@@ -12,12 +12,12 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <junit.version>5.10.2</junit.version>
-        <spring-cloud.version>2024.0.1</spring-cloud.version>
+        <spring-cloud.version>2023.0.0</spring-cloud.version>
     </properties>
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.4.4</version>
+        <version>3.2.0</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
@@ -80,6 +80,7 @@
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+            <version>4.1.0</version>
             <exclusions>
                 <exclusion>
                     <groupId>com.sun.jersey</groupId>
@@ -94,6 +95,7 @@
                     <artifactId>jersey-apache-client4</artifactId>
                 </exclusion>
             </exclusions>
+
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
