@@ -62,7 +62,7 @@ class ClientEureka implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         registerLobby("max", 10, true);
-        Thread.sleep(10000);
+        Thread.sleep(10000); //only if necessary
         fillList();
     }
 }

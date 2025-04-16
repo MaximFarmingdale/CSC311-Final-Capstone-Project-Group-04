@@ -1,3 +1,4 @@
+/*
 package com.example.csc311finalcapstoneprojectgroup04.Eureka;
 
 import org.springframework.boot.SpringApplication;
@@ -11,3 +12,4 @@ public class EurekaServer {
     }
 
 }
+*/

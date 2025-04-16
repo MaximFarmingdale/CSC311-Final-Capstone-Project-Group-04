@@ -4,12 +4,14 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.io.IOException;
 /// Application
 @SpringBootApplication
-public class TypeApplication extends Application {
+public class TypeApplication extends Application implements CommandLineRunner {
     @Override
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(TypeApplication.class.getResource("SplashScreen.fxml"));//change to whatever fxml file you are testing
@@ -20,6 +22,11 @@ public class TypeApplication extends Application {
     }
 
     public static void main(String[] args) {
+        SpringApplication.run(TypeApplication.class, args);
+    }
+
+    @Override
+    public void run(String... args) throws Exception {
         launch();
     }
 }
