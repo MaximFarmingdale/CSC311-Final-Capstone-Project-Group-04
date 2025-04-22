@@ -150,7 +150,7 @@ public class SplashScreenController implements Initializable {
 
     public void changeController(Stage stage, User currentUser) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("HostOrJoin.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("MainMenuScreen.fxml"));
             Parent newRoot = loader.load();
             HostOrJoinController controller = loader.getController();
             controller.enterHostOrJoin(currentUser);
