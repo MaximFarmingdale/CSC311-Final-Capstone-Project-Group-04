@@ -11,7 +11,7 @@ public final class Lobby {
     private int numPlayers = 0;
     private boolean activeRace = false;
     private String text;
-    private final int MaxPlayers = 3;
+    private final int maxPlayers = 3;
     private final int port = 1234;
     private int currentPlayers = 0;
     public Lobby(String LobbyIP, String LobbyHostName) {
@@ -35,4 +35,7 @@ public final class Lobby {
     public String getLobbyHostName() {return LobbyHostName;}
     public String getText() {return text;}
     public void setActiveRace(boolean activeRace) {this.activeRace = activeRace;}
+    public boolean getActiveRace() {return activeRace;}
+    public boolean fullRace() {return maxPlayers == numPlayers;}
+
 }

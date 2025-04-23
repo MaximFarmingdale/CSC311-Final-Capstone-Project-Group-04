@@ -1,5 +1,6 @@
 package com.example.csc311finalcapstoneprojectgroup04.TCPNetworking;
 
+import com.example.csc311finalcapstoneprojectgroup04.Lobby.Lobby;
 import com.example.csc311finalcapstoneprojectgroup04.NetworkMessagesandUpdate.Message;
 import com.example.csc311finalcapstoneprojectgroup04.NetworkMessagesandUpdate.Ping;
 import com.example.csc311finalcapstoneprojectgroup04.User;
@@ -7,6 +8,7 @@ import com.example.csc311finalcapstoneprojectgroup04.User;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -20,14 +22,16 @@ public class Server  {
     private Socket socketServer;
     private ObjectOutputStream objectOutputStream;
     private ObjectInputStream objectInputStream;
+    private Lobby lobby;
 
 
-    public Server(ServerSocket serverSocket, String username) throws IOException {
+    public Server(ServerSocket serverSocket, String username, Lobby lobby) throws IOException {
         this.serverSocket = serverSocket;
         this.username = username;
         this.socketServer = new Socket("localhost", 1234);
         this.objectInputStream = new ObjectInputStream(socketServer.getInputStream());
         objectOutputStream = new ObjectOutputStream(socketServer.getOutputStream());
+        this.lobby = lobby;
     }
     public void startServer() {
         try {
@@ -45,9 +49,9 @@ public class Server  {
                         }
                         //if the application is just pinging the server to see if it works
                         if(object instanceof Ping) {
-                            Ping ping = (Ping) object;
-                            //add ping response
+                            pingResponse(socket);
                         }
+
                     } catch (ClassNotFoundException e) {
                         throw new RuntimeException(e);
                     }
@@ -89,6 +93,7 @@ public class Server  {
         }
 
     }
+    //I am not sure if this method will be used
     public void sendMessage(Ping ping) {
         try {
             for (ClientHandler clientHandler : clients) {
@@ -100,8 +105,17 @@ public class Server  {
         }
 
     }
-    public void pingResponse(Ping ping) {
-        //fill in
+    public void pingResponse(Socket socket) {
+        try {
+            ObjectOutputStream responseStream = new ObjectOutputStream(socket.getOutputStream());
+            if (lobby.fullRace())
+                responseStream.writeObject(Ping.GameFull);
+            else if(lobby.getActiveRace())
+                responseStream.writeObject(Ping.GameInProgress);
+        }
+        catch (IOException e) {
+            closeServer();
+        }
     }
     public void closeServer() {
         try {
