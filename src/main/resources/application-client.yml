@@ -4,7 +4,7 @@ spring:
   application:
     name: EurekaClientTest
 server:
-  port: 8099 #8090 works
+  port: 8090 #8090 works
 
 eureka:
   client:
@@ -21,4 +21,4 @@ eureka:
       current-players: "2"
       active-game: "true"
     hostname: "max"
-    instance-id: client-32 # only for testing
+    instance-id: client-8008 # only for testing

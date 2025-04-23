@@ -147,7 +147,10 @@ public class SplashScreenController implements Initializable {
             signUpText.setText("Log In");
         }
     }
+    @FXML
+    void addUsers(ActionEvent event) {
 
+    }
     public void changeController(Stage stage, User currentUser) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("HostOrJoin.fxml"));
