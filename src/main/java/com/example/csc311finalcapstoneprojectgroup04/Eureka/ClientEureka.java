@@ -38,6 +38,7 @@ class ClientEureka implements CommandLineRunner {
         metadata.put("active-game", String.valueOf(active));
         instance.setMetadataMap(metadata);
         applicationInfoManager.registerAppMetadata(metadata);
+        applicationInfoManager.setInstanceStatus(InstanceInfo.InstanceStatus.UP);
         //applicationInfoManager.setInstanceStatus(InstanceInfo.InstanceStatus.UP);
     }
     public void printLobbies() {
@@ -49,7 +50,7 @@ class ClientEureka implements CommandLineRunner {
         if (eurekaClient.getApplication("EUREKACLIENTTEST") != null) {
             List<InstanceInfo> instances = eurekaClient.getApplication("EUREKACLIENTTEST").getInstances();
             for (InstanceInfo info : instances) {
-                System.out.println("Found instance: " + info.getMetadata());
+                System.out.println("Found instance: " + info.getMetadata() + info.getIPAddr());
             }
         } else {
             System.out.println("No instances found.");
