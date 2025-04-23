@@ -1,4 +1,4 @@
-package com.example.csc311finalcapstoneprojectgroup04;
+package com.example.csc311finalcapstoneprojectgroup04.JavaFXControllers;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;

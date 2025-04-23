@@ -1,4 +1,4 @@
-package com.example.csc311finalcapstoneprojectgroup04;
+package com.example.csc311finalcapstoneprojectgroup04.JavaFXControllers;
 
 import java.io.IOException;
 import java.net.Socket;
