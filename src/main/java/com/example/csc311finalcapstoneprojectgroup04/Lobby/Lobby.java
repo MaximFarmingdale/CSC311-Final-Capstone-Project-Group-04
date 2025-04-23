@@ -1,19 +1,19 @@
-package com.example.csc311finalcapstoneprojectgroup04;
+package com.example.csc311finalcapstoneprojectgroup04.Lobby;
 
 import java.io.IOException;
 import java.net.Socket;
 
 public final class Lobby {
     private String LobbyIP;
-    private String LobbyName;
     private String LobbyHostName;
     private int numPlayers = 0;
     private final int MaxPlayers = 3;
     private final int port = 1234;
-    public Lobby(String LobbyIP, String LobbyName, String LobbyHostName) {
+    private int currentPlayers = 0;
+    public Lobby(String LobbyIP, String LobbyHostName, int currentPlayers) {
         this.LobbyIP = LobbyIP;
-        this.LobbyName = LobbyName;
         this.LobbyHostName = LobbyHostName;
+        this.numPlayers = currentPlayers;
     }
     public boolean stillRunning() {
         try {
@@ -24,8 +24,11 @@ public final class Lobby {
             return false;
         }
     }
+    public int getCurrentPlayers() {
+        return currentPlayers;
+    }
 
-
-
-
+    public void setCurrentPlayers(int currentPlayers) {
+        this.currentPlayers = currentPlayers;
+    }
 }

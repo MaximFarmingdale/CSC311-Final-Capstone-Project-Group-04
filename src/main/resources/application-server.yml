@@ -1,0 +1,19 @@
+spring:
+  application:
+    name: EurekaServer
+#Note DO NOT PUT IN SEPARATE FOLDER
+server:
+  port: 8761
+  address: 0.0.0.0
+eureka:
+  instance:
+    hostname: localhost
+    statusPageUrlPath: /actuator/info
+    healthCheckUrlPath: /actuator/health
+  client:
+    healthcheck:
+      enabled: true
+    register-with-eureka: false
+    fetch-registry: false
+    service-url:
+      defaultZone: http://localhost:8761/eureka #http://localhost:8761/eureka/ #http://100.38.237.126:8761/eureka

@@ -1,4 +1,4 @@
-package com.example.csc311finalcapstoneprojectgroup04;
+package com.example.csc311finalcapstoneprojectgroup04.NetworkMessagesandUpdate;
 
 import java.io.Serializable;
 /// message class for the message objects sent over the sockets

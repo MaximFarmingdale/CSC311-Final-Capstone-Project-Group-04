@@ -1,4 +1,7 @@
-package com.example.csc311finalcapstoneprojectgroup04;
+package com.example.csc311finalcapstoneprojectgroup04.Lobby;
+
+import com.example.csc311finalcapstoneprojectgroup04.TCPNetworking.Server;
+import com.example.csc311finalcapstoneprojectgroup04.User;
 
 import java.io.IOException;
 import java.net.InetAddress;

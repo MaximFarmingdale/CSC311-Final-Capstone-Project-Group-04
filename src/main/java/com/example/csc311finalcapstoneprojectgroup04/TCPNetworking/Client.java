@@ -1,6 +1,7 @@
-package com.example.csc311finalcapstoneprojectgroup04;
+package com.example.csc311finalcapstoneprojectgroup04.TCPNetworking;
 
-import java.io.*;
+import com.example.csc311finalcapstoneprojectgroup04.User;
+
 import java.io.*;
 import java.net.Socket;
 public class Client {
