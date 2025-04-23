@@ -1,5 +1,7 @@
 package com.example.csc311finalcapstoneprojectgroup04.Lobby;
 
+import com.github.javafaker.Faker;
+
 import java.io.IOException;
 import java.net.Socket;
 
@@ -7,22 +9,18 @@ public final class Lobby {
     private String LobbyIP;
     private String LobbyHostName;
     private int numPlayers = 0;
+    private boolean activeRace = false;
+    private String text;
     private final int MaxPlayers = 3;
     private final int port = 1234;
     private int currentPlayers = 0;
-    public Lobby(String LobbyIP, String LobbyHostName, int currentPlayers) {
+    public Lobby(String LobbyIP, String LobbyHostName) {
         this.LobbyIP = LobbyIP;
         this.LobbyHostName = LobbyHostName;
-        this.numPlayers = currentPlayers;
     }
-    public boolean stillRunning() {
-        try {
-            new Socket(LobbyIP, port);
-            //have it send over a ping to see the status of the lobby
-            return true;
-        } catch (IOException e) {
-            return false;
-        }
+    public void generateNewText(){
+        Faker faker = new Faker();
+        text = faker.hitchhikersGuideToTheGalaxy().quote();
     }
     public int getCurrentPlayers() {
         return currentPlayers;
@@ -31,4 +29,10 @@ public final class Lobby {
     public void setCurrentPlayers(int currentPlayers) {
         this.currentPlayers = currentPlayers;
     }
+    public int getNumPlayers() {return numPlayers;}
+    public void setNumPlayers(int numPlayers) {this.numPlayers = numPlayers; }
+    public String getLobbyIP() {return LobbyIP;}
+    public String getLobbyHostName() {return LobbyHostName;}
+    public String getText() {return text;}
+    public void setActiveRace(boolean activeRace) {this.activeRace = activeRace;}
 }
