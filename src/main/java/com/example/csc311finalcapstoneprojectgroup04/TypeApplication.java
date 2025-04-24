@@ -16,6 +16,7 @@ import java.io.IOException;
 /**
  * JavaFX application that is called by the TypeSpringBootApplication, which launches the
  * JavaFX components.
+ * THIS PROGRAM WILL NOT RUN WITHOUT A EUREKA SERVER RUNNING
  */
 public class TypeApplication extends Application {
     private ConfigurableApplicationContext applicationContext;
