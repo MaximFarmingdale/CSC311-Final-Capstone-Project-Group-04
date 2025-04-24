@@ -23,7 +23,6 @@ public final class Lobby implements Serializable {
         Faker faker = new Faker();
         text = faker.hitchhikersGuideToTheGalaxy().quote();
     }
-
     public int getCurrentPlayers() {
         return currentPlayers;
     }
@@ -31,7 +30,25 @@ public final class Lobby implements Serializable {
         this.currentPlayers = currentPlayers;
     }
     public int getNumPlayers() {return numPlayers;}
-    public void setNumPlayers(int numPlayers) {this.numPlayers = numPlayers; }
+
+    /**
+     *
+     * @return
+     */
+    public boolean increaseNumPlayers(){
+        if(numPlayers == maxPlayers) {
+            numPlayers++;
+            return true;
+        }
+        return false;
+    }
+    public boolean decreaseNumPlayers(){
+        if(numPlayers == 0) {
+            numPlayers--;
+            return true;
+        }
+        return false;
+    }
     public String getLobbyIP() {return LobbyIP;}
     public String getLobbyHostName() {return LobbyHostName;}
     public String getText() {return text;}
