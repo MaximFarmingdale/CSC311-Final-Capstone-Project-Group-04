@@ -8,14 +8,24 @@ import java.net.Socket;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-/// uses threads to handle multiple users at the same time
+/**
+ * Used by the server for handling client's messages and race updates that are intended for other clients.
+ * Only intended as a helper class for server.
+ */
 public class ClientHandler implements Runnable {
-    public static List<ClientHandler> clients = new CopyOnWriteArrayList<>();
+    public static List<ClientHandler> clients = new CopyOnWriteArrayList<>(); //change?
     private Socket socket;
     public ObjectOutputStream objectOutputStream;
     private ObjectInputStream objectInputStream;
     public String clientUserName;
 
+    /**
+     * Allows you to construct a new ClientHandler for managing multiple connections to a server.
+     * @param socket The socket that the server accepts. The constructor uses the socket to make an
+     * ObjectOutputStream and ObjectInputStream that is used throughout the class.
+     * @param clientUserName The client username which the server gets from the join message.
+     *
+     */
     public ClientHandler(Socket socket, String clientUserName) {
         try {
             this.socket = socket;
@@ -25,9 +35,14 @@ public class ClientHandler implements Runnable {
             clients.add(this);
             sendMessage(new Message(clientUserName, clientUserName + " has entered the game"));
         } catch (Exception e) {
-            closeClient();
+            removeClient();
         }
     }
+
+    /**
+     * Override of the runnable interface which runs a while loop that looks for new race updates or new messages
+     * in the objectInputStream and sends it to the rest of the clients.
+     */
     @Override
     public void run() {
         Message message;
@@ -42,6 +57,11 @@ public class ClientHandler implements Runnable {
             }
         }
     }
+
+    /**
+     * Sends a client message to every other client.
+     * @param message the client message object.
+     */
     public void sendMessage(Message message) {
         for (ClientHandler client : clients) {
             try {
@@ -51,11 +71,16 @@ public class ClientHandler implements Runnable {
                 }
             }
             catch (IOException e) {
-                closeClient();
+                removeClient();
             }
 
         }
     }
+
+    /**
+     * Sends a client user object to every other client.
+     * @param user the client user object.
+     */
     public void sendMessage(User user) {
         for (ClientHandler client : clients) {
             try {
@@ -65,15 +90,24 @@ public class ClientHandler implements Runnable {
                 }
             }
             catch (IOException e) {
-                closeClient();
+                removeClient();
             }
 
         }
     }
+
+    /**
+     * Removes the ClientHandler from the clients list and releases the resources of the ClientHandler.
+     */
     public void removeClient() {
         clients.remove(this);
         sendMessage(new Message(clientUserName, "user: " + clientUserName + " has left!"));
+        closeClient();
     }
+
+    /**
+     * Releases the resources of the ClientHandler.
+     */
     public void closeClient() {
         removeClient();
         try {
@@ -89,8 +123,5 @@ public class ClientHandler implements Runnable {
         } catch (IOException e) {
             e.printStackTrace(); //add better logging
         }
-    }
-    public static void main(String[] args) throws IOException {
-        //ClientHandler clientHandler = new ClientHandler(new Socket("localhost", 1234));
     }
 }
