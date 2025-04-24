@@ -20,7 +20,7 @@ public class MainMenuScreenController {
     private Button playButton;
 
     @FXML
-    private Pane playMenu;
+    private Pane playMenu_Pane;
 
     @FXML
     private Button playMenu_Exit;
@@ -52,14 +52,43 @@ public class MainMenuScreenController {
         stage.close();
     }
 
+    int playmenuclickcount = 1;
     @FXML
     void openPlayMenu(MouseEvent event) {
+        playButton.setOnAction(e -> {
+            System.out.println(playmenuclickcount);
+            playmenuclickcount++;
+            playButton.getOnMouseClicked();
+        });
 
+        if (playmenuclickcount % 1 == 0) {
+            playMenu_Pane.setOpacity(1);
+            playMenu_Pane.setDisable(false);
+        }
+        if (playmenuclickcount % 2 == 0) {
+            playMenu_Pane.setOpacity(0);
+            playMenu_Pane.setDisable(true);
+        }
     }
 
+
+    int optionclicked = 1;
     @FXML
     void optionPullUp(MouseEvent event) {
 
+        optionsButton.setOnAction(e -> {
+            optionclicked++;
+            optionsButton.getOnMouseClicked();
+        });
+
+        if (optionclicked % 1 == 0) {
+            volumePane.setOpacity(1);
+            volumePane.setDisable(false);
+        }
+        if (optionclicked % 2 == 0) {
+            volumePane.setOpacity(0);
+            volumePane.setDisable(true);
+        }
     }
 
     @FXML
@@ -74,7 +103,9 @@ public class MainMenuScreenController {
 
     @FXML
     void playMenu_exitMenu(MouseEvent event) {
-
+        playmenuclickcount++;
+        playMenu_Pane.setOpacity(0);
+        playMenu_Pane.setDisable(true);
     }
 
 }

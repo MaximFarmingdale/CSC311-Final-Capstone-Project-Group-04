@@ -54,7 +54,7 @@
             </Text>
          </top>
          <center>
-            <Pane fx:id="volumePane" depthTest="DISABLE" disable="true" maxHeight="100.0" maxWidth="250.0" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #337ef5; -fx-border-color: #ffffff; -fx-border-width: 1.5;" translateX="-100.0" BorderPane.alignment="CENTER">
+            <Pane fx:id="volumePane" depthTest="DISABLE" disable="true" maxHeight="100.0" maxWidth="250.0" opacity="0.0" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #337ef5; -fx-border-color: #ffffff; -fx-border-width: 1.5;" translateX="-100.0" BorderPane.alignment="CENTER">
                <children>
                   <Slider fx:id="volumePane_Slider" layoutX="55.0" layoutY="60.0" maxHeight="10.0" maxWidth="200.0" />
                   <Text fx:id="volumePane_Text" fill="WHITE" layoutX="65.0" layoutY="40.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Volume">
@@ -66,7 +66,7 @@
             </Pane>
          </center>
          <left>
-            <Pane fx:id="playMenu" maxHeight="200.0" maxWidth="200.0" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #337ef5; -fx-border-color: #ffffff; -fx-border-width: 1.5;" translateX="140.0" BorderPane.alignment="CENTER">
+            <Pane fx:id="playMenu_Pane" disable="true" maxHeight="200.0" maxWidth="200.0" opacity="0.0" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #337ef5; -fx-border-color: #ffffff; -fx-border-width: 1.5;" translateX="140.0" BorderPane.alignment="CENTER">
                <children>
                   <Text fx:id="playMenu_selectModeText" fill="WHITE" layoutX="25.0" layoutY="40.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Select Mode" textAlignment="CENTER">
                      <font>
