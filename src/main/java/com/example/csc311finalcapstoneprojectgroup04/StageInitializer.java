@@ -6,10 +6,12 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class StageInitializer implements ApplicationListener<TypeApplication.StageReadyEvent> {
-
+    /**
+     * StageReadyEvent listener that listens for a ready stage.
+     * @param event the event to listen to
+     */
     @Override
     public void onApplicationEvent(TypeApplication.StageReadyEvent event) {
         Stage stage = event.getStage();
-
     }
 }
