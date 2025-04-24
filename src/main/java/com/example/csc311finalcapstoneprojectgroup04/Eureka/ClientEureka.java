@@ -17,6 +17,11 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
+
+/**
+ * Class that enables clients to fetch lobby information from metadata in Eureka into a list called instances
+ * and also lets hosts register their lobbies to Eureka and update the metadata when the lobby changes.
+ */
 @SpringBootApplication
 @EnableDiscoveryClient
 class ClientEureka implements CommandLineRunner {
@@ -28,24 +33,32 @@ class ClientEureka implements CommandLineRunner {
     private ApplicationInfoManager applicationInfoManager;
     @Autowired
     private EurekaClient eurekaClient;
-
-
     List<InstanceInfo> instances;
-    public void registerLobby(String username, int numPlayers, boolean active) {
+
+    /**
+     * Registers a lobby to eureka for clients to find, adds information such as host username, current players
+     * and if there is an active game to metadata.
+     * @param username host username
+     */
+    public void registerLobby(String username) {
         Map<String, String> metadata = instance.getMetadataMap();
         metadata.put("host-name", username);
-        metadata.put("current-players", String.valueOf(numPlayers));
-        metadata.put("active-game", String.valueOf(active));
+        metadata.put("current-players", "0");
+        metadata.put("active-game", "false");
         instance.setMetadataMap(metadata);
         applicationInfoManager.registerAppMetadata(metadata);
         applicationInfoManager.setInstanceStatus(InstanceInfo.InstanceStatus.UP);
-        //applicationInfoManager.setInstanceStatus(InstanceInfo.InstanceStatus.UP);
     }
+    //testing method
     public void printLobbies() {
         for(InstanceInfo instanceInfo : instances) {
             System.out.println(instanceInfo);
         }
     }
+
+    /**
+     * fills the instances' list with EurekaClient instances
+     */
     public void fillList() {
         if (eurekaClient.getApplication("EUREKACLIENTTEST") != null) {
             List<InstanceInfo> instances = eurekaClient.getApplication("EUREKACLIENTTEST").getInstances();
@@ -62,7 +75,7 @@ class ClientEureka implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        registerLobby("max", 10, true);
+        registerLobby("max");
         Thread.sleep(10000); //only if necessary
         fillList();
     }
