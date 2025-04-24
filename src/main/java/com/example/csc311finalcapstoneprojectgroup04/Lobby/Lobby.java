@@ -3,9 +3,10 @@ package com.example.csc311finalcapstoneprojectgroup04.Lobby;
 import com.github.javafaker.Faker;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.net.Socket;
 
-public final class Lobby {
+public final class Lobby implements Serializable {
     private String LobbyIP;
     private String LobbyHostName;
     private int numPlayers = 0;
@@ -14,7 +15,7 @@ public final class Lobby {
     private final int maxPlayers = 3;
     private final int port = 1234;
     private int currentPlayers = 0;
-    public Lobby(String LobbyIP, String LobbyHostName) {
+    public Lobby(String LobbyIP, String LobbyHostName){
         this.LobbyIP = LobbyIP;
         this.LobbyHostName = LobbyHostName;
     }
@@ -22,10 +23,10 @@ public final class Lobby {
         Faker faker = new Faker();
         text = faker.hitchhikersGuideToTheGalaxy().quote();
     }
+
     public int getCurrentPlayers() {
         return currentPlayers;
     }
-
     public void setCurrentPlayers(int currentPlayers) {
         this.currentPlayers = currentPlayers;
     }
