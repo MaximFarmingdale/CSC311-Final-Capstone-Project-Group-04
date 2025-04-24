@@ -61,7 +61,7 @@ public class MainMenuScreenController {
 
     int playmenuclickcount = 1;
     @FXML
-    void openPlayMenu(MouseEvent event) {
+    void openPlayMenu(MouseEvent event) { // probably an easier way to do this, but i used a counter to track button clicks and translated it to a toggle function
         playButton.setOnAction(e -> {
             System.out.println(playmenuclickcount);
             playmenuclickcount++;
@@ -81,7 +81,7 @@ public class MainMenuScreenController {
 
     int optionclicked = 1;
     @FXML
-    void optionPullUp(MouseEvent event) {
+    void optionPullUp(MouseEvent event) { // probably an easier way to do this, but i used a counter to track button clicks and translated it to a toggle function
 
         optionsButton.setOnAction(e -> {
             optionclicked++;
@@ -99,17 +99,17 @@ public class MainMenuScreenController {
     }
 
     @FXML
-    void playMenu_Host(MouseEvent event) {
+    void playMenu_Host(MouseEvent event) { // todo - opens FXML file for host screen -- shows you and empty slots until player joins
 
     }
 
     @FXML
-    void playMenu_Join(MouseEvent event) {
+    void playMenu_Join(MouseEvent event) { // todo - opens up lobby screen
 
     }
 
     @FXML
-    void playMenu_exitMenu(MouseEvent event) {
+    void playMenu_exitMenu(MouseEvent event) { // secondary button to close play menu (can also close by pressing the play button again)
         playmenuclickcount++;
         playMenu_Pane.setOpacity(0);
         playMenu_Pane.setDisable(true);
@@ -117,7 +117,7 @@ public class MainMenuScreenController {
 
 
     @FXML
-    void playMenu_SoloStart(MouseEvent event) throws IOException {
+    void playMenu_SoloStart(MouseEvent event) throws IOException { // loads solo mode
         Stage stage = (Stage) playMenu_Exit.getScene().getWindow();
         try {
             FXMLLoader solo = new FXMLLoader(getClass().getResource("Solo.fxml"));

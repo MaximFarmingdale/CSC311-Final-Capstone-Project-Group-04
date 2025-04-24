@@ -28,6 +28,9 @@ public class SplashScreenController implements Initializable {
     private boolean newUser = false;
 
     @FXML
+    private Button debug;
+
+    @FXML
     private TextField passwordField;
 
     @FXML
@@ -168,5 +171,15 @@ public class SplashScreenController implements Initializable {
         //for now use this hard coded user
         user = new User("maxim", "password");
         users.add(user);
+    }
+
+    @FXML
+    void debuglogin(MouseEvent event) throws IOException {
+        Stage stage = (Stage) signInButton.getScene().getWindow();
+        FXMLLoader fxmlLoader = new FXMLLoader(TypeApplication.class.getResource("MainMenuScreen.fxml"));//change to whatever fxml file you are testing
+        Scene scene = new Scene(fxmlLoader.load(), 1280, 720);
+        stage.setTitle("Type Application");
+        stage.setScene(scene);
+        stage.show();
     }
 }

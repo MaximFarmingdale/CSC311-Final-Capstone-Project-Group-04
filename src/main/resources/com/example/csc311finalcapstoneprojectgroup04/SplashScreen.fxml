@@ -20,6 +20,7 @@
    <center>
       <VBox alignment="CENTER" prefHeight="500.0" prefWidth="1280.0" BorderPane.alignment="CENTER">
          <children>
+            <Button fx:id="debug" mnemonicParsing="false" onMouseClicked="#debuglogin" text="Debug Sign in" translateY="-100.0" />
             <Text fx:id="promptTextOne" nodeOrientation="LEFT_TO_RIGHT" strokeType="OUTSIDE" strokeWidth="0.0" text="Sign In To Your Account Using Your Username And Password" translateY="-50.0" wrappingWidth="729.0255317687988">
                <font>
                   <Font size="27.0" />
