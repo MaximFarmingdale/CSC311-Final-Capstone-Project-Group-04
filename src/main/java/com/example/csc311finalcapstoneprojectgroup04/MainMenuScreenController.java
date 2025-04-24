@@ -1,12 +1,16 @@
 package com.example.csc311finalcapstoneprojectgroup04;
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Slider;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
+import javafx.scene.Scene;
 import javafx.stage.Stage;
+import java.io.IOException;
 
 public class MainMenuScreenController {
 
@@ -30,6 +34,9 @@ public class MainMenuScreenController {
 
     @FXML
     private Button playMenu_JoinButton;
+
+    @FXML
+    private Button playMenu_Solo;
 
     @FXML
     private Text playMenu_selectModeText;
@@ -106,6 +113,21 @@ public class MainMenuScreenController {
         playmenuclickcount++;
         playMenu_Pane.setOpacity(0);
         playMenu_Pane.setDisable(true);
+    }
+
+
+    @FXML
+    void playMenu_SoloStart(MouseEvent event) throws IOException {
+        Stage stage = (Stage) playMenu_Exit.getScene().getWindow();
+        try {
+            FXMLLoader solo = new FXMLLoader(getClass().getResource("Solo.fxml"));
+            Scene scene = new Scene(solo.load(), 1280, 720);
+            stage.setTitle("Solo");
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 }

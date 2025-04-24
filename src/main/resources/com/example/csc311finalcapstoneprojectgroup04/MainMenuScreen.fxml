@@ -83,7 +83,12 @@
                         <Font name="OCR A Extended" size="14.0" />
                      </font>
                   </Button>
-                  <Button fx:id="playMenu_Exit" mnemonicParsing="false" onMouseClicked="#playMenu_exitMenu" prefHeight="35.0" style="-fx-background-color: #013891;" text="EXIT Window" textFill="WHITE" translateX="40.0" translateY="125.0">
+                  <Button fx:id="playMenu_Solo" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onMouseClicked="#playMenu_SoloStart" prefWidth="60.0" style="-fx-background-color: #3da8f5;" text="Solo" translateX="60.0" translateY="100.0">
+                     <font>
+                        <Font name="OCR A Extended" size="14.0" />
+                     </font>
+                  </Button>
+                  <Button fx:id="playMenu_Exit" layoutX="5.0" layoutY="19.0" mnemonicParsing="false" onMouseClicked="#playMenu_exitMenu" prefHeight="35.0" style="-fx-background-color: #013891;" text="EXIT Window" textFill="WHITE" translateX="35.0" translateY="125.0">
                      <font>
                         <Font name="OCR A Extended" size="15.0" />
                      </font>
