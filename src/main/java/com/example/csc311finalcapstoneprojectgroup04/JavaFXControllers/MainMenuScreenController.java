@@ -7,6 +7,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -22,26 +24,29 @@ public class MainMenuScreenController {
     @FXML
     private Button playButton;
 
+    @FXML
+    private BorderPane PlayMenuBPane;
+
+
+    @FXML
+    private AnchorPane MainMenuAPane;
+
+
     private User user;
 
     @FXML
     void exitProgram(ActionEvent event) {
 
     }
-
+    /// change this to look better
     @FXML
     void openPlayMenu(ActionEvent event) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/JavaFX_FXML/PlayMenu.fxml"));
-            Parent root = loader.load();
-            Stage stage = new Stage();
-            stage.setTitle("Play Menu");
-            Scene scene = new Scene(root, 320, 180 );
-            stage.setScene(scene);
-            stage.show();
-
+            Parent playMenuPane = loader.load();
+            MainMenuAPane.getChildren().add(playMenuPane);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
     }
 
@@ -55,7 +60,7 @@ public class MainMenuScreenController {
     @FXML
     void goToWaitingRoom(ActionEvent event) {
         try {
-            Stage stage = (Stage) exitButton.getScene().getWindow();
+            Stage stage = (Stage) PlayMenuBPane.getScene().getWindow();
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/JavaFX_FXML/WaitingRoom.fxml"));
             Parent newRoot = loader.load();
             WaitingRoomController controller = loader.getController();
@@ -71,7 +76,7 @@ public class MainMenuScreenController {
     @FXML
     void goToHostScreen(ActionEvent event) {
         try {
-            Stage stage = (Stage) exitButton.getScene().getWindow();
+            Stage stage =(Stage) PlayMenuBPane.getScene().getWindow();
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/JavaFX_FXML/HostScreen.fxml"));
             Parent newRoot = loader.load();
             HostScreenController controller = loader.getController();
