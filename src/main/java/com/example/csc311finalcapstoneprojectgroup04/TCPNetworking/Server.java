@@ -3,6 +3,7 @@ package com.example.csc311finalcapstoneprojectgroup04.TCPNetworking;
 import com.example.csc311finalcapstoneprojectgroup04.Lobby.Lobby;
 import com.example.csc311finalcapstoneprojectgroup04.NetworkMessagesandUpdate.Message;
 import com.example.csc311finalcapstoneprojectgroup04.NetworkMessagesandUpdate.Ping;
+import com.example.csc311finalcapstoneprojectgroup04.NetworkMessagesandUpdate.RaceUpdate;
 import com.example.csc311finalcapstoneprojectgroup04.User;
 
 import java.io.IOException;
@@ -188,6 +189,22 @@ public class Server  {
     }
 
     /**
+     * Allows the host to send a RaceUpdate to all clients
+     * @param raceUpdate
+     */
+    public void sendMessage(RaceUpdate raceUpdate) {
+        try {
+            for (ClientHandler clientHandler : clients) {
+                clientHandler.objectOutputStream.writeObject(raceUpdate);
+            }
+        }
+        catch (IOException e) {
+            closeSocket();
+        }
+
+    }
+
+    /**
      * internal helper method to respond to pings
      * @param socket
      * sends a response ping of GameFull if the game is full and returns GameInProgress if the game is in progress
@@ -204,7 +221,6 @@ public class Server  {
             closeSocket();
         }
     }
-
     /**
      * Closes the socket that the server class uses for ObjectOutputStream and ObjectInputStream and frees up resources
      */

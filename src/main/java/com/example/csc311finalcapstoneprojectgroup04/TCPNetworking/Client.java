@@ -79,9 +79,7 @@ public class Client {
                     }
                     System.out.println(receivedMessage);
                 }
-            } catch (IOException e) {
-                closeClient();
-            } catch (ClassNotFoundException e) {
+            } catch (IOException | ClassNotFoundException e) {
                 closeClient();
             }
         }).start();

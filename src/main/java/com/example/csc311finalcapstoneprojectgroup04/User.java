@@ -10,7 +10,7 @@ import java.io.Serializable;
  */
 public class User implements Serializable {
     public String username;
-    private String password;
+    private String password; //get rid of password later
     private double raceProgress;
     public User(String username, String password) {
         this.username = username;
