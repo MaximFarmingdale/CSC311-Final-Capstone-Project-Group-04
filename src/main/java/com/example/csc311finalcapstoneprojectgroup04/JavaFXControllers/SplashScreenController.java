@@ -151,12 +151,13 @@ public class SplashScreenController implements Initializable {
     void addUsers(ActionEvent event) {
 
     }
-    public void changeController(Stage stage, User currentUser) {
+    public void changeController(User currentUser) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("HostOrJoin.fxml"));
+            Stage stage = (Stage) signInButton.getScene().getWindow();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("MainMenuScreen.fxml"));
             Parent newRoot = loader.load();
-            HostOrJoinController controller = loader.getController();
-            controller.enterHostOrJoin(currentUser);
+            MainMenuScreenController controller = loader.getController();
+            controller.enterMainMenu(currentUser);
             Scene scene = new Scene(newRoot, 1270, 720);
             stage.setScene(scene);
             stage.show();
