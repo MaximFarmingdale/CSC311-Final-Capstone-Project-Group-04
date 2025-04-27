@@ -39,7 +39,7 @@ public class TypeApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         applicationContext.publishEvent(new StageReadyEvent(stage));
-        FXMLLoader fxmlLoader = new FXMLLoader(TypeApplication.class.getResource("SplashScreen.fxml"));//change to whatever fxml file you are testing
+        FXMLLoader fxmlLoader = new FXMLLoader(TypeApplication.class.getResource("/com/example/JavaFX_FXML/SplashScreen.fxml"));//change to whatever fxml file you are testing
         Scene scene = new Scene(fxmlLoader.load(), 1270, 720);
         stage.setTitle("Type Application");
         stage.setScene(scene);

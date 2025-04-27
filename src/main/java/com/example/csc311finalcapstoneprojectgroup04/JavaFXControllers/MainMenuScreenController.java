@@ -32,7 +32,7 @@ public class MainMenuScreenController {
     @FXML
     void openPlayMenu(ActionEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("PlayMenu.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/JavaFX_FXML/PlayMenu.fxml"));
             Parent root = loader.load();
             Stage stage = new Stage();
             stage.setTitle("Play Menu");
@@ -56,7 +56,7 @@ public class MainMenuScreenController {
     void goToWaitingRoom(ActionEvent event) {
         try {
             Stage stage = (Stage) exitButton.getScene().getWindow();
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("WaitingRoom.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/JavaFX_FXML/WaitingRoom.fxml"));
             Parent newRoot = loader.load();
             WaitingRoomController controller = loader.getController();
             controller.enterWaitingRoom(user);
@@ -72,7 +72,7 @@ public class MainMenuScreenController {
     void goToHostScreen(ActionEvent event) {
         try {
             Stage stage = (Stage) exitButton.getScene().getWindow();
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("HostScreen.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/JavaFX_FXML/HostScreen.fxml"));
             Parent newRoot = loader.load();
             HostScreenController controller = loader.getController();
             controller.enterHostScreen(user);
