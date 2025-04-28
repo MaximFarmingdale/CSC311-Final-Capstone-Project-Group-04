@@ -38,7 +38,11 @@ public class MainMenuScreenController {
     void exitProgram(ActionEvent event) {
 
     }
-    /// change this to look better
+
+    /**
+     * opens the play menu
+     * @param event
+     */
     @FXML
     void openPlayMenu(ActionEvent event) {
         try {
@@ -54,12 +58,23 @@ public class MainMenuScreenController {
     void optionPullUp(ActionEvent event) {
 
     }
+
+    /**
+     * Method to pass a user to mainMenu
+     * @param event
+     */
     public void enterMainMenu(User event) {
         user = event;
     }
+
+    /**
+     *
+     * @param event
+     */
     @FXML
     void goToWaitingRoom(ActionEvent event) {
         try {
+
             Stage stage = (Stage) PlayMenuBPane.getScene().getWindow();
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/JavaFX_FXML/WaitingRoom.fxml"));
             Parent newRoot = loader.load();
