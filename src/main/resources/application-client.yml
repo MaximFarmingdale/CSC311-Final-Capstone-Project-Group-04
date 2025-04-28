@@ -9,7 +9,7 @@ server:
 eureka:
   client:
     #set register to false in the future
-    register-with-eureka: false
+    register-with-eureka: true
     fetch-registry: true
     registry-fetch-interval-seconds: 5
     service-url:
