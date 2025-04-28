@@ -1,5 +1,6 @@
 package com.example.csc311finalcapstoneprojectgroup04.JavaFXControllers;
 
+import com.example.csc311finalcapstoneprojectgroup04.TypeApplication;
 import com.example.csc311finalcapstoneprojectgroup04.User;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -13,14 +14,17 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
-
 /// controller for the first screen the user sees, before they log in or start a match etc.
+@Component
 public class SplashScreenController implements Initializable {
     private List<User> users = new ArrayList<>();
     // this user only exists for debugging get rid of it in the final version
@@ -50,6 +54,9 @@ public class SplashScreenController implements Initializable {
 
     @FXML
     private HBox hbox;
+    @Autowired
+    private ApplicationContext applicationContext;
+
 
     @FXML
     void login(ActionEvent event) {
@@ -158,12 +165,16 @@ public class SplashScreenController implements Initializable {
         try {
             Stage stage = (Stage) signInButton.getScene().getWindow();
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/JavaFX_FXML/MainMenuScreen.fxml"));
+            loader.setControllerFactory(applicationContext::getBean); //gets beans from spring
             Parent newRoot = loader.load();
             MainMenuScreenController controller = loader.getController();
             controller.enterMainMenu(currentUser);
             Scene scene = new Scene(newRoot, 1270, 720);
             stage.setScene(scene);
             stage.show();
+            if(applicationContext == null){
+                System.out.println("ApplicationContext is null");
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }

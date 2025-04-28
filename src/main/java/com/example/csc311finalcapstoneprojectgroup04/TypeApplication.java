@@ -5,9 +5,7 @@ import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationEvent;
 import org.springframework.context.ConfigurableApplicationContext;
 
@@ -16,16 +14,16 @@ import java.io.IOException;
 /**
  * JavaFX application that is called by the TypeSpringBootApplication, which launches the
  * JavaFX components.
- * THIS PROGRAM WILL NOT RUN WITHOUT A EUREKA SERVER RUNNING
+ * THIS PROGRAM WILL NOT RUN CORRECTLY WITHOUT A EUREKA SERVER RUNNING
  */
 public class TypeApplication extends Application {
-    private ConfigurableApplicationContext applicationContext;
+    private static ConfigurableApplicationContext applicationContext;
     /**
      * Override of the intializer method of the JavaFX application, sets the ConfigurableApplicationContext.
      */
     @Override
     public void init() {
-        applicationContext = new SpringApplication(TypeSpringBootApplication.class).run();
+        applicationContext = TypeSpringBootApplication.getApplicationContext();
     }
 
     /**
@@ -39,8 +37,9 @@ public class TypeApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         applicationContext.publishEvent(new StageReadyEvent(stage));
-        FXMLLoader fxmlLoader = new FXMLLoader(TypeApplication.class.getResource("/com/example/JavaFX_FXML/SplashScreen.fxml"));//change to whatever fxml file you are testing
-        Scene scene = new Scene(fxmlLoader.load(), 1270, 720);
+        FXMLLoader loader = new FXMLLoader(TypeApplication.class.getResource("/com/example/JavaFX_FXML/SplashScreen.fxml"));//change to whatever fxml file you are testing
+        loader.setControllerFactory(applicationContext::getBean); //gets beans from spring
+        Scene scene = new Scene(loader.load(), 1270, 720);
         stage.setTitle("Type Application");
         stage.setScene(scene);
         stage.show();
@@ -53,6 +52,15 @@ public class TypeApplication extends Application {
     public void stop() {
         applicationContext.close();
         Platform.exit();
+    }
+
+    /**
+     * returns application context for linking beans to JavaFX controllers
+     *
+     * @return ApplicationEvent
+     */
+    public static ConfigurableApplicationContext getApplicationEvent() {
+        return applicationContext;
     }
 
     /**
@@ -74,7 +82,5 @@ public class TypeApplication extends Application {
             return ((Stage) getSource());
         }
     }
-    public static void main(String[] args) {
-        SpringApplication.run(TypeApplication.class, args);
-    }
+
 }

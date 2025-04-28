@@ -1,5 +1,6 @@
 package com.example.csc311finalcapstoneprojectgroup04.JavaFXControllers;
 
+import com.example.csc311finalcapstoneprojectgroup04.TypeApplication;
 import com.example.csc311finalcapstoneprojectgroup04.User;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -10,9 +11,12 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-
+@Component
 public class MainMenuScreenController {
 
     @FXML
@@ -34,6 +38,8 @@ public class MainMenuScreenController {
 
     private User user;
 
+    @Autowired
+    private ApplicationContext applicationContext;
     @FXML
     void exitProgram(ActionEvent event) {
 
@@ -47,6 +53,7 @@ public class MainMenuScreenController {
     void openPlayMenu(ActionEvent event) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/JavaFX_FXML/PlayMenu.fxml"));
+            loader.setControllerFactory(applicationContext::getBean);
             Parent playMenuPane = loader.load();
             MainMenuAPane.getChildren().add(playMenuPane);
         } catch (IOException e) {
@@ -77,8 +84,10 @@ public class MainMenuScreenController {
 
             Stage stage = (Stage) PlayMenuBPane.getScene().getWindow();
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/JavaFX_FXML/WaitingRoom.fxml"));
+            loader.setControllerFactory(applicationContext::getBean); //gets beans from spring
             Parent newRoot = loader.load();
             WaitingRoomController controller = loader.getController();
+            loader.setControllerFactory(applicationContext::getBean);
             controller.enterWaitingRoom(user);
             Scene scene = new Scene(newRoot, 1270, 720);
             stage.setScene(scene);
@@ -93,6 +102,7 @@ public class MainMenuScreenController {
         try {
             Stage stage =(Stage) PlayMenuBPane.getScene().getWindow();
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/JavaFX_FXML/HostScreen.fxml"));
+            loader.setControllerFactory(applicationContext::getBean); //gets beans from spring
             Parent newRoot = loader.load();
             HostScreenController controller = loader.getController();
             controller.enterHostScreen(user);

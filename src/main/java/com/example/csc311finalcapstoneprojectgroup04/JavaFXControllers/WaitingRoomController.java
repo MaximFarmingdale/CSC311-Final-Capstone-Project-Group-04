@@ -81,13 +81,13 @@ public class WaitingRoomController implements Initializable {
      * @param i
      */
     private void updateHbox(HBox hbox, InstanceInfo i) {
-        HBox hbox1 = new HBox();
         Label label = new Label(i.getMetadata().get("host-name"));
         Label label2 = new Label(i.getMetadata().get("current-players"));
-        hbox1.getChildren().addAll(label, label2);
+        hbox.getChildren().addAll(label, label2);
         Label label3 = new Label(i.getMetadata().get("active-game"));
-        hbox1.getChildren().addAll(label);
-        hbox.getChildren().addAll(hbox1);
+        Platform.runLater(() -> {
+            hbox.getChildren().addAll(label, label3, label2);
+        });
     }
 
 
@@ -138,12 +138,15 @@ public class WaitingRoomController implements Initializable {
                         instances.setAll(latest);
                     });
                 }
+                else
+                    System.out.println("Waiting for Eureka");
                 try {
-                    Thread.sleep(100);
+                    Thread.sleep(1000);
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();//add to other interrupted exceptions
                     throw new RuntimeException(e);
                 }
+
 
             }
         }).start();
