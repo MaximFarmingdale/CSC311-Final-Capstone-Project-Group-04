@@ -11,11 +11,11 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Controller;
 
 import java.net.URL;
 import java.util.HashMap;
@@ -81,13 +81,21 @@ public class WaitingRoomController implements Initializable {
      * @param i
      */
     private void updateHbox(HBox hbox, InstanceInfo i) {
-        Label label = new Label(i.getMetadata().get("host-name"));
-        Label label2 = new Label(i.getMetadata().get("current-players"));
-        hbox.getChildren().addAll(label, label2);
+        Label label1 = new Label(i.getMetadata().get("host-name"));
+        Label label2 = new Label(i.getMetadata().get("current-players" ) + "/"+maxPlayers);
         Label label3 = new Label(i.getMetadata().get("active-game"));
-        Platform.runLater(() -> {
-            hbox.getChildren().addAll(label, label3, label2);
+        Label label4 = new Label(i.getIPAddr());
+        VBox vbox = new VBox();
+        vbox.getChildren().addAll(label1, label2, label3, label4);
+        hbox.getChildren().add(vbox);
+        hbox.setStyle("-fx-background-color: #bf1616");
+        hbox.setStyle("-fx-border-color: #16bf8c");
+        hbox.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
+            HBox hbox2 = (HBox) event.getSource();
+            Label ip = (Label) hbox2.getChildren().get(3);
+            //ping host
         });
+
     }
 
 
@@ -128,13 +136,19 @@ public class WaitingRoomController implements Initializable {
                 }
 
             });
-            instances.setAll(clientEureka.fillList());
+            List<InstanceInfo> temp = clientEureka.fillList();
+            if (temp != null) {
+                instances.setAll(clientEureka.fillList());
+            }
         }
+        //refreshes lobbies every second
         new Thread(() -> {
             while (true) {
+                // later on add a way for lobby's that have the same metadata to stay instead of getting cleared
                 if(clientEureka != null) {
                     List<InstanceInfo> latest = clientEureka.fillList();
                     Platform.runLater(() -> {
+                        LobbyVbox.getChildren().clear();
                         instances.setAll(latest);
                     });
                 }
@@ -146,8 +160,6 @@ public class WaitingRoomController implements Initializable {
                     Thread.currentThread().interrupt();//add to other interrupted exceptions
                     throw new RuntimeException(e);
                 }
-
-
             }
         }).start();
     }
