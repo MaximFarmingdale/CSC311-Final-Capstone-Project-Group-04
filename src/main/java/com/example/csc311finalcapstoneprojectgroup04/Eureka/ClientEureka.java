@@ -5,6 +5,7 @@ import com.netflix.appinfo.EurekaAccept;
 import com.netflix.appinfo.InstanceInfo;
 import com.netflix.discovery.DiscoveryClient;
 import com.netflix.discovery.EurekaClient;
+import com.netflix.discovery.EurekaEventListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -24,8 +25,7 @@ import java.util.Map;
  */
 @SpringBootApplication
 @EnableDiscoveryClient
-class ClientEureka implements CommandLineRunner {
-
+public class ClientEureka implements CommandLineRunner {
     @Autowired
     private EurekaInstanceConfigBean instance;
     //private DiscoveryClient discovery;
@@ -59,15 +59,16 @@ class ClientEureka implements CommandLineRunner {
     /**
      * fills the instances' list with EurekaClient instances
      */
-    public void fillList() {
+    public List<InstanceInfo> fillList() {
         if (eurekaClient.getApplication("EUREKACLIENTTEST") != null) {
-            List<InstanceInfo> instances = eurekaClient.getApplication("EUREKACLIENTTEST").getInstances();
+            instances = eurekaClient.getApplication("EUREKACLIENTTEST").getInstances();
             for (InstanceInfo info : instances) {
                 System.out.println("Found instance: " + info.getMetadata() + info.getIPAddr());
             }
         } else {
             System.out.println("No instances found.");
         }
+        return instances;
     }
     public static void main(String[] args) {
         SpringApplication.run(ClientEureka.class, args);
