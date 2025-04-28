@@ -34,7 +34,40 @@ public class WaitingRoomController implements Initializable {
     public void enterWaitingRoom(User currentUser) {
         user = currentUser;
         instances = FXCollections.observableArrayList(clientEureka.fillList());
-
+        instances.addListener(new ListChangeListener<InstanceInfo>() {
+            @Override
+            public void onChanged(Change<? extends InstanceInfo> c) {
+                while (c.next()) {
+                    if (c.wasAdded()) {
+                        for (InstanceInfo addedInstance : c.getAddedSubList()) {
+                            HBox hbox = new HBox();
+                            updateHbox(hbox, addedInstance);
+                            instancesMap.put(addedInstance, hbox);
+                            LobbyVbox.getChildren().add(hbox);
+                        }
+                    }
+                    else if (c.wasRemoved()) {
+                        for (InstanceInfo removedInstance : c.getRemoved()) {
+                            HBox hbox = instancesMap.remove(removedInstance);
+                            if (hbox != null) {
+                                LobbyVbox.getChildren().remove(hbox);
+                            }
+                        }
+                    }
+                    else if(c.wasPermutated())//check if this is needed
+                        ;
+                    else if(c.wasUpdated()) {
+                        for (InstanceInfo updatedInstance : instances) {
+                            HBox hbox = instancesMap.get(updatedInstance);
+                            if (hbox != null) {
+                                hbox.getChildren().clear();
+                                updateHbox(hbox, updatedInstance);
+                            }
+                        }
+                    }
+                }
+            }
+        } );
     }
     private void fillLobbyVbox() {
         for (InstanceInfo i : instances) {
