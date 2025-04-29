@@ -1,9 +1,11 @@
 package com.example.csc311finalcapstoneprojectgroup04;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.Slider;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
@@ -19,6 +21,9 @@ public class MainMenuScreenController {
 
     @FXML
     private Button optionsButton;
+
+    @FXML
+    private CheckBox darkmodeCheck;
 
     @FXML
     private Button playButton;
@@ -82,7 +87,7 @@ public class MainMenuScreenController {
     int optionclicked = 1;
     @FXML
     void optionPullUp(MouseEvent event) { // probably an easier way to do this, but i used a counter to track button clicks and translated it to a toggle function
-
+        // todo - make this a dark mode setting instead of volume slider
         optionsButton.setOnAction(e -> {
             optionclicked++;
             optionsButton.getOnMouseClicked();
@@ -100,7 +105,16 @@ public class MainMenuScreenController {
 
     @FXML
     void playMenu_Host(MouseEvent event) { // todo - opens FXML file for host screen -- shows you and empty slots until player joins
-
+        Stage stage = (Stage) playMenu_Exit.getScene().getWindow();
+        try {
+            FXMLLoader solo = new FXMLLoader(getClass().getResource("HostScreen.fxml"));
+            Scene scene = new Scene(solo.load(), 1280, 720);
+            stage.setTitle("Host");
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @FXML
@@ -115,19 +129,24 @@ public class MainMenuScreenController {
         playMenu_Pane.setDisable(true);
     }
 
+    @FXML
+    void darkMode_Toggle(ActionEvent event) {
+
+    }
+
 
     @FXML
     void playMenu_SoloStart(MouseEvent event) throws IOException { // loads solo mode
-        Stage stage = (Stage) playMenu_Exit.getScene().getWindow();
-        try {
-            FXMLLoader solo = new FXMLLoader(getClass().getResource("Solo.fxml"));
-            Scene scene = new Scene(solo.load(), 1280, 720);
-            stage.setTitle("Solo");
-            stage.setScene(scene);
-            stage.show();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+//        Stage stage = (Stage) playMenu_Exit.getScene().getWindow();
+//        try {
+//            FXMLLoader solo = new FXMLLoader(getClass().getResource("HostScreen.fxml"));
+//            Scene scene = new Scene(solo.load(), 1280, 720);
+//            stage.setTitle("Solo");
+//            stage.setScene(scene);
+//            stage.show();
+//        } catch (IOException e) {
+//            throw new RuntimeException(e);
+//        }
     }
 
 }
