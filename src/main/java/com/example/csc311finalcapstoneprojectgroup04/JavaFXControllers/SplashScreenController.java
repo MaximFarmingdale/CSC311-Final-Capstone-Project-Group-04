@@ -69,11 +69,13 @@ public class SplashScreenController implements Initializable {
             return;
         }
         String password = passwordField.getText();
+        User currentUser = new User(username, password);
         //if the user is signing up
         if(newUser) {
             if (checkUniqueUsername(username)) {
-                users.add(new User(username, password));
+                users.add(currentUser); //get rid of later
                 //call change controller here
+                changeController(currentUser);
             } else {
                 problemText.setText("Username is already taken or invalid!");
                 errorColor(usernameField);
@@ -84,7 +86,8 @@ public class SplashScreenController implements Initializable {
             if (!checkUniqueUsername(username)) {
                 if(getUser(username).checkPassword(password)) {
                     //change controller
-                    System.out.println(getUser(username));
+                    System.out.println(getUser(username)); //get rid of later
+                    changeController(currentUser);
                 }
                 else {
                     problemText.setText("Password is incorrect!");
@@ -150,13 +153,17 @@ public class SplashScreenController implements Initializable {
             signUpText.setText("Log In");
         }
     }
+    @FXML
+    void addUsers(ActionEvent event) {
 
-    public void changeController(Stage stage, User currentUser) {
+    }
+    public void changeController(User currentUser) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("MainMenuScreen.fxml"));
+            Stage stage = (Stage) signInButton.getScene().getWindow();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/JavaFX_FXML/MainMenuScreen.fxml"));
             Parent newRoot = loader.load();
-            HostOrJoinController controller = loader.getController();
-            controller.enterHostOrJoin(currentUser);
+            MainMenuScreenController controller = loader.getController();
+            controller.enterMainMenu(currentUser);
             Scene scene = new Scene(newRoot, 1270, 720);
             stage.setScene(scene);
             stage.show();

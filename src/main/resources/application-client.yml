@@ -1,0 +1,25 @@
+spring:
+  main:
+    web-application-type: none
+  application:
+    name: EurekaClientTest
+server:
+  port: 8090 #8090 works
+
+eureka:
+  client:
+    #set register to false in the future
+    register-with-eureka: true
+    fetch-registry: true
+    registry-fetch-interval-seconds: 5
+    service-url:
+      defaultZone: http://100.38.237.126:8090/eureka
+
+  instance:
+    prefer-ip-address: true
+    metadata-map:
+      host-name: "Max"
+      current-players: "2"
+      active-game: "true"
+    hostname: "max"
+    instance-id: client-8008 # only for testing
