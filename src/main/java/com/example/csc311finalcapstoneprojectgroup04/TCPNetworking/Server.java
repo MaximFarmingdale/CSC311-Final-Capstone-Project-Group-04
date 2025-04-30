@@ -108,6 +108,17 @@ public class Server  {
             throw new RuntimeException(e);
         }
     }
+    public void sendMessage(String text) {
+        try {
+            for (ClientHandler clientHandler : clients) {
+                clientHandler.objectOutputStream.writeObject(text);
+            }
+        }
+        catch (IOException e) {
+            closeSocket();
+        }
+
+    }
 
     /**
      * Allows the host to send a message to all clients
@@ -138,6 +149,26 @@ public class Server  {
         catch (IOException e) {
             closeSocket();
         }
+
+    }
+    public void startRace() {
+        try {
+            lobby.generateNewText();
+            String text = lobby.getText();
+            sendMessage("Race begins in 3");
+            Thread.sleep(1000);
+            sendMessage("Race begins in 2");
+            Thread.sleep(1000);
+            sendMessage("Race begins in 1");
+            Thread.sleep(1000);
+            sendMessage("Start!");
+            //send lobby
+
+
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+
 
     }
 
