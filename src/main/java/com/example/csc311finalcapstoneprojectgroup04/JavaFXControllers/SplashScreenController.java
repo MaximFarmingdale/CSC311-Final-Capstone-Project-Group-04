@@ -110,7 +110,7 @@ public class SplashScreenController implements Initializable {
             return false;
         }
         for (User user : users) {
-            if (user.username.equals(username)) {
+            if (user.getUsername().equals(username)) {
                 return false;
             }
         }
@@ -119,7 +119,7 @@ public class SplashScreenController implements Initializable {
     //helper method to get back a user object with a given username
     private User getUser(String username) {
         for (User user : users) {
-            if(user.username.equals(username)) {
+            if(user.getUsername().equals(username)) {
                 return user;
             }
         }

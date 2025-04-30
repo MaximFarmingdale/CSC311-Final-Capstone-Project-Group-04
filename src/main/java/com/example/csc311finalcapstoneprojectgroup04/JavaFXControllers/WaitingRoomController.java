@@ -42,7 +42,6 @@ public class WaitingRoomController implements Initializable {
     private final int maxPlayers = 8;
     public void enterWaitingRoom(User currentUser) {
         user = currentUser;
-
     }
     /**
      * method to update the observable list only with new changes
@@ -87,7 +86,6 @@ public class WaitingRoomController implements Initializable {
             System.out.println(ip.getText());
             //ping host
         });
-
     }
 
 
