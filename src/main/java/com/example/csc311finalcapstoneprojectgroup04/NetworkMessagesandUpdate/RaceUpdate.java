@@ -41,4 +41,7 @@ public class RaceUpdate implements Serializable {
     public void setProgress(double progress) {
         this.progress = progress;
     }
+    public String getUsername() {return username;}
+    public void setUsername(String username) {this.username = username;}
+
 }
