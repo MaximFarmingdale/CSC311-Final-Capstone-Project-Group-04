@@ -4,6 +4,7 @@ import com.example.csc311finalcapstoneprojectgroup04.Lobby.Lobby;
 import com.example.csc311finalcapstoneprojectgroup04.NetworkMessagesandUpdate.RaceUpdate;
 import com.example.csc311finalcapstoneprojectgroup04.TCPNetworking.Server;
 import com.example.csc311finalcapstoneprojectgroup04.User;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
@@ -52,6 +53,10 @@ public class HostScreenController implements Initializable {
         }
     }
 
+    /**
+     * Sends a message to all clients and adds Message to messageVbox
+     * @param event
+     */
     @FXML
     void SendMessage(KeyEvent event) {
         if (event.getCode() == KeyCode.ENTER) {
@@ -59,14 +64,34 @@ public class HostScreenController implements Initializable {
         }
     }
 
+    /**
+     * Sends a RaceUpdate to all clients and adds it to the raceUpdateList
+     * @param event
+     */
     @FXML
     void sendRaceUpdate(KeyEvent event) {
 
     }
 
+    /**
+     * Sends user information to HostScreenController
+     * @param currentUser
+     */
     public void enterHostScreen(User currentUser) {
         user = currentUser;
     }
 
-
+    /**
+     * Starts the race by setting an active race in Lobby, resetting Labels
+     * and calling the server start method
+     * @param event
+     */
+    @FXML
+    void startRace(ActionEvent event) {
+        lobby.setActiveRace(true);
+        lobby.generateNewText();
+        typedLabel.setText("");
+        untypedLabel.setText(lobby.getText());
+        server.startRace();
+    }
 }
