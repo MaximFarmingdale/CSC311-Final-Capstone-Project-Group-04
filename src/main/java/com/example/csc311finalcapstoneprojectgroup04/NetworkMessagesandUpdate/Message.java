@@ -3,8 +3,8 @@ package com.example.csc311finalcapstoneprojectgroup04.NetworkMessagesandUpdate;
 import java.io.Serializable;
 ///
 public class Message implements Serializable {
-    public String message;
-    public String sender;
+    private String message;
+    private String sender;
     public Message(String sender, String message) {
         this.sender = sender;
         this.message = message;
