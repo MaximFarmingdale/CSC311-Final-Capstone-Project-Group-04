@@ -5,12 +5,17 @@ import com.example.csc311finalcapstoneprojectgroup04.NetworkMessagesandUpdate.Me
 import com.example.csc311finalcapstoneprojectgroup04.NetworkMessagesandUpdate.Ping;
 import com.example.csc311finalcapstoneprojectgroup04.NetworkMessagesandUpdate.RaceUpdate;
 import com.example.csc311finalcapstoneprojectgroup04.User;
+import javafx.application.Platform;
+import javafx.geometry.Pos;
+import javafx.scene.control.Label;
+import javafx.scene.layout.VBox;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.List;
 
 import static com.example.csc311finalcapstoneprojectgroup04.TCPNetworking.ClientHandler.clients;
 
@@ -32,6 +37,8 @@ public class Server  {
     private ObjectInputStream objectInputStream;
     private Lobby lobby;
     private ObjectOutputStream pingStream;
+    private VBox messageBox;
+    private List <RaceUpdate> raceUpdates;
 
 
     /**
@@ -43,13 +50,15 @@ public class Server  {
      * the objectInputStream and objectOutputStream are to read the input from users and to output objects to users
      * it is used throughout the class for these functions
      */
-    public Server(ServerSocket serverSocket, String username, Lobby lobby) throws IOException {
+    public Server(ServerSocket serverSocket, String username, Lobby lobby, VBox messageBox, List<RaceUpdate> raceUpdateList) throws IOException {
         this.serverSocket = serverSocket;
         this.username = username;
         this.socketServer = new Socket("localhost", 1234);
         this.objectInputStream = new ObjectInputStream(socketServer.getInputStream());
         objectOutputStream = new ObjectOutputStream(socketServer.getOutputStream());
         this.lobby = lobby;
+        this.messageBox = messageBox;
+        this.raceUpdates = raceUpdateList;
     }
 
     /**
@@ -70,11 +79,13 @@ public class Server  {
                             ClientHandler clientHandler = new ClientHandler(socket, message.sender);
                             Thread thread = new Thread(clientHandler);
                             thread.start();
+                            break;
                         }
                         //if the application is just pinging the server to see if it works
                         if(object instanceof Ping) {
                             pingResponse(socket);
                             socket.close();
+                            break;
                         }
 
                     } catch (ClassNotFoundException e) {
@@ -108,6 +119,11 @@ public class Server  {
             throw new RuntimeException(e);
         }
     }
+
+    /**
+     * Allows the host to send Text to the user
+     * @param text
+     */
     public void sendMessage(String text) {
         try {
             for (ClientHandler clientHandler : clients) {
@@ -239,7 +255,4 @@ public class Server  {
             e.printStackTrace();
         }
     }
-
-
-
 }
