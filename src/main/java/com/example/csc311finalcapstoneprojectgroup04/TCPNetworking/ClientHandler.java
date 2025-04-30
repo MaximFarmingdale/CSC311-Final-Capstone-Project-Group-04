@@ -1,6 +1,7 @@
 package com.example.csc311finalcapstoneprojectgroup04.TCPNetworking;
 
 import com.example.csc311finalcapstoneprojectgroup04.NetworkMessagesandUpdate.Message;
+import com.example.csc311finalcapstoneprojectgroup04.NetworkMessagesandUpdate.RaceUpdate;
 import com.example.csc311finalcapstoneprojectgroup04.User;
 
 import java.io.*;
@@ -18,6 +19,7 @@ public class ClientHandler implements Runnable {
     public ObjectOutputStream objectOutputStream;
     private ObjectInputStream objectInputStream;
     public String clientUserName;
+    private Server server;
 
     /**
      * Allows you to construct a new ClientHandler for managing multiple connections to a server.
@@ -26,12 +28,13 @@ public class ClientHandler implements Runnable {
      * @param clientUserName The client username which the server gets from the join message.
      *
      */
-    public ClientHandler(Socket socket, String clientUserName) {
+    public ClientHandler(Socket socket, String clientUserName, Server server) {
         try {
             this.socket = socket;
             this.objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
             this.objectInputStream = new ObjectInputStream(socket.getInputStream());
             this.clientUserName = clientUserName;
+            this.server = server;
             clients.add(this);
             sendMessage(new Message(clientUserName, clientUserName + " has entered the game"));
         } catch (Exception e) {
@@ -45,21 +48,28 @@ public class ClientHandler implements Runnable {
      */
     @Override
     public void run() {
-        Message message;
         while (socket.isConnected()) {
+
             try {
-                message = new Message(clientUserName, objectInputStream.readLine()); //change this
-                sendMessage(message);
+                Object input = objectInputStream.readObject();
+                if(input.getClass() == Message.class) {
+                    this.sendMessage((Message) input);
+                }
+                else if(input.getClass() == RaceUpdate.class) {
+
+                }
             }
              catch (IOException e) {
                  closeClient();
                  break;
+            } catch (ClassNotFoundException e) {
+                throw new RuntimeException(e);
             }
         }
     }
 
     /**
-     * Sends a client message to every other client.
+     * Sends a client message to every other client and the host.
      * @param message the client message object.
      */
     public void sendMessage(Message message) {
@@ -75,10 +85,12 @@ public class ClientHandler implements Runnable {
             }
 
         }
+        server.processMessage(message); //send it to the host
     }
 
     /**
      * Sends a client user object to every other client.
+     * @deprecated
      * @param user the client user object.
      */
     public void sendMessage(User user) {
@@ -92,8 +104,20 @@ public class ClientHandler implements Runnable {
             catch (IOException e) {
                 removeClient();
             }
-
         }
+    }
+    public void sendMessage(RaceUpdate raceUpdate) {
+        for (ClientHandler client : clients) {
+            try {
+                if(!client.clientUserName.equals(clientUserName)) {
+                    client.objectOutputStream.writeObject(raceUpdate);
+                    client.objectOutputStream.flush();
+                }
+            } catch (IOException e) {
+                removeClient();
+            }
+        }
+        server.processMessage(raceUpdate);
     }
 
     /**
