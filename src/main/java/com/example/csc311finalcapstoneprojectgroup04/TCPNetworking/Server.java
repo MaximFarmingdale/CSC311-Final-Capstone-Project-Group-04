@@ -76,7 +76,7 @@ public class Server implements Runnable {
                         Object object = objectInputStream.readObject();
                         if(object instanceof Message) {
                             Message message = (Message) object;
-                            ClientHandler clientHandler = new ClientHandler(socket, message.sender);
+                            ClientHandler clientHandler = new ClientHandler(socket, message.getSender());
                             Thread thread = new Thread(clientHandler);
                             thread.start();
                             break;
@@ -237,6 +237,19 @@ public class Server implements Runnable {
             closeSocket();
         }
     }
+
+    /**
+     * Processes an input of Messsage and adds it to the messageBox as a new label
+     * @param message
+     */
+    public void processMessage(Message message) {
+        Label label = new Label(message.getSender() + ": " + message.getMessage());
+        label.setAlignment(Pos.BASELINE_LEFT);
+        Platform.runLater(() -> {
+            messageBox.getChildren().add(label);
+        });
+    }
+
     /**
      * Closes the socket that the server class uses for ObjectOutputStream and ObjectInputStream and frees up resources
      */
