@@ -33,11 +33,10 @@ public class HostScreenController implements Initializable {
     @FXML
     private VBox messageVbox;
     @FXML
-    private TextField messageField;
+    private TextField messageField, raceField;
     @FXML
-    Label raceText;
-    @FXML
-    private TextField raceField;
+    Label typedLabel, untypedLabel;
+    private String raceText;
     private Server server;
     private List<RaceUpdate> raceUpdateList = new ArrayList<>();
     @Override
@@ -46,7 +45,6 @@ public class HostScreenController implements Initializable {
             lobby = new Lobby(Inet4Address.getLocalHost().getHostAddress(), user.getUsername());
             server = new Server(new ServerSocket(12345), user.getUsername(), lobby, messageVbox, raceUpdateList);
             new Thread(server).start();
-
         } catch (UnknownHostException e) {
             throw new RuntimeException(e);
         } catch (IOException e) {

@@ -56,7 +56,7 @@ public class ClientHandler implements Runnable {
                     this.sendMessage((Message) input);
                 }
                 else if(input.getClass() == RaceUpdate.class) {
-
+                    this.sendMessage((RaceUpdate) input);
                 }
             }
              catch (IOException e) {
