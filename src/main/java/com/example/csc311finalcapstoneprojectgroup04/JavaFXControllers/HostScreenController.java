@@ -1,6 +1,7 @@
 package com.example.csc311finalcapstoneprojectgroup04.JavaFXControllers;
 
 import com.example.csc311finalcapstoneprojectgroup04.Lobby.Lobby;
+import com.example.csc311finalcapstoneprojectgroup04.NetworkMessagesandUpdate.Message;
 import com.example.csc311finalcapstoneprojectgroup04.NetworkMessagesandUpdate.RaceUpdate;
 import com.example.csc311finalcapstoneprojectgroup04.TCPNetworking.Server;
 import com.example.csc311finalcapstoneprojectgroup04.User;
@@ -41,8 +42,9 @@ public class HostScreenController implements Initializable {
     private Server server;
     private String[] raceWords;
     private double racePercentage;
-    private int raceIndex;
+    private int raceIndex = 0;
     private RaceUpdate raceUpdate;
+    private Message message;
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         try {
@@ -63,7 +65,9 @@ public class HostScreenController implements Initializable {
     @FXML
     void SendMessage(KeyEvent event) {
         if (event.getCode() == KeyCode.ENTER) {
-            server.sendMessage(messageField.getText());
+            message.setMessage(messageField.getText());
+            server.sendMessage(message);
+            messageField.clear();
         }
     }
 
@@ -73,7 +77,19 @@ public class HostScreenController implements Initializable {
      */
     @FXML
     void sendRaceUpdate(KeyEvent event) {
-
+        if(raceWords.length == raceIndex) {
+            if(raceField.getText().trim().equals(raceWords[raceIndex])) {
+                //raceWinning
+            }
+            else if(raceField.getText().equals(raceWords[raceIndex])) {
+                raceIndex++;
+                raceUpdate.incrementWordIndex();
+                racePercentage = (double) raceIndex /raceWords.length;
+                raceUpdate.setProgress(racePercentage);
+                server.sendMessage(raceUpdate);
+                raceField.clear();
+            }
+        }
     }
 
     /**
@@ -83,6 +99,7 @@ public class HostScreenController implements Initializable {
     public void enterHostScreen(User currentUser) {
         user = currentUser;
         raceUpdate = new RaceUpdate(user.getUsername());
+        message = new Message(currentUser.getUsername(),"");
     }
 
     /**
