@@ -45,18 +45,8 @@ public class WaitingRoomController implements Initializable {
 
     }
     /**
-     * Fills up the GUI with Lobbies
-     */
-    private void fillLobbyVbox() {
-        for (InstanceInfo i : instances) {
-            HBox hbox = new HBox();
-            updateHbox(hbox, i);
-            instancesMap.put(i, hbox);
-            LobbyVbox.getChildren().add(hbox);
-        }
-    }
-    /**
      * method to update the observable list only with new changes
+     * Unfishinshed
      */
     private void addChangesToList(){//in high likelihood I will not be able to implement this correctly in time
         List<InstanceInfo> changes = clientEureka.fillList();
@@ -92,7 +82,9 @@ public class WaitingRoomController implements Initializable {
         hbox.setStyle("-fx-border-color: #16bf8c");
         hbox.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
             HBox hbox2 = (HBox) event.getSource();
-            Label ip = (Label) hbox2.getChildren().get(3);
+            VBox v = (VBox) hbox2.getChildren().get(0);
+            Label ip = (Label) v.getChildren().get(3);
+            System.out.println(ip.getText());
             //ping host
         });
 
@@ -108,13 +100,13 @@ public class WaitingRoomController implements Initializable {
                 public void onChanged(Change<? extends InstanceInfo> c) {
                     while (c.next()) {
                         if (c.wasAdded()) {
-                            for (InstanceInfo addedInstance : c.getAddedSubList()) {
+                            for (InstanceInfo addedInstance : c.getAddedSubList()) {//if elements are added to the list
                                 HBox hbox = new HBox();
                                 updateHbox(hbox, addedInstance);
                                 instancesMap.put(addedInstance, hbox);
                                 LobbyVbox.getChildren().add(hbox);
                             }
-                        } else if (c.wasRemoved()) {
+                        } else if (c.wasRemoved()) { //if elements were removed from the list, currently unused?
                             for (InstanceInfo removedInstance : c.getRemoved()) {
                                 HBox hbox = instancesMap.remove(removedInstance);
                                 if (hbox != null) {
@@ -123,7 +115,7 @@ public class WaitingRoomController implements Initializable {
                             }
                         } else if (c.wasPermutated())//check if this is needed
                             ;
-                        else if (c.wasUpdated()) {
+                        else if (c.wasUpdated()) {//currently impossible to reach until I update the lobby refresh
                             for (InstanceInfo updatedInstance : instances) {
                                 HBox hbox = instancesMap.get(updatedInstance);
                                 if (hbox != null) {
@@ -137,7 +129,7 @@ public class WaitingRoomController implements Initializable {
 
             });
             List<InstanceInfo> temp = clientEureka.fillList();
-            if (temp != null) {
+            if (temp != null) { //making sure that the list is not null before you try to make the observable list access it
                 instances.setAll(clientEureka.fillList());
             }
         }
@@ -147,10 +139,12 @@ public class WaitingRoomController implements Initializable {
                 // later on add a way for lobby's that have the same metadata to stay instead of getting cleared
                 if(clientEureka != null) {
                     List<InstanceInfo> latest = clientEureka.fillList();
-                    Platform.runLater(() -> {
-                        LobbyVbox.getChildren().clear();
-                        instances.setAll(latest);
-                    });
+                    if(latest != null) {
+                        Platform.runLater(() -> {
+                            LobbyVbox.getChildren().clear();
+                            instances.setAll(latest);
+                        });
+                    }
                 }
                 else
                     System.out.println("Waiting for Eureka");
