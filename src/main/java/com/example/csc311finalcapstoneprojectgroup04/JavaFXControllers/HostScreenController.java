@@ -45,7 +45,7 @@ public class HostScreenController implements Initializable {
         try {
             lobby = new Lobby(Inet4Address.getLocalHost().getHostAddress(), user.getUsername());
             server = new Server(new ServerSocket(12345), user.getUsername(), lobby, messageVbox, raceUpdateList);
-            new Thread(() -> {server.startServer();}).start();
+            new Thread(server).start();
 
         } catch (UnknownHostException e) {
             throw new RuntimeException(e);

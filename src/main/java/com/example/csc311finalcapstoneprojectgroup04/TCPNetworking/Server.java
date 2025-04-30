@@ -29,7 +29,7 @@ import static com.example.csc311finalcapstoneprojectgroup04.TCPNetworking.Client
  * to it. It uses ClientHandler to manage the lobbies, which by having each client as a different
  * thread, allows the manging of multiple clients.
  */
-public class Server  {
+public class Server implements Runnable {
     private ServerSocket serverSocket;
     private String username;
     private Socket socketServer;
@@ -66,7 +66,7 @@ public class Server  {
      * Accepted connections become new ClientHandler objects and get added to the ClientHandler lst: clients.
      * Always put this method in an unused thread as it is in an endless loop
      */
-    public void startServer() {
+    public void run() {
         try {
             while (!serverSocket.isClosed()) {
                 Socket socket = serverSocket.accept();
