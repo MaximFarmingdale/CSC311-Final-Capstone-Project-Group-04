@@ -50,7 +50,7 @@ public class Server implements Runnable {
      * the objectInputStream and objectOutputStream are to read the input from users and to output objects to users
      * it is used throughout the class for these functions
      */
-    public Server(ServerSocket serverSocket, String username, Lobby lobby, VBox messageBox, List<RaceUpdate> raceUpdateList) throws IOException {
+    public Server(ServerSocket serverSocket, String username, Lobby lobby, VBox messageBox) throws IOException {
         this.serverSocket = serverSocket;
         this.username = username;
         this.socketServer = new Socket("localhost", 1234);
@@ -58,7 +58,6 @@ public class Server implements Runnable {
         objectOutputStream = new ObjectOutputStream(socketServer.getOutputStream());
         this.lobby = lobby;
         this.messageBox = messageBox;
-        this.raceUpdates = raceUpdateList;
     }
 
     /**
@@ -286,5 +285,8 @@ public class Server implements Runnable {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+    public List<RaceUpdate> getRaceUpdates() {
+        return raceUpdates;
     }
 }

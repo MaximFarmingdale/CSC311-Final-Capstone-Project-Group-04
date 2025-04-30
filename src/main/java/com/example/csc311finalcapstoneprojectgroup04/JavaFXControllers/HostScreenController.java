@@ -39,12 +39,11 @@ public class HostScreenController implements Initializable {
     Label typedLabel, untypedLabel;
     private String raceText;
     private Server server;
-    private List<RaceUpdate> raceUpdateList = new ArrayList<>();
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         try {
             lobby = new Lobby(Inet4Address.getLocalHost().getHostAddress(), user.getUsername());
-            server = new Server(new ServerSocket(12345), user.getUsername(), lobby, messageVbox, raceUpdateList);
+            server = new Server(new ServerSocket(12345), user.getUsername(), lobby, messageVbox);
             new Thread(server).start();
         } catch (UnknownHostException e) {
             throw new RuntimeException(e);
