@@ -217,7 +217,6 @@ public class Server implements Runnable {
         catch (IOException e) {
             closeSocket();
         }
-
     }
 
     /**
@@ -248,6 +247,26 @@ public class Server implements Runnable {
         Platform.runLater(() -> {
             messageBox.getChildren().add(label);
         });
+    }
+
+    /**
+     * Process a RaceUpdate input and adds it to raceUpdates list if it's a race update from a
+     * new user or updates an existing RaceUpdate. Also calls winner method if it is a winning update
+     * @param raceUpdate
+     */
+    public void processMessage(RaceUpdate raceUpdate) {
+        if(raceUpdate.isWinner())
+            //call winner method
+            System.out.println("Winner");
+        boolean wasAdded = false;
+        for (RaceUpdate r : raceUpdates) {
+            if (r.getUsername().equals(raceUpdate.getUsername())) {
+                r = raceUpdate;
+                wasAdded = true;
+            }
+        }
+        if(wasAdded)
+            raceUpdates.add(raceUpdate);
     }
 
     /**
