@@ -76,7 +76,7 @@ public class Server implements Runnable {
                         Object object = objectInputStream.readObject();
                         if(object instanceof Message) {
                             Message message = (Message) object;
-                            ClientHandler clientHandler = new ClientHandler(socket, message.getSender());
+                            ClientHandler clientHandler = new ClientHandler(socket, message.getSender(), this);
                             Thread thread = new Thread(clientHandler);
                             thread.start();
                             break;
@@ -116,7 +116,7 @@ public class Server implements Runnable {
                 closeSocket();
             }
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            closeSocket();
         }
     }
 
@@ -182,7 +182,7 @@ public class Server implements Runnable {
 
 
         } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+            closeSocket();
         }
 
 
