@@ -39,6 +39,10 @@ public class HostScreenController implements Initializable {
     Label typedLabel, untypedLabel;
     private String raceText;
     private Server server;
+    private String[] raceWords;
+    private double racePercentage;
+    private int raceIndex;
+    private RaceUpdate raceUpdate;
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         try {
@@ -59,7 +63,7 @@ public class HostScreenController implements Initializable {
     @FXML
     void SendMessage(KeyEvent event) {
         if (event.getCode() == KeyCode.ENTER) {
-
+            server.sendMessage(messageField.getText());
         }
     }
 
@@ -78,6 +82,7 @@ public class HostScreenController implements Initializable {
      */
     public void enterHostScreen(User currentUser) {
         user = currentUser;
+        raceUpdate = new RaceUpdate(user.getUsername());
     }
 
     /**
@@ -92,5 +97,6 @@ public class HostScreenController implements Initializable {
         typedLabel.setText("");
         untypedLabel.setText(lobby.getText());
         server.startRace();
+        raceWords = raceText.split(" ");
     }
 }
