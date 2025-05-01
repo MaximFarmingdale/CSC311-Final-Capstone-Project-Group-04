@@ -6,6 +6,7 @@ import com.example.csc311finalcapstoneprojectgroup04.NetworkMessagesandUpdate.Pi
 import com.example.csc311finalcapstoneprojectgroup04.NetworkMessagesandUpdate.RaceUpdate;
 import com.example.csc311finalcapstoneprojectgroup04.User;
 import javafx.application.Platform;
+import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
@@ -38,7 +39,7 @@ public class Server implements Runnable {
     private Lobby lobby;
     private ObjectOutputStream pingStream;
     private VBox messageBox;
-    private List <RaceUpdate> raceUpdates;
+    private ObservableList<RaceUpdate> raceUpdatesObservableList;
 
 
     /**
@@ -50,7 +51,7 @@ public class Server implements Runnable {
      * the objectInputStream and objectOutputStream are to read the input from users and to output objects to users
      * it is used throughout the class for these functions
      */
-    public Server(ServerSocket serverSocket, String username, Lobby lobby, VBox messageBox, List<RaceUpdate> raceUpdateList) throws IOException {
+    public Server(ServerSocket serverSocket, String username, Lobby lobby, VBox messageBox, ObservableList<RaceUpdate> raceUpdatesObservableList) throws IOException {
         this.serverSocket = serverSocket;
         this.username = username;
         this.socketServer = new Socket("localhost", 1234);
@@ -58,7 +59,7 @@ public class Server implements Runnable {
         this.objectOutputStream = new ObjectOutputStream(socketServer.getOutputStream());
         this.lobby = lobby;
         this.messageBox = messageBox;
-        this.raceUpdates = raceUpdateList;
+        this.raceUpdatesObservableList = raceUpdatesObservableList;
     }
 
     /**
@@ -167,6 +168,11 @@ public class Server implements Runnable {
         }
 
     }
+
+    /**\
+     * Starts the race by sending messages signfiying the beginning of the race,
+     * then sends the lobby to users.
+     */
     public void startRace() {
         try {
             lobby.generateNewText();
@@ -259,14 +265,14 @@ public class Server implements Runnable {
             //call winner method
             System.out.println("Winner");
         boolean wasAdded = false;
-        for (RaceUpdate r : raceUpdates) {
+        for (RaceUpdate r : raceUpdatesObservableList) {
             if (r.getUsername().equals(raceUpdate.getUsername())) {
                 r = raceUpdate;
                 wasAdded = true;
             }
         }
         if(wasAdded)
-            raceUpdates.add(raceUpdate);
+            raceUpdatesObservableList.add(raceUpdate);
     }
 
     /**
@@ -288,6 +294,6 @@ public class Server implements Runnable {
         }
     }
     public List<RaceUpdate> getRaceUpdates() {
-        return raceUpdates;
+        return raceUpdatesObservableList;
     }
 }

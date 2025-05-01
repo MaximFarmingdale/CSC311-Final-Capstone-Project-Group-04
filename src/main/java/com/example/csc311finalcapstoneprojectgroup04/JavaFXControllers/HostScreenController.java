@@ -5,6 +5,9 @@ import com.example.csc311finalcapstoneprojectgroup04.NetworkMessagesandUpdate.Me
 import com.example.csc311finalcapstoneprojectgroup04.NetworkMessagesandUpdate.RaceUpdate;
 import com.example.csc311finalcapstoneprojectgroup04.TCPNetworking.Server;
 import com.example.csc311finalcapstoneprojectgroup04.User;
+import com.netflix.appinfo.InstanceInfo;
+import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -12,6 +15,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -47,18 +51,41 @@ public class HostScreenController implements Initializable {
     private Message message;
     private String typedString = "";
     private String untypedString = "";
-    private List<RaceUpdate> raceUpdates;
+    private ObservableList<RaceUpdate> raceUpdatesObservableList;
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         try {
             lobby = new Lobby(Inet4Address.getLocalHost().getHostAddress(), user.getUsername());
-            server = new Server(new ServerSocket(12345), user.getUsername(), lobby, messageVbox, raceUpdates);
+            server = new Server(new ServerSocket(12345), user.getUsername(), lobby, messageVbox, raceUpdatesObservableList);
             new Thread(server).start();
         } catch (UnknownHostException e) {
             throw new RuntimeException(e);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        raceUpdatesObservableList.addListener(new ListChangeListener<RaceUpdate>() {
+            @Override
+            public void onChanged(Change<? extends RaceUpdate> c) {
+                while (c.next()) {
+                    if (c.wasAdded()) {
+                        for(RaceUpdate r : c.getAddedSubList()) {
+                            if(r.isWinner())
+                                endOfRace(r);
+                        }
+                    }
+                    else if (c.wasPermutated())//check if this is needed
+                        System.out.println(c.getRemoved());
+
+                    else if (c.wasUpdated()) {
+                        for (RaceUpdate r : raceUpdatesObservableList) {
+                            if(r.isWinner())
+                                endOfRace(r);
+                        }
+                    }
+                }
+            }
+
+        });
     }
     /**
      * Sends a message to all clients and adds Message to messageVbox
@@ -83,7 +110,9 @@ public class HostScreenController implements Initializable {
                 if (raceField.getText()
                         .trim()
                         .equals(raceWords[raceWordindex])) {//if it's the last word
-                    //raceWinning
+                    raceUpdate.incrementWordIndex();
+                    raceUpdate.setProgress(1);
+                    endOfRace(raceUpdate);
                 }
             } else if (raceField.getText().equals(raceWords[raceWordindex])) {
                 raceIndex += raceWords[raceWordindex].length() + 1;
@@ -113,6 +142,9 @@ public class HostScreenController implements Initializable {
         user = currentUser;
         raceUpdate = new RaceUpdate(user.getUsername());
         message = new Message(currentUser.getUsername(),"");
+    }
+    public void endOfRace(RaceUpdate update) {
+
     }
     /**
      * Starts the race by setting an active race in Lobby, resetting Labels
