@@ -22,7 +22,6 @@ import java.net.Inet4Address;
 import java.net.ServerSocket;
 import java.net.URL;
 import java.net.UnknownHostException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -42,14 +41,18 @@ public class HostScreenController implements Initializable {
     private Server server;
     private String[] raceWords;
     private double racePercentage;
+    private int raceWordindex = 0;
     private int raceIndex = 0;
     private RaceUpdate raceUpdate;
     private Message message;
+    private String typedString = "";
+    private String untypedString = "";
+    private List<RaceUpdate> raceUpdates;
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         try {
             lobby = new Lobby(Inet4Address.getLocalHost().getHostAddress(), user.getUsername());
-            server = new Server(new ServerSocket(12345), user.getUsername(), lobby, messageVbox);
+            server = new Server(new ServerSocket(12345), user.getUsername(), lobby, messageVbox, raceUpdates);
             new Thread(server).start();
         } catch (UnknownHostException e) {
             throw new RuntimeException(e);
@@ -76,17 +79,29 @@ public class HostScreenController implements Initializable {
     @FXML
     void sendRaceUpdate(KeyEvent event) {
         if(lobby.getActiveRace()) {
-            if (raceWords.length == raceIndex) {
-                if (raceField.getText().trim().equals(raceWords[raceIndex])) {
+            if (raceWords.length - 1 == raceWordindex) {
+                if (raceField.getText()
+                        .trim()
+                        .equals(raceWords[raceWordindex])) {//if it's the last word
                     //raceWinning
                 }
-            } else if (raceField.getText().equals(raceWords[raceIndex])) {
-                raceIndex++;
+            } else if (raceField.getText().equals(raceWords[raceWordindex])) {
+                raceIndex += raceWords[raceWordindex].length() + 1;
+                //sets the untyped and typed messages to their respective new index
+                typedString = raceText.substring(0, raceIndex);
+                untypedString = raceText.substring(raceIndex);
+                //updating values
+                raceWordindex++;
                 raceUpdate.incrementWordIndex();
-                racePercentage = (double) raceIndex / raceWords.length;
+                racePercentage = (double) raceWordindex / raceWords.length;
                 raceUpdate.setProgress(racePercentage);
+                //sending messages
                 server.sendMessage(raceUpdate);
+                //clearing the field
                 raceField.clear();
+                typedLabel.setText(typedString);
+                untypedLabel.setText(untypedString);
+                System.out.println(untypedString.toString() + " " + typedString.toString());
             }
         }
     }

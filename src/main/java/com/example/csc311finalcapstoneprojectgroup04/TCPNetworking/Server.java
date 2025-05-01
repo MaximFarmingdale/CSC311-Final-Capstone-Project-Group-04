@@ -50,14 +50,15 @@ public class Server implements Runnable {
      * the objectInputStream and objectOutputStream are to read the input from users and to output objects to users
      * it is used throughout the class for these functions
      */
-    public Server(ServerSocket serverSocket, String username, Lobby lobby, VBox messageBox) throws IOException {
+    public Server(ServerSocket serverSocket, String username, Lobby lobby, VBox messageBox, List<RaceUpdate> raceUpdateList) throws IOException {
         this.serverSocket = serverSocket;
         this.username = username;
         this.socketServer = new Socket("localhost", 1234);
         this.objectInputStream = new ObjectInputStream(socketServer.getInputStream());
-        objectOutputStream = new ObjectOutputStream(socketServer.getOutputStream());
+        this.objectOutputStream = new ObjectOutputStream(socketServer.getOutputStream());
         this.lobby = lobby;
         this.messageBox = messageBox;
+        this.raceUpdates = raceUpdateList;
     }
 
     /**
