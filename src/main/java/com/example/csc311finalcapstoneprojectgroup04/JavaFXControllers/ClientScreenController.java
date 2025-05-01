@@ -105,7 +105,7 @@ public class ClientScreenController implements Initializable {
         this.lobby = lobby;
         try {
             raceUpdates = FXCollections.observableArrayList(new ArrayList<>());
-            client = new Client(new Socket(lobby.getLobbyIP(),12345), user.getUsername(), raceUpdates);
+            new Thread(client = new Client(new Socket(lobby.getLobbyIP(),12345), user.getUsername(), raceUpdates));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

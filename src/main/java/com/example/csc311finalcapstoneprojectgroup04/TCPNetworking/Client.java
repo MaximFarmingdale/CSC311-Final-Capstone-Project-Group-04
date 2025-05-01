@@ -17,7 +17,7 @@ import java.util.List;
  * lobbies. Messages are added as text in FX Java Hbox, so that they are displayed
  * visually. Once a message is sent, it will be sent to
  */
-public class Client {
+public class Client implements Runnable {
     private Socket socket;
     private ObjectOutputStream objectOutputStream;
     private ObjectInputStream objectInputStream;
@@ -88,31 +88,30 @@ public class Client {
     /**
      * Waits for input and calls various methods to process the input
      */
-    public void getMessage() {
-        new Thread(() -> {
-            try {
-                while (true) {
-                    Object receivedObject = objectInputStream.readObject();
-                    if(receivedObject instanceof User) {
-                        processMessage((User) receivedObject);
-                    }
-                    else if(receivedObject instanceof String) {
-                        processMessage((String) receivedObject);
-                    }
-                    else if(receivedObject instanceof Message) {
-                        processMessage((Message) receivedObject);
-                    }
-                    else if(receivedObject instanceof Lobby) {
-                        processMessage((Lobby) receivedObject);
-                    }
-                    else if(receivedObject instanceof RaceUpdate) {
-                        processMessage((RaceUpdate) receivedObject);
-                    }
+    @Override
+    public void run() {
+        try {
+            while (true) {
+                Object receivedObject = objectInputStream.readObject();
+                if(receivedObject instanceof User) {
+                    processMessage((User) receivedObject);
                 }
+                else if(receivedObject instanceof String) {
+                    processMessage((String) receivedObject);
+                }
+                else if(receivedObject instanceof Message) {
+                    processMessage((Message) receivedObject);
+                }
+                else if(receivedObject instanceof Lobby) {
+                    processMessage((Lobby) receivedObject);
+                }
+                else if(receivedObject instanceof RaceUpdate) {
+                    processMessage((RaceUpdate) receivedObject);
+                }
+            }
             } catch (IOException | ClassNotFoundException e) {
                 closeClient();
             }
-        }).start();
     }
 
     /**
