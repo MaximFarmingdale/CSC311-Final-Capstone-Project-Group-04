@@ -169,6 +169,21 @@ public class Server implements Runnable {
 
     }
 
+    /**
+     *  Allows the host to send a lobby to all clients
+     * @param lobby
+     */
+    public void sendMessage(Lobby lobby) {
+        try {
+            for (ClientHandler clientHandler : clients) {
+                clientHandler.objectOutputStream.writeObject(lobby);
+            }
+        }
+        catch (IOException e) {
+            closeSocket();
+        }
+    }
+
     /**\
      * Starts the race by sending messages signfiying the beginning of the race,
      * then sends the lobby to users.
