@@ -51,19 +51,19 @@ public class HostScreenController implements Initializable {
     private Message message;
     private String typedString = "";
     private String untypedString = "";
-    private ObservableList<RaceUpdate> raceUpdatesObservableList;
+    private ObservableList<RaceUpdate> raceUpdates;
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         try {
             lobby = new Lobby(Inet4Address.getLocalHost().getHostAddress(), user.getUsername());
-            server = new Server(new ServerSocket(12345), user.getUsername(), lobby, messageVbox, raceUpdatesObservableList);
+            server = new Server(new ServerSocket(12345), user.getUsername(), lobby, messageVbox, raceUpdates);
             new Thread(server).start();
         } catch (UnknownHostException e) {
             throw new RuntimeException(e);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        raceUpdatesObservableList.addListener(new ListChangeListener<RaceUpdate>() {
+        raceUpdates.addListener(new ListChangeListener<RaceUpdate>() {
             @Override
             public void onChanged(Change<? extends RaceUpdate> c) {
                 while (c.next()) {
@@ -77,7 +77,7 @@ public class HostScreenController implements Initializable {
                         System.out.println(c.getRemoved());
 
                     else if (c.wasUpdated()) {
-                        for (RaceUpdate r : raceUpdatesObservableList) {
+                        for (RaceUpdate r : raceUpdates) {
                             if(r.isWinner())
                                 endOfRace(r);
                         }

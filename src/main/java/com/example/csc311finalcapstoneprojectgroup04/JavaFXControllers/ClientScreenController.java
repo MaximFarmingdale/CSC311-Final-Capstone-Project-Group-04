@@ -5,6 +5,7 @@ import com.example.csc311finalcapstoneprojectgroup04.NetworkMessagesandUpdate.Ra
 import com.example.csc311finalcapstoneprojectgroup04.TCPNetworking.Client;
 import com.example.csc311finalcapstoneprojectgroup04.User;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -45,7 +46,6 @@ public class ClientScreenController implements Initializable {
     private Lobby lobby;
     private Client client;
     private ObservableList<RaceUpdate> raceUpdates;
-
     @FXML
     void SendMessage(KeyEvent event) {
 
@@ -68,5 +68,24 @@ public class ClientScreenController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        // adds a listener which can be used for animations.
+        raceUpdates.addListener(new ListChangeListener<RaceUpdate>() {
+            @Override
+            public void onChanged(Change<? extends RaceUpdate> c) {
+                while (c.next()) {
+                    if (c.wasAdded()) {
+                        System.out.println("added");
+                    }
+                    else if (c.wasPermutated())//check if this is needed
+                        System.out.println("removed");
+
+                    else if (c.wasUpdated()) {
+                        System.out.println("updated");
+                    }
+                }
+            }
+        });
+
+
     }
 }
