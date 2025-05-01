@@ -44,13 +44,13 @@ public class Client {
     }
 
     /**
-     * Allows the client to send messages to all other clients.
-     * @param message client message.
+     *
+     * @param message
      */
-    public void sendMessage(String message) {
+    public void sendMessage(Message message) {
         try {
             if (socket.isConnected()) {
-                objectOutputStream.writeObject(username + ": " + message);
+                objectOutputStream.writeObject(message);
                 objectOutputStream.flush();
             }
         } catch (IOException e) {
@@ -60,7 +60,7 @@ public class Client {
 
     /**
      * @deprecated
-     * Allows the client to send users to all other clients.
+     * Allows the client to send users to all other clients and the host.
      * @param user user message.
      */
     public void sendMessage(User user) {
@@ -69,6 +69,19 @@ public class Client {
             objectOutputStream.flush();
         } catch (IOException e) {
             closeClient();
+        }
+    }
+
+    /**
+     * Allows the client to send users to all other clients and the host.
+     * @param raceUpdate
+     */
+    public void sendMessage(RaceUpdate raceUpdate) {
+        try {
+            objectOutputStream.writeObject(raceUpdate);
+            objectOutputStream.flush();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -91,6 +104,9 @@ public class Client {
                     }
                     else if(receivedObject instanceof Lobby) {
                         processMessage((Lobby) receivedObject);
+                    }
+                    else if(receivedObject instanceof RaceUpdate) {
+                        processMessage((RaceUpdate) receivedObject);
                     }
                 }
             } catch (IOException | ClassNotFoundException e) {

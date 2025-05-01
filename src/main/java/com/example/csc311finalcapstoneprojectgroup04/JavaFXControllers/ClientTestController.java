@@ -6,6 +6,7 @@ import java.net.URL;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
+import com.example.csc311finalcapstoneprojectgroup04.NetworkMessagesandUpdate.Message;
 import com.example.csc311finalcapstoneprojectgroup04.TCPNetworking.Client;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -46,11 +47,6 @@ Its fleece was white as snow.""";
     @FXML
     void testClient(KeyEvent event) throws IOException {
         if (event.getCode() == KeyCode.SPACE) {
-            if (count < list.length && Objects.equals(inputField.getText(), list[count])) {
-                client.sendMessage(inputField.getText());
-                count++;
-                inputField.clear();
-            }
         }
         if (event.getCode() == KeyCode.ENTER) {
             if (username.isEmpty()) {
