@@ -13,6 +13,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
@@ -60,7 +61,11 @@ public class ClientScreenController implements Initializable {
     private ObservableList<RaceUpdate> raceUpdates;
     @FXML
     void SendMessage(KeyEvent event) {
-
+        if (event.getCode() == KeyCode.ENTER) {
+            message.setMessage(messageField.getText());
+            client.sendMessage(message);
+            messageField.clear();
+        }
     }
 
     @FXML
@@ -128,4 +133,5 @@ public class ClientScreenController implements Initializable {
 
 
     }
+
 }
