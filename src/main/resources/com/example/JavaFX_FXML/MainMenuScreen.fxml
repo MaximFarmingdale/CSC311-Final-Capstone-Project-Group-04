@@ -10,13 +10,13 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.csc311finalcapstoneprojectgroup04.MainMenuScreenController">
+<AnchorPane fx:id="MainMenuAPane" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.csc311finalcapstoneprojectgroup04.JavaFXControllers.MainMenuScreenController">
    <children>
       <BorderPane prefHeight="720.0" prefWidth="1280.0" style="-fx-background-color: #00bfff;">
          <bottom>
             <HBox alignment="CENTER" maxHeight="225.0" minHeight="175.0" prefWidth="1280.0" style="-fx-background-color: #3d8c40;" BorderPane.alignment="CENTER">
                <children>
-                  <Button fx:id="playButton" minHeight="100.0" minWidth="200.0" mnemonicParsing="false" onMouseClicked="#openPlayMenu" style="-fx-background-color: #4caf50;" text="PLAY" textFill="WHITE">
+                  <Button fx:id="playButton" minHeight="100.0" minWidth="200.0" mnemonicParsing="false" onAction="#openPlayMenu" style="-fx-background-color: #4caf50;" text="PLAY" textFill="WHITE">
                      <HBox.margin>
                         <Insets bottom="100.0" left="100.0" right="100.0" top="100.0" />
                      </HBox.margin>
@@ -24,7 +24,7 @@
                         <Font name="Malgun Gothic Bold" size="32.0" />
                      </font>
                   </Button>
-                  <Button fx:id="optionsButton" minHeight="100.0" minWidth="200.0" mnemonicParsing="false" onMouseClicked="#optionPullUp" style="-fx-background-color: #4caf50;" text="OPTIONS" textFill="WHITE">
+                  <Button fx:id="optionsButton" minHeight="100.0" minWidth="200.0" mnemonicParsing="false" onAction="#optionPullUp" style="-fx-background-color: #4caf50;" text="OPTION" textFill="WHITE">
                      <HBox.margin>
                         <Insets bottom="100.0" left="100.0" right="100.0" top="100.0" />
                      </HBox.margin>
@@ -32,7 +32,7 @@
                         <Font name="Malgun Gothic Bold" size="32.0" />
                      </font>
                   </Button>
-                  <Button fx:id="exitButton" minHeight="100.0" minWidth="200.0" mnemonicParsing="false" onMouseClicked="#exitProgram" style="-fx-background-color: #4caf50;" text="EXIT" textFill="WHITE">
+                  <Button fx:id="exitButton" minHeight="100.0" minWidth="200.0" mnemonicParsing="false" onAction="#exitProgram" style="-fx-background-color: #4caf50;" text="EXIT" textFill="WHITE">
                      <HBox.margin>
                         <Insets bottom="100.0" left="100.0" right="100.0" top="100.0" />
                      </HBox.margin>
@@ -44,7 +44,7 @@
             </HBox>
          </bottom>
          <top>
-            <Text fx:id="typeracerLogo" fill="WHITE" stroke="BLACK" strokeType="OUTSIDE" strokeWidth="0.0" text="TypeRacer Demo" textAlignment="CENTER" BorderPane.alignment="CENTER">
+            <Text fill="WHITE" stroke="BLACK" strokeType="OUTSIDE" strokeWidth="0.0" text="TypeRacer Demo" textAlignment="CENTER" BorderPane.alignment="CENTER">
                <font>
                   <Font name="MS Outlook" size="86.0" />
                </font>
@@ -54,14 +54,18 @@
             </Text>
          </top>
          <center>
-            <Pane fx:id="volumePane" depthTest="DISABLE" disable="true" maxHeight="100.0" maxWidth="250.0" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #337ef5; -fx-border-color: #ffffff; -fx-border-width: 1.5;" translateX="-100.0" BorderPane.alignment="CENTER">
+            <Pane fx:id="volumePane" depthTest="DISABLE" disable="true" maxHeight="100.0" maxWidth="250.0" opacity="0.0" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #337ef5; -fx-border-color: #ffffff; -fx-border-width: 1.5;" translateX="-100.0" BorderPane.alignment="CENTER">
                <children>
                   <Text fx:id="volumePane_Text" fill="WHITE" layoutX="65.0" layoutY="40.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Volume">
                      <font>
                         <Font name="Malgun Gothic Bold" size="32.0" />
                      </font>
                   </Text>
-                  <CheckBox fx:id="darkmodeCheck" layoutX="85.0" layoutY="60.0" mnemonicParsing="false" onAction="#darkMode_Toggle" style="-fx-background-color: #ffffff;" text="Dark Mode" />
+                  <CheckBox fx:id="darkmode_Checkbox" mnemonicParsing="false" onAction="#darkMode_Toggle" text="Dark Mode" translateX="75.0" translateY="55.0">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </CheckBox>
                </children>
             </Pane>
          </center>
