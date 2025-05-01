@@ -2,10 +2,14 @@ package com.example.csc311finalcapstoneprojectgroup04.TCPNetworking;
 
 import com.example.csc311finalcapstoneprojectgroup04.Lobby.Lobby;
 import com.example.csc311finalcapstoneprojectgroup04.NetworkMessagesandUpdate.Message;
+import com.example.csc311finalcapstoneprojectgroup04.NetworkMessagesandUpdate.RaceUpdate;
 import com.example.csc311finalcapstoneprojectgroup04.User;
+import javafx.collections.ObservableList;
 
 import java.io.*;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Class used by clients to join lobbies and allows said clients to send Messages,
@@ -18,6 +22,7 @@ public class Client {
     private ObjectOutputStream objectOutputStream;
     private ObjectInputStream objectInputStream;
     private String username;
+    private ObservableList<RaceUpdate> raceUpdates;
 
     /**
      * Constructs a client which uses a socket to make ObjectOutputStream and
@@ -25,7 +30,7 @@ public class Client {
      * @param socket the provided socket.
      * @param username the username from username.
      */
-    public Client(Socket socket, String username) {
+    public Client(Socket socket, String username, ObservableList<RaceUpdate> raceUpdates) {
         try {
             this.socket = socket;
             this.objectOutputStream = new ObjectOutputStream(socket.getOutputStream());

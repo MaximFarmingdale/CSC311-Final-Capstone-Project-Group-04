@@ -1,7 +1,11 @@
 package com.example.csc311finalcapstoneprojectgroup04.JavaFXControllers;
 
 import com.example.csc311finalcapstoneprojectgroup04.Lobby.Lobby;
+import com.example.csc311finalcapstoneprojectgroup04.NetworkMessagesandUpdate.RaceUpdate;
+import com.example.csc311finalcapstoneprojectgroup04.TCPNetworking.Client;
 import com.example.csc311finalcapstoneprojectgroup04.User;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
@@ -14,7 +18,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
+import java.net.Socket;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 @Component
@@ -35,6 +43,8 @@ public class ClientScreenController implements Initializable {
     private Label typedLabel, untypedLabel;
     private User user;
     private Lobby lobby;
+    private Client client;
+    private ObservableList<RaceUpdate> raceUpdates;
 
     @FXML
     void SendMessage(KeyEvent event) {
@@ -48,11 +58,15 @@ public class ClientScreenController implements Initializable {
     public void enterClientScreen(User user, Lobby lobby) {
         this.user = user;
         this.lobby = lobby;
+        try {
+            raceUpdates = FXCollections.observableArrayList(new ArrayList<>());
+            client = new Client(new Socket(lobby.getLobbyIP(),12345), user.getUsername(), raceUpdates);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
-
     }
 }
