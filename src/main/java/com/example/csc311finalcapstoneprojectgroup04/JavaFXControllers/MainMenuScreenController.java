@@ -117,6 +117,10 @@ public class MainMenuScreenController {
     }
 
     int optionclicked = 1;
+    /**
+     * pulls up option menu pane
+     * @param event
+     */
     @FXML
     void optionPullUp(MouseEvent event) {
         optionsButton.setOnAction(e -> {
@@ -189,7 +193,7 @@ public class MainMenuScreenController {
         }
     }
 
-
+// todo
     public void darkMode_Toggle(ActionEvent event) {
     }
 
