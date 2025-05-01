@@ -149,6 +149,19 @@ public class Client {
             closeClient();
         }
     }
+
+    /**
+     * Process a RaceUpdate Object from the network
+     * @param raceUpdate
+     */
+    private void processMessage(RaceUpdate raceUpdate) {
+        try {
+            objectOutputStream.writeObject(raceUpdate);
+            objectOutputStream.flush();
+        } catch (IOException e) {
+            closeClient();
+        }
+    }
     /**
      * Releases the resources of Client.
      */
