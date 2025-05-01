@@ -39,7 +39,7 @@ public class Server implements Runnable {
     private Lobby lobby;
     private ObjectOutputStream pingStream;
     private VBox messageBox;
-    private ObservableList<RaceUpdate> raceUpdatesObservableList;
+    private ObservableList<RaceUpdate> raceUpdates;
 
 
     /**
@@ -51,7 +51,7 @@ public class Server implements Runnable {
      * the objectInputStream and objectOutputStream are to read the input from users and to output objects to users
      * it is used throughout the class for these functions
      */
-    public Server(ServerSocket serverSocket, String username, Lobby lobby, VBox messageBox, ObservableList<RaceUpdate> raceUpdatesObservableList) throws IOException {
+    public Server(ServerSocket serverSocket, String username, Lobby lobby, VBox messageBox, ObservableList<RaceUpdate> raceUpdates) throws IOException {
         this.serverSocket = serverSocket;
         this.username = username;
         this.socketServer = new Socket("localhost", 1234);
@@ -59,7 +59,7 @@ public class Server implements Runnable {
         this.objectOutputStream = new ObjectOutputStream(socketServer.getOutputStream());
         this.lobby = lobby;
         this.messageBox = messageBox;
-        this.raceUpdatesObservableList = raceUpdatesObservableList;
+        this.raceUpdates = this.raceUpdates;
     }
 
     /**
@@ -280,14 +280,14 @@ public class Server implements Runnable {
             //call winner method
             System.out.println("Winner");
         boolean wasAdded = false;
-        for (RaceUpdate r : raceUpdatesObservableList) {
+        for (RaceUpdate r : raceUpdates) {
             if (r.getUsername().equals(raceUpdate.getUsername())) {
                 r = raceUpdate;
                 wasAdded = true;
             }
         }
         if(wasAdded)
-            raceUpdatesObservableList.add(raceUpdate);
+            raceUpdates.add(raceUpdate);
     }
 
     /**
@@ -309,6 +309,6 @@ public class Server implements Runnable {
         }
     }
     public List<RaceUpdate> getRaceUpdates() {
-        return raceUpdatesObservableList;
+        return raceUpdates;
     }
 }

@@ -59,6 +59,7 @@ public class Client {
     }
 
     /**
+     * @deprecated
      * Allows the client to send users to all other clients.
      * @param user user message.
      */
@@ -155,12 +156,15 @@ public class Client {
      * @param raceUpdate
      */
     private void processMessage(RaceUpdate raceUpdate) {
-        try {
-            objectOutputStream.writeObject(raceUpdate);
-            objectOutputStream.flush();
-        } catch (IOException e) {
-            closeClient();
+        boolean wasAdded = false;
+        for (RaceUpdate r : raceUpdates) {
+            if (r.getUsername().equals(raceUpdate.getUsername())) {
+                r = raceUpdate;
+                wasAdded = true;
+            }
         }
+        if(wasAdded)
+            raceUpdates.add(raceUpdate);
     }
     /**
      * Releases the resources of Client.
