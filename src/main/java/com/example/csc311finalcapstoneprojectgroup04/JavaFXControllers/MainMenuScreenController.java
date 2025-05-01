@@ -68,8 +68,9 @@ public class MainMenuScreenController {
     private User user;
 
     @FXML
-    void exitProgram(ActionEvent event) {
-
+    void exitProgram(MouseEvent event) {
+        Stage stage = (Stage) exitButton.getScene().getWindow();
+        stage.close();
     }
 
     /**
@@ -105,9 +106,22 @@ public class MainMenuScreenController {
 
     }
 
-        @FXML
-    void optionPullUp(ActionEvent event) {
+    int optionclicked = 1;
+    @FXML
+    void optionPullUp(MouseEvent event) {
+        optionsButton.setOnAction(e -> {
+            optionclicked++;
+            optionsButton.getOnMouseClicked();
+        });
 
+        if (optionclicked % 1 == 0) {
+            volumePane.setOpacity(1);
+            volumePane.setDisable(false);
+        }
+        if (optionclicked % 2 == 0) {
+            volumePane.setOpacity(0);
+            volumePane.setDisable(true);
+        }
     }
 
     /**

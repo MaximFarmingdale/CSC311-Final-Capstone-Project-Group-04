@@ -16,7 +16,7 @@
          <bottom>
             <HBox alignment="CENTER" maxHeight="225.0" minHeight="175.0" prefWidth="1280.0" style="-fx-background-color: #3d8c40;" BorderPane.alignment="CENTER">
                <children>
-                  <Button fx:id="playButton" minHeight="100.0" minWidth="200.0" mnemonicParsing="false" onAction="#openPlayMenu" style="-fx-background-color: #4caf50;" text="PLAY" textFill="WHITE">
+                  <Button fx:id="playButton" minHeight="100.0" minWidth="200.0" mnemonicParsing="false" onMouseClicked="#openPlayMenu" style="-fx-background-color: #4caf50;" text="PLAY" textFill="WHITE">
                      <HBox.margin>
                         <Insets bottom="100.0" left="100.0" right="100.0" top="100.0" />
                      </HBox.margin>
@@ -24,7 +24,7 @@
                         <Font name="Malgun Gothic Bold" size="32.0" />
                      </font>
                   </Button>
-                  <Button fx:id="optionsButton" minHeight="100.0" minWidth="200.0" mnemonicParsing="false" onAction="#optionPullUp" style="-fx-background-color: #4caf50;" text="OPTION" textFill="WHITE">
+                  <Button fx:id="optionsButton" minHeight="100.0" minWidth="200.0" mnemonicParsing="false" onMouseClicked="#optionPullUp" style="-fx-background-color: #4caf50;" text="OPTION" textFill="WHITE">
                      <HBox.margin>
                         <Insets bottom="100.0" left="100.0" right="100.0" top="100.0" />
                      </HBox.margin>
@@ -32,7 +32,7 @@
                         <Font name="Malgun Gothic Bold" size="32.0" />
                      </font>
                   </Button>
-                  <Button fx:id="exitButton" minHeight="100.0" minWidth="200.0" mnemonicParsing="false" onAction="#exitProgram" style="-fx-background-color: #4caf50;" text="EXIT" textFill="WHITE">
+                  <Button fx:id="exitButton" minHeight="100.0" minWidth="200.0" mnemonicParsing="false" onMouseClicked="#exitProgram" style="-fx-background-color: #4caf50;" text="EXIT" textFill="WHITE">
                      <HBox.margin>
                         <Insets bottom="100.0" left="100.0" right="100.0" top="100.0" />
                      </HBox.margin>
@@ -83,11 +83,6 @@
                      </font>
                   </Button>
                   <Button fx:id="playMenu_JoinButton" mnemonicParsing="false" onMouseClicked="#playMenu_Join" prefWidth="60.0" style="-fx-background-color: #3da8f5;" text="Join" translateX="125.0" translateY="75.0">
-                     <font>
-                        <Font name="OCR A Extended" size="14.0" />
-                     </font>
-                  </Button>
-                  <Button fx:id="playMenu_Solo" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onMouseClicked="#playMenu_SoloStart" prefWidth="60.0" style="-fx-background-color: #3da8f5;" text="Solo" translateX="60.0" translateY="100.0">
                      <font>
                         <Font name="OCR A Extended" size="14.0" />
                      </font>
