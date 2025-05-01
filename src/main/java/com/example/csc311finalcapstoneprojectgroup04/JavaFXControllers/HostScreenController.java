@@ -57,7 +57,6 @@ public class HostScreenController implements Initializable {
             throw new RuntimeException(e);
         }
     }
-
     /**
      * Sends a message to all clients and adds Message to messageVbox
      * @param event
@@ -70,28 +69,27 @@ public class HostScreenController implements Initializable {
             messageField.clear();
         }
     }
-
     /**
      * Sends a RaceUpdate to all clients and adds it to the raceUpdateList
      * @param event
      */
     @FXML
     void sendRaceUpdate(KeyEvent event) {
-        if(raceWords.length == raceIndex) {
-            if(raceField.getText().trim().equals(raceWords[raceIndex])) {
-                //raceWinning
-            }
-            else if(raceField.getText().equals(raceWords[raceIndex])) {
+        if(lobby.getActiveRace()) {
+            if (raceWords.length == raceIndex) {
+                if (raceField.getText().trim().equals(raceWords[raceIndex])) {
+                    //raceWinning
+                }
+            } else if (raceField.getText().equals(raceWords[raceIndex])) {
                 raceIndex++;
                 raceUpdate.incrementWordIndex();
-                racePercentage = (double) raceIndex /raceWords.length;
+                racePercentage = (double) raceIndex / raceWords.length;
                 raceUpdate.setProgress(racePercentage);
                 server.sendMessage(raceUpdate);
                 raceField.clear();
             }
         }
     }
-
     /**
      * Sends user information to HostScreenController
      * @param currentUser
@@ -101,7 +99,6 @@ public class HostScreenController implements Initializable {
         raceUpdate = new RaceUpdate(user.getUsername());
         message = new Message(currentUser.getUsername(),"");
     }
-
     /**
      * Starts the race by setting an active race in Lobby, resetting Labels
      * and calling the server start method

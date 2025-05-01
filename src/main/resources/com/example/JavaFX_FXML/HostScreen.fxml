@@ -28,6 +28,11 @@
                   <Font size="19.0" />
                </font>
             </Button>
+            <Button mnemonicParsing="false" onAction="#startRace" prefHeight="90.0" prefWidth="121.0" text="Reset Race">
+               <font>
+                  <Font size="19.0" />
+               </font>
+            </Button>
             </children>
         </HBox>
     </top>
