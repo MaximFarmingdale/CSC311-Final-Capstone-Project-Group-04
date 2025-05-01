@@ -19,7 +19,6 @@ import java.util.ResourceBundle;
 
 @Component
 public class ClientScreenController implements Initializable {
-    private User user;
     @Autowired
     private ApplicationContext applicationContext;
 
@@ -34,6 +33,8 @@ public class ClientScreenController implements Initializable {
 
     @FXML
     private Label typedLabel, untypedLabel;
+    private User user;
+    private Lobby lobby;
 
     @FXML
     void SendMessage(KeyEvent event) {
@@ -45,11 +46,13 @@ public class ClientScreenController implements Initializable {
 
     }
     public void enterClientScreen(User user, Lobby lobby) {
-
+        this.user = user;
+        this.lobby = lobby;
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+
 
     }
 }

@@ -1,5 +1,7 @@
 package com.example.csc311finalcapstoneprojectgroup04.TCPNetworking;
 
+import com.example.csc311finalcapstoneprojectgroup04.Lobby.Lobby;
+import com.example.csc311finalcapstoneprojectgroup04.NetworkMessagesandUpdate.Message;
 import com.example.csc311finalcapstoneprojectgroup04.User;
 
 import java.io.*;
@@ -63,26 +65,84 @@ public class Client {
             closeClient();
         }
     }
-    //add comments later
+
+    /**
+     * Waits for input and calls various methods to process the input
+     */
     public void getMessage() {
         new Thread(() -> {
             try {
                 while (true) {
-                    User user;
-                    String receivedMessage = "";
                     Object receivedObject = objectInputStream.readObject();
                     if(receivedObject instanceof User) {
-                        user = (User) receivedObject;
+                        processMessage((User) receivedObject);
                     }
-                    if(receivedObject instanceof String) {
-                        receivedMessage = (String) receivedObject;
+                    else if(receivedObject instanceof String) {
+                        processMessage((String) receivedObject);
                     }
-                    System.out.println(receivedMessage);
+                    else if(receivedObject instanceof Message) {
+                        processMessage((Message) receivedObject);
+                    }
+                    else if(receivedObject instanceof Lobby) {
+                        processMessage((Lobby) receivedObject);
+                    }
                 }
             } catch (IOException | ClassNotFoundException e) {
                 closeClient();
             }
         }).start();
+    }
+
+    /**
+     * Process a String Object from the network
+     * @param message
+     */
+    private void processMessage(String message) {
+        try {
+            objectOutputStream.writeObject(message);
+            objectOutputStream.flush();
+        } catch (IOException e) {
+            closeClient();
+        }
+    }
+
+    /**
+     * Process a User Object from the network
+     * @param user
+     */
+    private void processMessage(User user) {
+        try {
+            objectOutputStream.writeObject(user);
+            objectOutputStream.flush();
+        } catch (IOException e) {
+            closeClient();
+        }
+    }
+
+    /**
+     * Process a Lobby Object from the network
+     * @param lobby
+     */
+    private void processMessage(Lobby lobby) {
+        try {
+            objectOutputStream.writeObject(lobby);
+            objectOutputStream.flush();
+        } catch (IOException e) {
+            closeClient();
+        }
+    }
+
+    /**
+     * Process a Message Object from the network
+     * @param message
+     */
+    private void processMessage(Message message) {
+        try {
+            objectOutputStream.writeObject(message);
+            objectOutputStream.flush();
+        } catch (IOException e) {
+            closeClient();
+        }
     }
     /**
      * Releases the resources of Client.
