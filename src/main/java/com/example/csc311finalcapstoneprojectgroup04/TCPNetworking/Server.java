@@ -5,12 +5,18 @@ import com.example.csc311finalcapstoneprojectgroup04.NetworkMessagesandUpdate.Me
 import com.example.csc311finalcapstoneprojectgroup04.NetworkMessagesandUpdate.Ping;
 import com.example.csc311finalcapstoneprojectgroup04.NetworkMessagesandUpdate.RaceUpdate;
 import com.example.csc311finalcapstoneprojectgroup04.User;
+import javafx.application.Platform;
+import javafx.collections.ObservableList;
+import javafx.geometry.Pos;
+import javafx.scene.control.Label;
+import javafx.scene.layout.VBox;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.List;
 
 import static com.example.csc311finalcapstoneprojectgroup04.TCPNetworking.ClientHandler.clients;
 
@@ -24,7 +30,7 @@ import static com.example.csc311finalcapstoneprojectgroup04.TCPNetworking.Client
  * to it. It uses ClientHandler to manage the lobbies, which by having each client as a different
  * thread, allows the manging of multiple clients.
  */
-public class Server  {
+public class Server implements Runnable {
     private ServerSocket serverSocket;
     private String username;
     private Socket socketServer;
@@ -32,6 +38,8 @@ public class Server  {
     private ObjectInputStream objectInputStream;
     private Lobby lobby;
     private ObjectOutputStream pingStream;
+    private VBox messageBox;
+    private ObservableList<RaceUpdate> raceUpdatesObservableList;
 
 
     /**
@@ -43,13 +51,15 @@ public class Server  {
      * the objectInputStream and objectOutputStream are to read the input from users and to output objects to users
      * it is used throughout the class for these functions
      */
-    public Server(ServerSocket serverSocket, String username, Lobby lobby) throws IOException {
+    public Server(ServerSocket serverSocket, String username, Lobby lobby, VBox messageBox, ObservableList<RaceUpdate> raceUpdatesObservableList) throws IOException {
         this.serverSocket = serverSocket;
         this.username = username;
         this.socketServer = new Socket("localhost", 1234);
         this.objectInputStream = new ObjectInputStream(socketServer.getInputStream());
-        objectOutputStream = new ObjectOutputStream(socketServer.getOutputStream());
+        this.objectOutputStream = new ObjectOutputStream(socketServer.getOutputStream());
         this.lobby = lobby;
+        this.messageBox = messageBox;
+        this.raceUpdatesObservableList = raceUpdatesObservableList;
     }
 
     /**
@@ -57,7 +67,7 @@ public class Server  {
      * Accepted connections become new ClientHandler objects and get added to the ClientHandler lst: clients.
      * Always put this method in an unused thread as it is in an endless loop
      */
-    public void startServer() {
+    public void run() {
         try {
             while (!serverSocket.isClosed()) {
                 Socket socket = serverSocket.accept();
@@ -67,14 +77,16 @@ public class Server  {
                         Object object = objectInputStream.readObject();
                         if(object instanceof Message) {
                             Message message = (Message) object;
-                            ClientHandler clientHandler = new ClientHandler(socket, message.sender);
+                            ClientHandler clientHandler = new ClientHandler(socket, message.getSender(), this);
                             Thread thread = new Thread(clientHandler);
                             thread.start();
+                            break;
                         }
                         //if the application is just pinging the server to see if it works
                         if(object instanceof Ping) {
                             pingResponse(socket);
                             socket.close();
+                            break;
                         }
 
                     } catch (ClassNotFoundException e) {
@@ -105,9 +117,14 @@ public class Server  {
                 closeSocket();
             }
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            closeSocket();
         }
     }
+
+    /**
+     * Allows the host to send Text to the user
+     * @param text
+     */
     public void sendMessage(String text) {
         try {
             for (ClientHandler clientHandler : clients) {
@@ -151,6 +168,26 @@ public class Server  {
         }
 
     }
+
+    /**
+     *  Allows the host to send a lobby to all clients
+     * @param lobby
+     */
+    public void sendMessage(Lobby lobby) {
+        try {
+            for (ClientHandler clientHandler : clients) {
+                clientHandler.objectOutputStream.writeObject(lobby);
+            }
+        }
+        catch (IOException e) {
+            closeSocket();
+        }
+    }
+
+    /**\
+     * Starts the race by sending messages signfiying the beginning of the race,
+     * then sends the lobby to users.
+     */
     public void startRace() {
         try {
             lobby.generateNewText();
@@ -166,7 +203,7 @@ public class Server  {
 
 
         } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+            closeSocket();
         }
 
 
@@ -201,7 +238,6 @@ public class Server  {
         catch (IOException e) {
             closeSocket();
         }
-
     }
 
     /**
@@ -221,6 +257,39 @@ public class Server  {
             closeSocket();
         }
     }
+
+    /**
+     * Processes an input of Messsage and adds it to the messageBox as a new label
+     * @param message
+     */
+    public void processMessage(Message message) {
+        Label label = new Label(message.getSender() + ": " + message.getMessage());
+        label.setAlignment(Pos.BASELINE_LEFT);
+        Platform.runLater(() -> {
+            messageBox.getChildren().add(label);
+        });
+    }
+
+    /**
+     * Process a RaceUpdate input and adds it to raceUpdates list if it's a race update from a
+     * new user or updates an existing RaceUpdate. Also calls winner method if it is a winning update
+     * @param raceUpdate
+     */
+    public void processMessage(RaceUpdate raceUpdate) {
+        if(raceUpdate.isWinner())
+            //call winner method
+            System.out.println("Winner");
+        boolean wasAdded = false;
+        for (RaceUpdate r : raceUpdatesObservableList) {
+            if (r.getUsername().equals(raceUpdate.getUsername())) {
+                r = raceUpdate;
+                wasAdded = true;
+            }
+        }
+        if(wasAdded)
+            raceUpdatesObservableList.add(raceUpdate);
+    }
+
     /**
      * Closes the socket that the server class uses for ObjectOutputStream and ObjectInputStream and frees up resources
      */
@@ -239,7 +308,7 @@ public class Server  {
             e.printStackTrace();
         }
     }
-
-
-
+    public List<RaceUpdate> getRaceUpdates() {
+        return raceUpdatesObservableList;
+    }
 }

@@ -23,7 +23,7 @@ import java.util.Map;
  * Class that enables clients to fetch lobby information from metadata in Eureka into a list called instances
  * and also lets hosts register their lobbies to Eureka and update the metadata when the lobby changes.
  */
-@SpringBootApplication
+@Service
 @EnableDiscoveryClient
 public class ClientEureka implements CommandLineRunner {
     @Autowired

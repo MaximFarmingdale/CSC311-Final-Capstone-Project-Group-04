@@ -35,6 +35,7 @@ public final class Lobby implements Serializable {
      *
      * @return
      */
+
     public boolean increaseNumPlayers(){
         if(numPlayers == maxPlayers) {
             numPlayers++;

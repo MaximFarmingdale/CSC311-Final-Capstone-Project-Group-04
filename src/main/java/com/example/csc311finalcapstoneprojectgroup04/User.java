@@ -9,7 +9,7 @@ import java.io.Serializable;
  * login to be valid it must be a unique password.
  */
 public class User implements Serializable {
-    public String username;
+    private String username;
     private String password; //get rid of password later
     private double raceProgress;
     public User(String username, String password) {
@@ -24,5 +24,11 @@ public class User implements Serializable {
     }
     public void setRaceProgress(double raceProgress) {
         this.raceProgress = raceProgress;
+    }
+    public String getUsername() {
+        return username;
+    }
+    public void setUsername(String username) {
+        this.username = username;
     }
 }

@@ -1,5 +1,6 @@
 package com.example.csc311finalcapstoneprojectgroup04.JavaFXControllers;
 
+import com.example.csc311finalcapstoneprojectgroup04.TypeApplication;
 import com.example.csc311finalcapstoneprojectgroup04.User;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -14,9 +15,12 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.scene.text.Text;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-// test
+@Component
 public class MainMenuScreenController {
 
 
@@ -67,12 +71,18 @@ public class MainMenuScreenController {
 
     private User user;
 
+    @Autowired
+    private ApplicationContext applicationContext;
+
+    /**
+     * Exits the program.
+     * @param event
+     */
     @FXML
     void exitProgram(MouseEvent event) {
         Stage stage = (Stage) exitButton.getScene().getWindow();
         stage.close();
     }
-
     /**
      * opens the play menu
      * @param event
@@ -113,6 +123,9 @@ public class MainMenuScreenController {
             optionclicked++;
             optionsButton.getOnMouseClicked();
         });
+    }
+        @FXML
+    void optionPullUp(ActionEvent event) {
 
         if (optionclicked % 1 == 0) {
             volumePane.setOpacity(1);
@@ -125,7 +138,7 @@ public class MainMenuScreenController {
     }
 
     /**
-     * Method to pass a user to mainMenu
+     * Method to pass a user to MainMenuScreen
      * @param event
      */
     public void enterMainMenu(User event) {
@@ -133,7 +146,7 @@ public class MainMenuScreenController {
     }
 
     /**
-     *
+     * Sets the current scene to the WaitingRoom.
      * @param event
      */
     @FXML
@@ -142,8 +155,10 @@ public class MainMenuScreenController {
 
             Stage stage = (Stage) PlayMenuBPane.getScene().getWindow();
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/JavaFX_FXML/WaitingRoom.fxml"));
+            loader.setControllerFactory(applicationContext::getBean); //gets beans from spring
             Parent newRoot = loader.load();
             WaitingRoomController controller = loader.getController();
+            loader.setControllerFactory(applicationContext::getBean);
             controller.enterWaitingRoom(user);
             Scene scene = new Scene(newRoot, 1270, 720);
             stage.setScene(scene);
@@ -153,11 +168,16 @@ public class MainMenuScreenController {
         }
     }
 
+    /**
+     * Sets the current scene to the HostScreen.
+     * @param event
+     */
     @FXML
     void goToHostScreen(ActionEvent event) {
         try {
             Stage stage =(Stage) PlayMenuBPane.getScene().getWindow();
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/JavaFX_FXML/HostScreen.fxml"));
+            loader.setControllerFactory(applicationContext::getBean); //gets beans from spring
             Parent newRoot = loader.load();
             HostScreenController controller = loader.getController();
             controller.enterHostScreen(user);
