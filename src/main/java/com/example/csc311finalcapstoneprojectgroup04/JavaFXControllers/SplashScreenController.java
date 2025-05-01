@@ -57,7 +57,12 @@ public class SplashScreenController implements Initializable {
     @Autowired
     private ApplicationContext applicationContext;
 
-
+    /**
+     * Method that on button clickchecks if the user is typing in correct sign-up or
+     * login information. Adds signups to the database and pass it to the MainMenuScreen
+     * and just directly passes the login user to the MainMenuScreen.
+     * @param event
+     */
     @FXML
     void login(ActionEvent event) {
         //null-pointer check
@@ -78,7 +83,7 @@ public class SplashScreenController implements Initializable {
         if(newUser) {
             if (checkUniqueUsername(username)) {
                 users.add(currentUser); //get rid of later
-                //call change controller here
+                changeController(currentUser);
                 changeController(currentUser);
             } else {
                 problemText.setText("Username is already taken or invalid!");
@@ -89,7 +94,6 @@ public class SplashScreenController implements Initializable {
         else {
             if (!checkUniqueUsername(username)) {
                 if(getUser(username).checkPassword(password)) {
-                    //change controller
                     System.out.println(getUser(username)); //get rid of later
                     changeController(currentUser);
                 }
@@ -104,7 +108,12 @@ public class SplashScreenController implements Initializable {
             }
         }
     }
-    //checks if the username is already in use or not
+
+    /**
+     * Checks if a username is unique.
+     * @param username
+     * @return boolean if its true or not.
+     */
     private boolean checkUniqueUsername(String username) {
         if (username == null || username.trim().isEmpty()) {
             return false;
@@ -116,7 +125,12 @@ public class SplashScreenController implements Initializable {
         }
         return true;
     }
-    //helper method to get back a user object with a given username
+
+    /**
+     * Helper method to get current User from an array of users by username.
+     * @param username
+     * @return current user
+     */
     private User getUser(String username) {
         for (User user : users) {
             if(user.getUsername().equals(username)) {
@@ -125,8 +139,12 @@ public class SplashScreenController implements Initializable {
         }
         return null;
     }
-    //changes the color of an incorrect field to make the user know they filled it in wrong
-    //change the name of this method later
+
+    /**
+     * Makes either the username or password text field light up red to signify a
+     * problem.
+     * @param field username or password field
+     */
     private void errorColor(TextField field) {
         if (field.equals(usernameField)) {
             passwordField.setStyle("-fx-border-color: null");
@@ -137,7 +155,13 @@ public class SplashScreenController implements Initializable {
             passwordField.setStyle("-fx-border-color: RED");
         }
     }
-    //Lets the user switch from signing in to logging in and vice versa
+
+    /**
+     * Switches the GUI elements to the user login in to signing up and vise versa
+     * also stores if the user is a new user to use in other methods to make sure to
+     * sign them up.
+     * @param event
+     */
     @FXML
     void switchModes(MouseEvent event) {
         if(newUser) {
@@ -161,6 +185,11 @@ public class SplashScreenController implements Initializable {
     void addUsers(ActionEvent event) {
 
     }
+
+    /**
+     * Changes the scene to MainMenu
+     * @param currentUser
+     */
     public void changeController(User currentUser) {
         try {
             Stage stage = (Stage) signInButton.getScene().getWindow();

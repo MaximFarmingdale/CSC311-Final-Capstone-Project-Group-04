@@ -40,11 +40,15 @@ public class MainMenuScreenController {
 
     @Autowired
     private ApplicationContext applicationContext;
+
+    /**
+     * Exits the program.
+     * @param event
+     */
     @FXML
     void exitProgram(ActionEvent event) {
 
     }
-
     /**
      * opens the play menu
      * @param event
@@ -60,14 +64,13 @@ public class MainMenuScreenController {
             e.printStackTrace();
         }
     }
-
         @FXML
     void optionPullUp(ActionEvent event) {
 
     }
 
     /**
-     * Method to pass a user to mainMenu
+     * Method to pass a user to MainMenuScreen
      * @param event
      */
     public void enterMainMenu(User event) {
@@ -75,7 +78,7 @@ public class MainMenuScreenController {
     }
 
     /**
-     *
+     * Sets the current scene to the WaitingRoom.
      * @param event
      */
     @FXML
@@ -97,6 +100,10 @@ public class MainMenuScreenController {
         }
     }
 
+    /**
+     * Sets the current scene to the HostScreen.
+     * @param event
+     */
     @FXML
     void goToHostScreen(ActionEvent event) {
         try {
@@ -113,7 +120,4 @@ public class MainMenuScreenController {
             e.printStackTrace();
         }
     }
-
-
-
 }
