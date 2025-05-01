@@ -23,6 +23,10 @@ public class Client implements Runnable {
     private ObjectInputStream objectInputStream;
     private String username;
     private ObservableList<RaceUpdate> raceUpdates;
+    private Message message;
+    private Lobby lobby;
+    private String text;
+    private User user;
 
     /**
      * Constructs a client which uses a socket to make ObjectOutputStream and
@@ -119,38 +123,24 @@ public class Client implements Runnable {
      * @param message
      */
     private void processMessage(String message) {
-        try {
-            objectOutputStream.writeObject(message);
-            objectOutputStream.flush();
-        } catch (IOException e) {
-            closeClient();
-        }
+        text = message;
     }
 
     /**
+     * @deprecated
      * Process a User Object from the network
-     * @param user
+     * @param currentUser
      */
-    private void processMessage(User user) {
-        try {
-            objectOutputStream.writeObject(user);
-            objectOutputStream.flush();
-        } catch (IOException e) {
-            closeClient();
-        }
+    private void processMessage(User currentUser) {
+        user = user;
     }
 
     /**
      * Process a Lobby Object from the network
-     * @param lobby
+     * @param currentLobby
      */
-    private void processMessage(Lobby lobby) {
-        try {
-            objectOutputStream.writeObject(lobby);
-            objectOutputStream.flush();
-        } catch (IOException e) {
-            closeClient();
-        }
+    private void processMessage(Lobby currentLobby) {
+        lobby = lobby;
     }
 
     /**
@@ -168,18 +158,18 @@ public class Client implements Runnable {
 
     /**
      * Process a RaceUpdate Object from the network
-     * @param raceUpdate
+     * @param currentRaceUpdate
      */
-    private void processMessage(RaceUpdate raceUpdate) {
+    private void processMessage(RaceUpdate currentRaceUpdate) {
         boolean wasAdded = false;
         for (RaceUpdate r : raceUpdates) {
-            if (r.getUsername().equals(raceUpdate.getUsername())) {
-                r = raceUpdate;
+            if (r.getUsername().equals(currentRaceUpdate.getUsername())) {
+                r = currentRaceUpdate;
                 wasAdded = true;
             }
         }
         if(wasAdded)
-            raceUpdates.add(raceUpdate);
+            raceUpdates.add(currentRaceUpdate);
     }
     /**
      * Releases the resources of Client.

@@ -130,8 +130,6 @@ public class ClientScreenController implements Initializable {
                 }
             }
         });
-
-
     }
 
 }
