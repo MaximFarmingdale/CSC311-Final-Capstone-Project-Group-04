@@ -41,8 +41,8 @@ public class HostScreenController implements Initializable {
     private TextField messageField, raceField;
     @FXML
     Label typedLabel, untypedLabel;
-    private String raceText;
     private Server server;
+    private String raceText;
     private String[] raceWords;
     private double racePercentage;
     private int raceWordindex = 0;

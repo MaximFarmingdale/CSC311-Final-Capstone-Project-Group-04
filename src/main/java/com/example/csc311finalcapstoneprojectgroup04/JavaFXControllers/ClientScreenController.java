@@ -1,6 +1,7 @@
 package com.example.csc311finalcapstoneprojectgroup04.JavaFXControllers;
 
 import com.example.csc311finalcapstoneprojectgroup04.Lobby.Lobby;
+import com.example.csc311finalcapstoneprojectgroup04.NetworkMessagesandUpdate.Message;
 import com.example.csc311finalcapstoneprojectgroup04.NetworkMessagesandUpdate.RaceUpdate;
 import com.example.csc311finalcapstoneprojectgroup04.TCPNetworking.Client;
 import com.example.csc311finalcapstoneprojectgroup04.User;
@@ -45,6 +46,17 @@ public class ClientScreenController implements Initializable {
     private User user;
     private Lobby lobby;
     private Client client;
+
+    private String raceText;
+    private String[] raceWords;
+    private double racePercentage;
+    private int raceWordindex = 0;
+    private int raceIndex = 0;
+    private RaceUpdate raceUpdate;
+    private Message message;
+    private String typedString = "";
+    private String untypedString = "";
+
     private ObservableList<RaceUpdate> raceUpdates;
     @FXML
     void SendMessage(KeyEvent event) {
@@ -53,6 +65,34 @@ public class ClientScreenController implements Initializable {
 
     @FXML
     void sendRaceUpdate(KeyEvent event) {
+        if(lobby.getActiveRace()) {
+            if (raceWords.length - 1 == raceWordindex) {
+                if (raceField.getText()
+                        .trim()
+                        .equals(raceWords[raceWordindex])) {//if it's the last word
+                    raceUpdate.incrementWordIndex();
+                    raceUpdate.setProgress(1);
+                    //endOfRace(raceUpdate);
+                }
+            } else if (raceField.getText().equals(raceWords[raceWordindex])) {
+                raceIndex += raceWords[raceWordindex].length() + 1;
+                //sets the untyped and typed messages to their respective new index
+                typedString = raceText.substring(0, raceIndex);
+                untypedString = raceText.substring(raceIndex);
+                //updating values
+                raceWordindex++;
+                raceUpdate.incrementWordIndex();
+                racePercentage = (double) raceWordindex / raceWords.length;
+                raceUpdate.setProgress(racePercentage);
+                //sending messages
+                client.sendMessage(raceUpdate);
+                //clearing the field
+                raceField.clear();
+                typedLabel.setText(typedString);
+                untypedLabel.setText(untypedString);
+                System.out.println(untypedString.toString() + " " + typedString.toString());
+            }
+        }
 
     }
     public void enterClientScreen(User user, Lobby lobby) {
