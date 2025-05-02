@@ -115,7 +115,6 @@ public class MainMenuScreenController {
         }
 
     }
-
     int optionclicked = 1;
     @FXML
     void optionPullUp(MouseEvent event) {
@@ -194,9 +193,37 @@ public class MainMenuScreenController {
     }
 
     public void playMenu_Host(MouseEvent event) {
+        try {
+            Stage stage =(Stage) PlayMenuBPane.getScene().getWindow();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/JavaFX_FXML/HostScreen.fxml"));
+            loader.setControllerFactory(applicationContext::getBean); //gets beans from spring
+            Parent newRoot = loader.load();
+            HostScreenController controller = loader.getController();
+            controller.enterHostScreen(user);
+            Scene scene = new Scene(newRoot, 1270, 720);
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void playMenu_Join(MouseEvent event) {
+        try {
+
+            Stage stage = (Stage) PlayMenuBPane.getScene().getWindow();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/JavaFX_FXML/WaitingRoom.fxml"));
+            loader.setControllerFactory(applicationContext::getBean); //gets beans from spring
+            Parent newRoot = loader.load();
+            WaitingRoomController controller = loader.getController();
+            loader.setControllerFactory(applicationContext::getBean);
+            controller.enterWaitingRoom(user);
+            Scene scene = new Scene(newRoot, 1270, 720);
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void playMenu_exitMenu(MouseEvent event) {
