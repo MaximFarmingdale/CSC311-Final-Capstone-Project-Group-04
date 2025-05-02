@@ -8,9 +8,13 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import javafx.scene.text.Text;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
@@ -18,6 +22,13 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 @Component
 public class MainMenuScreenController {
+
+
+    @FXML
+    private AnchorPane MainMenuAPane;
+
+    @FXML
+    private CheckBox darkmode_Checkbox;
 
     @FXML
     private Button exitButton;
@@ -29,11 +40,33 @@ public class MainMenuScreenController {
     private Button playButton;
 
     @FXML
-    private BorderPane PlayMenuBPane;
+    private Button playMenu_Exit;
+
+    @FXML
+    private Button playMenu_HostButton;
+
+    @FXML
+    private Button playMenu_JoinButton;
+
+    @FXML
+    private Pane playMenu_Pane;
+
+    @FXML
+    private Button playMenu_Solo;
+
+    @FXML
+    private Text playMenu_selectModeText;
+
+    @FXML
+    private Pane volumePane;
 
 
     @FXML
-    private AnchorPane MainMenuAPane;
+    private BorderPane PlayMenuBPane;
+
+
+//    @FXML
+//    private AnchorPane MainMenuAPane;
 
 
     private User user;
@@ -46,27 +79,62 @@ public class MainMenuScreenController {
      * @param event
      */
     @FXML
-    void exitProgram(ActionEvent event) {
-
+    void exitProgram(MouseEvent event) {
+        Stage stage = (Stage) exitButton.getScene().getWindow();
+        stage.close();
     }
     /**
      * opens the play menu
      * @param event
      */
+    int playmenuclickcount = 1;
     @FXML
-    void openPlayMenu(ActionEvent event) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/JavaFX_FXML/PlayMenu.fxml"));
-            loader.setControllerFactory(applicationContext::getBean);
-            Parent playMenuPane = loader.load();
-            MainMenuAPane.getChildren().add(playMenuPane);
-        } catch (IOException e) {
-            e.printStackTrace();
+    void openPlayMenu(MouseEvent event) {
+//        try {
+//            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/JavaFX_FXML/PlayMenu.fxml"));
+//            Parent playMenuPane = loader.load();
+//            MainMenuAPane.getChildren().add(playMenuPane);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+
+
+        playButton.setOnAction(e -> {
+            System.out.println(playmenuclickcount);
+            playmenuclickcount++;
+            playButton.getOnMouseClicked();
+        });
+
+        if (playmenuclickcount % 1 == 0) {
+            playMenu_Pane.setOpacity(1);
+            playMenu_Pane.setDisable(false);
         }
+        if (playmenuclickcount % 2 == 0) {
+            playMenu_Pane.setOpacity(0);
+            playMenu_Pane.setDisable(true);
+        }
+
+    }
+
+    int optionclicked = 1;
+    @FXML
+    void optionPullUp(MouseEvent event) {
+        optionsButton.setOnAction(e -> {
+            optionclicked++;
+            optionsButton.getOnMouseClicked();
+        });
     }
         @FXML
     void optionPullUp(ActionEvent event) {
 
+        if (optionclicked % 1 == 0) {
+            volumePane.setOpacity(1);
+            volumePane.setDisable(false);
+        }
+        if (optionclicked % 2 == 0) {
+            volumePane.setOpacity(0);
+            volumePane.setDisable(true);
+        }
     }
 
     /**
@@ -119,5 +187,18 @@ public class MainMenuScreenController {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+
+    public void darkMode_Toggle(ActionEvent event) {
+    }
+
+    public void playMenu_Host(MouseEvent event) {
+    }
+
+    public void playMenu_Join(MouseEvent event) {
+    }
+
+    public void playMenu_exitMenu(MouseEvent event) {
     }
 }

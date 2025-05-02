@@ -2,9 +2,11 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
@@ -14,7 +16,7 @@
          <bottom>
             <HBox alignment="CENTER" maxHeight="225.0" minHeight="175.0" prefWidth="1280.0" style="-fx-background-color: #3d8c40;" BorderPane.alignment="CENTER">
                <children>
-                  <Button fx:id="playButton" minHeight="100.0" minWidth="200.0" mnemonicParsing="false" onAction="#openPlayMenu" style="-fx-background-color: #4caf50;" text="PLAY" textFill="WHITE">
+                  <Button fx:id="playButton" minHeight="100.0" minWidth="200.0" mnemonicParsing="false" onMouseClicked="#openPlayMenu" style="-fx-background-color: #4caf50;" text="PLAY" textFill="WHITE">
                      <HBox.margin>
                         <Insets bottom="100.0" left="100.0" right="100.0" top="100.0" />
                      </HBox.margin>
@@ -22,7 +24,7 @@
                         <Font name="Malgun Gothic Bold" size="32.0" />
                      </font>
                   </Button>
-                  <Button fx:id="optionsButton" minHeight="100.0" minWidth="200.0" mnemonicParsing="false" onAction="#optionPullUp" style="-fx-background-color: #4caf50;" text="OPTION" textFill="WHITE">
+                  <Button fx:id="optionsButton" minHeight="100.0" minWidth="200.0" mnemonicParsing="false" onMouseClicked="#optionPullUp" style="-fx-background-color: #4caf50;" text="OPTION" textFill="WHITE">
                      <HBox.margin>
                         <Insets bottom="100.0" left="100.0" right="100.0" top="100.0" />
                      </HBox.margin>
@@ -30,7 +32,7 @@
                         <Font name="Malgun Gothic Bold" size="32.0" />
                      </font>
                   </Button>
-                  <Button fx:id="exitButton" minHeight="100.0" minWidth="200.0" mnemonicParsing="false" onAction="#exitProgram" style="-fx-background-color: #4caf50;" text="EXIT" textFill="WHITE">
+                  <Button fx:id="exitButton" minHeight="100.0" minWidth="200.0" mnemonicParsing="false" onMouseClicked="#exitProgram" style="-fx-background-color: #4caf50;" text="EXIT" textFill="WHITE">
                      <HBox.margin>
                         <Insets bottom="100.0" left="100.0" right="100.0" top="100.0" />
                      </HBox.margin>
@@ -51,6 +53,48 @@
                </BorderPane.margin>
             </Text>
          </top>
+         <center>
+            <Pane fx:id="volumePane" depthTest="DISABLE" disable="true" maxHeight="100.0" maxWidth="250.0" opacity="0.0" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #337ef5; -fx-border-color: #ffffff; -fx-border-width: 1.5;" translateX="-100.0" BorderPane.alignment="CENTER">
+               <children>
+                  <Text fx:id="volumePane_Text" fill="WHITE" layoutX="65.0" layoutY="40.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Volume">
+                     <font>
+                        <Font name="Malgun Gothic Bold" size="32.0" />
+                     </font>
+                  </Text>
+                  <CheckBox fx:id="darkmode_Checkbox" mnemonicParsing="false" onAction="#darkMode_Toggle" text="Dark Mode" translateX="75.0" translateY="55.0">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </CheckBox>
+               </children>
+            </Pane>
+         </center>
+         <left>
+            <Pane fx:id="playMenu_Pane" disable="true" maxHeight="200.0" maxWidth="200.0" opacity="0.0" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #337ef5; -fx-border-color: #ffffff; -fx-border-width: 1.5;" translateX="140.0" BorderPane.alignment="CENTER">
+               <children>
+                  <Text fx:id="playMenu_selectModeText" fill="WHITE" layoutX="25.0" layoutY="40.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Select Mode" textAlignment="CENTER">
+                     <font>
+                        <Font name="Malgun Gothic Bold" size="25.0" />
+                     </font>
+                  </Text>
+                  <Button fx:id="playMenu_HostButton" mnemonicParsing="false" onMouseClicked="#playMenu_Host" prefWidth="60.0" style="-fx-background-color: #3da8f5;" text="Host" translateX="15.0" translateY="75.0">
+                     <font>
+                        <Font name="OCR A Extended" size="14.0" />
+                     </font>
+                  </Button>
+                  <Button fx:id="playMenu_JoinButton" mnemonicParsing="false" onMouseClicked="#playMenu_Join" prefWidth="60.0" style="-fx-background-color: #3da8f5;" text="Join" translateX="125.0" translateY="75.0">
+                     <font>
+                        <Font name="OCR A Extended" size="14.0" />
+                     </font>
+                  </Button>
+                  <Button fx:id="playMenu_Exit" layoutX="5.0" layoutY="19.0" mnemonicParsing="false" onMouseClicked="#playMenu_exitMenu" prefHeight="35.0" style="-fx-background-color: #013891;" text="EXIT Window" textFill="WHITE" translateX="35.0" translateY="125.0">
+                     <font>
+                        <Font name="OCR A Extended" size="15.0" />
+                     </font>
+                  </Button>
+               </children>
+            </Pane>
+         </left>
       </BorderPane>
    </children>
 </AnchorPane>

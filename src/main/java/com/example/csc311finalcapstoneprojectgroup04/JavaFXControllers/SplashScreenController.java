@@ -11,6 +11,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -30,6 +31,9 @@ public class SplashScreenController implements Initializable {
     // this user only exists for debugging get rid of it in the final version
     private User user;
     private boolean newUser = false;
+
+    @FXML
+    private Button debug;
 
     @FXML
     private TextField passwordField;
@@ -215,5 +219,15 @@ public class SplashScreenController implements Initializable {
         //for now use this hard coded user
         user = new User("maxim", "password");
         users.add(user);
+    }
+
+    @FXML
+    void debuglogin(MouseEvent event) throws IOException {
+        Stage stage = (Stage) signInButton.getScene().getWindow();
+        FXMLLoader fxmlLoader = new FXMLLoader(TypeApplication.class.getResource("MainMenuScreen.fxml"));//change to whatever fxml file you are testing
+        Scene scene = new Scene(fxmlLoader.load(), 1280, 720);
+        stage.setTitle("Type Application");
+        stage.setScene(scene);
+        stage.show();
     }
 }

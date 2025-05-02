@@ -20,19 +20,32 @@
    <center>
       <VBox alignment="CENTER" prefHeight="500.0" prefWidth="1280.0" BorderPane.alignment="CENTER">
          <children>
-            <Text fx:id="promptTextOne" nodeOrientation="LEFT_TO_RIGHT" strokeType="OUTSIDE" strokeWidth="0.0" text="Sign In To Your Account Using Your Username And Password" wrappingWidth="729.0255317687988">
+            <Button fx:id="debug" mnemonicParsing="false" onMouseClicked="#debuglogin" text="Debug Sign in" translateY="-100.0" />
+            <Text fx:id="promptTextOne" nodeOrientation="LEFT_TO_RIGHT" strokeType="OUTSIDE" strokeWidth="0.0" text="Sign In To Your Account Using Your Username And Password" translateY="-50.0" wrappingWidth="729.0255317687988">
                <font>
                   <Font size="27.0" />
                </font>
             </Text>
-            <HBox fx:id="hbox" alignment="CENTER" prefHeight="42.0" prefWidth="1280.0">
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Username" wrappingWidth="82.62414169311523">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Text>
+            <TextField fx:id="usernameField" alignment="CENTER" maxWidth="250.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="25.0" prefWidth="1216.0" translateY="5.0" />
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Password" translateY="10.0">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Text>
+            <TextField fx:id="passwordField" alignment="CENTER" maxWidth="250.0" translateY="15.0">
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin></TextField>
+            <Button fx:id="signInButton" mnemonicParsing="false" onAction="#login" prefHeight="25.0" prefWidth="349.0" text="Sign in" translateY="60.0" />
+            <Text fx:id="problemText" strokeType="OUTSIDE" strokeWidth="0.0" />
+            <HBox fx:id="hbox" alignment="CENTER" prefHeight="75.0" prefWidth="1280.0" translateY="100.0">
                <children>
                   <Text fx:id="promptTextTwo" strokeType="OUTSIDE" strokeWidth="0.0" text="Don't Have an Account?" wrappingWidth="255.69214820861816">
-                     <font>
-                        <Font size="24.0" />
-                     </font>
-                  </Text>
-                  <Text fx:id="signUpText" onMouseClicked="#switchModes" strokeType="OUTSIDE" strokeWidth="0.0" text="Signup" underline="true" wrappingWidth="79.24783134460449">
                      <font>
                         <Font size="24.0" />
                      </font>
@@ -42,21 +55,14 @@
                   <Insets />
                </VBox.margin>
             </HBox>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Username" wrappingWidth="82.62414169311523">
-               <font>
-                  <Font size="16.0" />
-               </font>
-            </Text>
-            <TextField fx:id="usernameField" alignment="CENTER" nodeOrientation="LEFT_TO_RIGHT" prefHeight="25.0" prefWidth="1216.0" />
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Password">
-               <font>
-                  <Font size="16.0" />
-               </font>
-            </Text>
-            <TextField fx:id="passwordField" alignment="CENTER" />
-            <Button fx:id="signInButton" mnemonicParsing="false" onAction="#login" prefHeight="25.0" prefWidth="349.0" text="SIgn in" />
-            <Text fx:id="problemText" strokeType="OUTSIDE" strokeWidth="0.0" />
          </children>
       </VBox>
    </center>
+   <bottom>
+      <Text fx:id="signUpText" onMouseClicked="#switchModes" strokeType="OUTSIDE" strokeWidth="0.0" text="Signup" translateY="-100.0" underline="true" wrappingWidth="79.24783134460449" BorderPane.alignment="CENTER">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Text>
+   </bottom>
 </BorderPane>
