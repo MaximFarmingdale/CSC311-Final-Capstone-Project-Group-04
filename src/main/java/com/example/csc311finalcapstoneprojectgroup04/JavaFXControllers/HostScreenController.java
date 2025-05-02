@@ -6,6 +6,7 @@ import com.example.csc311finalcapstoneprojectgroup04.NetworkMessagesandUpdate.Ra
 import com.example.csc311finalcapstoneprojectgroup04.TCPNetworking.Server;
 import com.example.csc311finalcapstoneprojectgroup04.User;
 import com.netflix.appinfo.InstanceInfo;
+import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -51,18 +52,10 @@ public class HostScreenController implements Initializable {
     private Message message;
     private String typedString = "";
     private String untypedString = "";
-    private ObservableList<RaceUpdate> raceUpdates;
+    private ObservableList<RaceUpdate> raceUpdates = FXCollections.observableArrayList();
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        try {
-            lobby = new Lobby(Inet4Address.getLocalHost().getHostAddress(), user.getUsername());
-            server = new Server(new ServerSocket(12345), user.getUsername(), lobby, messageVbox, raceUpdates);
-            new Thread(server).start();
-        } catch (UnknownHostException e) {
-            throw new RuntimeException(e);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+
         raceUpdates.addListener(new ListChangeListener<RaceUpdate>() {
             @Override
             public void onChanged(Change<? extends RaceUpdate> c) {
@@ -142,6 +135,15 @@ public class HostScreenController implements Initializable {
         user = currentUser;
         raceUpdate = new RaceUpdate(user.getUsername());
         message = new Message(currentUser.getUsername(),"");
+        try {
+            lobby = new Lobby(Inet4Address.getLocalHost().getHostAddress(), user.getUsername());
+            server = new Server(new ServerSocket(12345), user.getUsername(), lobby, messageVbox, raceUpdates);
+            new Thread(server).start();
+        } catch (UnknownHostException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
     public void endOfRace(RaceUpdate update) {
 
