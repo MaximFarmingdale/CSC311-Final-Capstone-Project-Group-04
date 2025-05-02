@@ -4,7 +4,16 @@ import com.example.csc311finalcapstoneprojectgroup04.Lobby.Lobby;
 import com.example.csc311finalcapstoneprojectgroup04.NetworkMessagesandUpdate.Message;
 import com.example.csc311finalcapstoneprojectgroup04.NetworkMessagesandUpdate.RaceUpdate;
 import com.example.csc311finalcapstoneprojectgroup04.User;
+import javafx.application.Platform;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.ReadOnlyObjectProperty;
+import javafx.beans.property.ReadOnlyObjectWrapper;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
+import javafx.geometry.Pos;
+import javafx.scene.control.Label;
+import javafx.scene.layout.VBox;
 
 import java.io.*;
 import java.net.Socket;
@@ -17,7 +26,7 @@ import java.util.List;
  * lobbies. Messages are added as text in FX Java Hbox, so that they are displayed
  * visually. Once a message is sent, it will be sent to
  */
-public class Client implements Runnable {
+public class Client implements Runnable{
     private Socket socket;
     private ObjectOutputStream objectOutputStream;
     private ObjectInputStream objectInputStream;
@@ -27,14 +36,15 @@ public class Client implements Runnable {
     private Lobby lobby;
     private String text;
     private User user;
-
+    private VBox messageBox;
+    private final ReadOnlyObjectWrapper<Lobby> lobbyRead = new ReadOnlyObjectWrapper<>();
     /**
      * Constructs a client which uses a socket to make ObjectOutputStream and
      * ObjectOutputStream.
      * @param socket the provided socket.
      * @param username the username from username.
      */
-    public Client(Socket socket, String username, ObservableList<RaceUpdate> raceUpdates) {
+    public Client(Socket socket, String username, VBox messageBox, ObservableList<RaceUpdate> raceUpdates) {
         try {
             this.socket = socket;
             this.objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
@@ -42,6 +52,7 @@ public class Client implements Runnable {
             this.username = username;
             objectOutputStream.writeObject(username);//check if it's necessary to send a new line
             objectOutputStream.flush();
+            this.messageBox = messageBox;
         } catch (IOException e) {
             closeClient();
         }
@@ -119,11 +130,15 @@ public class Client implements Runnable {
     }
 
     /**
-     * Process a String Object from the network
+     * Process a String Object from the network and adds it to the GUI
      * @param message
      */
     private void processMessage(String message) {
-        text = message;
+        Label label = new Label(message);
+        label.setAlignment(Pos.BASELINE_LEFT);
+        Platform.runLater(() -> {
+            messageBox.getChildren().add(label);
+        });
     }
 
     /**
@@ -140,20 +155,19 @@ public class Client implements Runnable {
      * @param currentLobby
      */
     private void processMessage(Lobby currentLobby) {
-        lobby = lobby;
+        lobbyRead.set(currentLobby);
     }
 
     /**
-     * Process a Message Object from the network
+     * Process a Message Object from the network and adds it to the GUI
      * @param message
      */
     private void processMessage(Message message) {
-        try {
-            objectOutputStream.writeObject(message);
-            objectOutputStream.flush();
-        } catch (IOException e) {
-            closeClient();
-        }
+        Label label = new Label(message.getSender() + ": " + message.getMessage());
+        label.setAlignment(Pos.BASELINE_LEFT);
+        Platform.runLater(() -> {
+            messageBox.getChildren().add(label);
+        });
     }
 
     /**
@@ -189,4 +203,21 @@ public class Client implements Runnable {
             e.printStackTrace();
         }
     }
+
+    /**
+     * Getter for ReadOnlyObjectProperty value
+     * @return value
+     */
+    public ReadOnlyObjectProperty<Lobby> lobbyProperty() {
+        return lobbyRead.getReadOnlyProperty();
+    }
+    //no setters needed
+    /**
+     * Getter for LobbyObservable
+     * @return LobbyObservable
+     */
+    public ObservableValue<Lobby> lobbyObservableProperty() {
+        return lobbyRead;
+    }
+
 }
