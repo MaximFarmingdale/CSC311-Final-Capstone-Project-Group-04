@@ -51,15 +51,15 @@ public class Server implements Runnable {
      * the objectInputStream and objectOutputStream are to read the input from users and to output objects to users
      * it is used throughout the class for these functions
      */
-    public Server(ServerSocket serverSocket, String username, Lobby lobby, VBox messageBox, ObservableList<RaceUpdate> raceUpdates) throws IOException {
+    public Server(ServerSocket serverSocket, String username, Lobby lobby, VBox messageBox, ObservableList<RaceUpdate> raceUpdatesList) throws IOException {
         this.serverSocket = serverSocket;
         this.username = username;
-        this.socketServer = new Socket("localhost", 1234);
+        this.socketServer = new Socket("localhost", 12345);
         this.objectInputStream = new ObjectInputStream(socketServer.getInputStream());
         this.objectOutputStream = new ObjectOutputStream(socketServer.getOutputStream());
         this.lobby = lobby;
         this.messageBox = messageBox;
-        this.raceUpdates = this.raceUpdates;
+        this.raceUpdates = raceUpdatesList;
     }
 
     /**
@@ -71,10 +71,11 @@ public class Server implements Runnable {
         try {
             while (!serverSocket.isClosed()) {
                 Socket socket = serverSocket.accept();
+                ObjectInputStream OIS = new ObjectInputStream(socket.getInputStream());
                 System.out.println("Accepted connection from " + socket.getRemoteSocketAddress());
                 while (true) {
                     try {
-                        Object object = objectInputStream.readObject();
+                        Object object = OIS.readObject();
                         if(object instanceof Message) {
                             Message message = (Message) object;
                             ClientHandler clientHandler = new ClientHandler(socket, message.getSender(), this);
@@ -276,18 +277,17 @@ public class Server implements Runnable {
      * @param raceUpdate
      */
     public void processMessage(RaceUpdate raceUpdate) {
-        if(raceUpdate.isWinner())
-            //call winner method
+        if (raceUpdate.isWinner()) {
             System.out.println("Winner");
-        boolean wasAdded = false;
-        for (RaceUpdate r : raceUpdates) {
+        }
+        for (int i = 0; i < raceUpdates.size(); i++) {
+            RaceUpdate r = raceUpdates.get(i);
             if (r.getUsername().equals(raceUpdate.getUsername())) {
-                r = raceUpdate;
-                wasAdded = true;
+                raceUpdates.set(i, raceUpdate);
+                return;
             }
         }
-        if(wasAdded)
-            raceUpdates.add(raceUpdate);
+        raceUpdates.add(raceUpdate);
     }
 
     /**
