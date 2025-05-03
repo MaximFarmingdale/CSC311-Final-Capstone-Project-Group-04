@@ -22,6 +22,8 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.URL;
 import java.util.ArrayList;
@@ -57,6 +59,7 @@ public class ClientScreenController implements Initializable {
     private Message message;
     private String typedString = "";
     private String untypedString = "";
+    private Socket socket;
 
     private ObservableList<RaceUpdate> raceUpdates;
     @FXML
@@ -105,7 +108,8 @@ public class ClientScreenController implements Initializable {
         this.lobby = lobby;
         try {
             raceUpdates = FXCollections.observableArrayList(new ArrayList<>());
-            new Thread(client = new Client(new Socket(lobby.getLobbyIP(),12345), user.getUsername(), messageVbox, raceUpdates));
+            socket = new Socket(lobby.getLobbyIP(),12345);
+            new Thread(client = new Client(socket, new ObjectOutputStream(socket.getOutputStream()), new ObjectInputStream(socket.getInputStream()), user.getUsername(), messageVbox, raceUpdates));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
