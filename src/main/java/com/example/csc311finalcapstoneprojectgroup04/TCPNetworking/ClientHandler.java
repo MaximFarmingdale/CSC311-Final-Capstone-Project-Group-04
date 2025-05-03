@@ -28,11 +28,11 @@ public class ClientHandler implements Runnable {
      * @param clientUserName The client username which the server gets from the join message.
      *
      */
-    public ClientHandler(Socket socket, String clientUserName, Server server) {
+    public ClientHandler(Socket socket, ObjectOutputStream objectOutputStream, ObjectInputStream objectInputStream, String clientUserName, Server server) {
         try {
             this.socket = socket;
-            this.objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
-            this.objectInputStream = new ObjectInputStream(socket.getInputStream());
+            this.objectOutputStream = objectOutputStream;
+            this.objectInputStream = objectInputStream;
             this.clientUserName = clientUserName;
             this.server = server;
             clients.add(this);
@@ -85,7 +85,6 @@ public class ClientHandler implements Runnable {
             }
 
         }
-        server.processMessage(message); //send it to the host
     }
 
     /**
@@ -117,7 +116,6 @@ public class ClientHandler implements Runnable {
                 removeClient();
             }
         }
-        server.processMessage(raceUpdate);
     }
 
     /**
