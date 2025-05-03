@@ -59,29 +59,28 @@ public class Server implements Runnable {
         try {
             while (!serverSocket.isClosed()) {
                 Socket socket = serverSocket.accept();
+                ObjectOutputStream OOS = new ObjectOutputStream(socket.getOutputStream());
+                OOS.flush();//to flush metadata
                 ObjectInputStream OIS = new ObjectInputStream(socket.getInputStream());
                 System.out.println("Accepted connection from " + socket.getRemoteSocketAddress());
-                while (true) {
                     try {
                         Object object = OIS.readObject();
                         if(object instanceof Message) {
                             Message message = (Message) object;
-                            ClientHandler clientHandler = new ClientHandler(socket, message.getSender(), this);
+                            ClientHandler clientHandler = new ClientHandler(socket, OOS, OIS, message.getSender(), this);
                             Thread thread = new Thread(clientHandler);
                             thread.start();
-                            break;
                         }
                         //if the application is just pinging the server to see if it works
                         if(object instanceof Ping) {
                             pingResponse(socket);
                             socket.close();
-                            break;
                         }
 
                     } catch (ClassNotFoundException e) {
                         throw new RuntimeException(e);
                     }
-                }
+
             }
         } catch (IOException e) {
             stopServer();
@@ -105,38 +104,6 @@ public class Server implements Runnable {
         }
 
     }
-    /*
-    /**\
-     * Starts the race by sending messages signfiying the beginning of the race,
-     * then sends the lobby to users.
-    public void startRace() {
-        try {
-            lobby.generateNewText();
-            String text = lobby.getText();
-            sendMessage("Race begins in 3");
-            Thread.sleep(1000);
-            sendMessage("Race begins in 2");
-            Thread.sleep(1000);
-            sendMessage("Race begins in 1");
-            Thread.sleep(1000);
-            sendMessage("Start!");
-            //send lobby
-
-
-        } catch (InterruptedException e) {
-            stopServer();
-        }
-    }
-
-     */
-
-
-    /**
-     * Allows the host to send a ping to all clients
-     * @param ping
-     */
-
-
     /**
      * internal helper method to respond to pings
      * @param socket
