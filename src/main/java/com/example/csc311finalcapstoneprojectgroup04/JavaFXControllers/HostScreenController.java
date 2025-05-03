@@ -3,6 +3,7 @@ package com.example.csc311finalcapstoneprojectgroup04.JavaFXControllers;
 import com.example.csc311finalcapstoneprojectgroup04.Lobby.Lobby;
 import com.example.csc311finalcapstoneprojectgroup04.NetworkMessagesandUpdate.Message;
 import com.example.csc311finalcapstoneprojectgroup04.NetworkMessagesandUpdate.RaceUpdate;
+import com.example.csc311finalcapstoneprojectgroup04.TCPNetworking.Host;
 import com.example.csc311finalcapstoneprojectgroup04.TCPNetworking.Server;
 import com.example.csc311finalcapstoneprojectgroup04.User;
 import com.netflix.appinfo.InstanceInfo;
@@ -23,10 +24,9 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.net.Inet4Address;
-import java.net.ServerSocket;
-import java.net.URL;
-import java.net.UnknownHostException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.*;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -43,7 +43,7 @@ public class HostScreenController implements Initializable {
     @FXML
     Label typedLabel, untypedLabel;
     private Server server;
-    private String raceText;
+    private String raceText = "";
     private String[] raceWords;
     private double racePercentage;
     private int raceWordindex = 0;
@@ -53,6 +53,8 @@ public class HostScreenController implements Initializable {
     private String typedString = "";
     private String untypedString = "";
     private ObservableList<RaceUpdate> raceUpdates = FXCollections.observableArrayList();
+    private Host host;
+    private Socket socket;
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
@@ -85,10 +87,12 @@ public class HostScreenController implements Initializable {
      * @param event
      */
     @FXML
-    void SendMessage(KeyEvent event) {
+    void sendMessage(KeyEvent event) {
+        messageField.requestFocus();
         if (event.getCode() == KeyCode.ENTER) {
             message.setMessage(messageField.getText());
-            server.sendMessage(message);
+            host.sendMessage(message);
+            System.out.println(messageField.getText());
             messageField.clear();
         }
     }
@@ -98,7 +102,7 @@ public class HostScreenController implements Initializable {
      */
     @FXML
     void sendRaceUpdate(KeyEvent event) {
-        if(lobby.getActiveRace()) {
+        if(lobby.getActiveRace() && event.getCode() == KeyCode.SPACE) {
             if (raceWords.length - 1 == raceWordindex) {
                 if (raceField.getText()
                         .trim()
@@ -118,7 +122,7 @@ public class HostScreenController implements Initializable {
                 racePercentage = (double) raceWordindex / raceWords.length;
                 raceUpdate.setProgress(racePercentage);
                 //sending messages
-                server.sendMessage(raceUpdate);
+                host.sendMessage(raceUpdate);
                 //clearing the field
                 raceField.clear();
                 typedLabel.setText(typedString);
@@ -137,16 +141,24 @@ public class HostScreenController implements Initializable {
         message = new Message(currentUser.getUsername(),"");
         try {
             lobby = new Lobby(Inet4Address.getLocalHost().getHostAddress(), user.getUsername());
-            server = new Server(new ServerSocket(12345), user.getUsername(), lobby, messageVbox, raceUpdates);
+            server = new Server(new ServerSocket(12345), user.getUsername(), lobby);
             new Thread(server).start();
+            Thread.sleep(200);
+            socket = new Socket("localhost", 12345);
+            host = new Host(socket, new ObjectOutputStream(socket.getOutputStream()), new ObjectInputStream(socket.getInputStream()), user.getUsername(), messageVbox, raceUpdates, lobby);
+            new Thread(host).start();
         } catch (UnknownHostException e) {
             throw new RuntimeException(e);
         } catch (IOException e) {
             throw new RuntimeException(e);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
         }
+        Thread.currentThread().interrupt();
+
     }
     public void endOfRace(RaceUpdate update) {
-
+        System.out.println(update);
     }
     /**
      * Starts the race by setting an active race in Lobby, resetting Labels
@@ -157,9 +169,10 @@ public class HostScreenController implements Initializable {
     void startRace(ActionEvent event) {
         lobby.setActiveRace(true);
         lobby.generateNewText();
+        raceText = lobby.getText();
         typedLabel.setText("");
         untypedLabel.setText(lobby.getText());
-        server.startRace();
+        host.startRace();
         raceWords = raceText.split(" ");
     }
 }
