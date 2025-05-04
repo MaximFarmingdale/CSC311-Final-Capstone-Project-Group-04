@@ -29,11 +29,6 @@
                   <Font size="19.0" />
                </font>
             </Button>
-            <Button mnemonicParsing="false" onAction="#startRace" prefHeight="90.0" prefWidth="121.0" text="Reset Race">
-               <font>
-                  <Font size="19.0" />
-               </font>
-            </Button>
             </children>
         </HBox>
     </top>
@@ -63,12 +58,12 @@
                             <children>
                         <TextFlow prefHeight="437.0" prefWidth="503.0">
                            <children>
-                              <Text fx:id="typedText" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-fill: GREEN;" text="Hello">
+                              <Text fx:id="typedText" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-fill: GREEN;">
                                  <font>
                                     <Font size="15.0" />
                                  </font>
                               </Text>
-                              <Text fx:id="untypedText" strokeType="OUTSIDE" strokeWidth="0.0" text="Text">
+                              <Text fx:id="untypedText" strokeType="OUTSIDE" strokeWidth="0.0">
                                  <font>
                                     <Font size="15.0" />
                                  </font>

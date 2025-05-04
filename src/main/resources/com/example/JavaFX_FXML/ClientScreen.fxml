@@ -35,7 +35,7 @@
                         <VBox fx:id="messageVbox" prefHeight="420.0" prefWidth="356.0" />
                      </content>
                   </ScrollPane>
-                  <TextField fx:id="messageField" onKeyTyped="#SendMessage" />
+                  <TextField fx:id="messageField" onKeyReleased="#SendMessage" />
                </children>
             </VBox>
             <GridPane layoutX="340.0" layoutY="314.0" prefHeight="565.0" prefWidth="888.0" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="1.0" AnchorPane.topAnchor="1.0">
@@ -63,7 +63,7 @@
                               </Label>
                            </children>
                         </TextFlow>
-                        <TextField fx:id="raceField" onKeyTyped="#sendRaceUpdate" />
+                        <TextField fx:id="raceField" onKeyReleased="#sendRaceUpdate" />
                      </children>
                   </VBox>
                </children>
