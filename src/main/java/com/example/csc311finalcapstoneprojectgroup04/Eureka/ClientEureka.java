@@ -49,11 +49,11 @@ public class ClientEureka {
         applicationInfoManager.registerAppMetadata(metadata);
         applicationInfoManager.setInstanceStatus(InstanceInfo.InstanceStatus.UP);
     }
-    public void updateLobby(String username, String currentPlayers, String activeGame) {
+    public void updateLobby(String username, int currentPlayers, boolean activeGame) {
         Map<String, String> metadata = instance.getMetadataMap();
         metadata.put("host-name", username);
-        metadata.put("current-players", "0");
-        metadata.put("active-game", "false");
+        metadata.put("current-players", String.valueOf(currentPlayers));
+        metadata.put("active-game", String.valueOf(activeGame));
         instance.setMetadataMap(metadata);
         applicationInfoManager.registerAppMetadata(metadata);
     }

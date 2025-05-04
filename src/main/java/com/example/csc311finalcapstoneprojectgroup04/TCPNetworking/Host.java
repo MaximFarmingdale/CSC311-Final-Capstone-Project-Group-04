@@ -38,7 +38,9 @@ public class Host extends Client{
                 sendMessage("Race begins in 1");
                 Thread.sleep(1000);
                 sendMessage("Start!");
+                lobby.setActiveRace(true);
                 sendMessage(lobby);
+
 
 
             } catch (InterruptedException e) {
