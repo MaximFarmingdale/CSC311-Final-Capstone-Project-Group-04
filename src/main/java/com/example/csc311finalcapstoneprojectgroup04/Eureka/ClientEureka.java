@@ -25,7 +25,7 @@ import java.util.Map;
  */
 @Service
 @EnableDiscoveryClient
-public class ClientEureka implements CommandLineRunner {
+public class ClientEureka {
     @Autowired
     private EurekaInstanceConfigBean instance;
     //private DiscoveryClient discovery;
@@ -43,11 +43,19 @@ public class ClientEureka implements CommandLineRunner {
     public void registerLobby(String username) {
         Map<String, String> metadata = instance.getMetadataMap();
         metadata.put("host-name", username);
-        metadata.put("current-players", "0");
+        metadata.put("current-players", "1");
         metadata.put("active-game", "false");
         instance.setMetadataMap(metadata);
         applicationInfoManager.registerAppMetadata(metadata);
         applicationInfoManager.setInstanceStatus(InstanceInfo.InstanceStatus.UP);
+    }
+    public void updateLobby(String username, String currentPlayers, String activeGame) {
+        Map<String, String> metadata = instance.getMetadataMap();
+        metadata.put("host-name", username);
+        metadata.put("current-players", "0");
+        metadata.put("active-game", "false");
+        instance.setMetadataMap(metadata);
+        applicationInfoManager.registerAppMetadata(metadata);
     }
     //testing method
     public void printLobbies() {
@@ -69,15 +77,5 @@ public class ClientEureka implements CommandLineRunner {
             System.out.println("No instances found.");
         }
         return instances;
-    }
-    public static void main(String[] args) {
-        SpringApplication.run(ClientEureka.class, args);
-    }
-
-    @Override
-    public void run(String... args) throws Exception {
-        registerLobby("max");
-        Thread.sleep(10000); //only if necessary
-        fillList();
     }
 }
