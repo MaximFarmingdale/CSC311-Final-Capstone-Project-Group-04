@@ -85,11 +85,6 @@ public class Client implements Runnable{
             if (socket.isConnected()) {
                 objectOutputStream.writeObject(message);
                 objectOutputStream.flush();
-                Label label = new Label(message);
-                label.setAlignment(Pos.BASELINE_LEFT);
-                Platform.runLater(() -> {
-                    messageBox.getChildren().add(label);
-                });
             }
         } catch (IOException e) {
             closeClient();
@@ -138,10 +133,10 @@ public class Client implements Runnable{
 
     /**
      * Process a String Object from the network and adds it to the GUI
-     * @param message
+     * @param text
      */
-    private void processMessage(String message) {
-        Label label = new Label(message);
+    private void processMessage(String text) {
+        Label label = new Label(text);
         label.setAlignment(Pos.BASELINE_LEFT);
         Platform.runLater(() -> {
             messageBox.getChildren().add(label);

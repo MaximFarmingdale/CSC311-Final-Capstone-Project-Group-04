@@ -1,5 +1,7 @@
 package com.example.csc311finalcapstoneprojectgroup04.TCPNetworking;
 
+import com.example.csc311finalcapstoneprojectgroup04.Eureka.ClientEureka;
+import com.example.csc311finalcapstoneprojectgroup04.Lobby.Lobby;
 import com.example.csc311finalcapstoneprojectgroup04.NetworkMessagesandUpdate.Message;
 import com.example.csc311finalcapstoneprojectgroup04.NetworkMessagesandUpdate.RaceUpdate;
 import com.example.csc311finalcapstoneprojectgroup04.User;
@@ -20,6 +22,8 @@ public class ClientHandler implements Runnable {
     private ObjectInputStream objectInputStream;
     public String clientUserName;
     private Server server;
+    private Lobby lobby;
+    private ClientEureka clientEureka;
 
     /**
      * Allows you to construct a new ClientHandler for managing multiple connections to a server.
@@ -28,13 +32,14 @@ public class ClientHandler implements Runnable {
      * @param clientUserName The client username which the server gets from the join message.
      *
      */
-    public ClientHandler(Socket socket, ObjectOutputStream objectOutputStream, ObjectInputStream objectInputStream, String clientUserName, Server server) {
+    public ClientHandler(Socket socket, ObjectOutputStream objectOutputStream, ObjectInputStream objectInputStream, String clientUserName, Server server, Lobby lobby, ClientEureka clientEureka) {
         try {
             this.socket = socket;
             this.objectOutputStream = objectOutputStream;
             this.objectInputStream = objectInputStream;
             this.clientUserName = clientUserName;
             this.server = server;
+            this.lobby = lobby;
             clients.add(this);
             sendMessage(new Message(clientUserName, clientUserName + " has entered the game"));
         } catch (Exception e) {
@@ -58,6 +63,16 @@ public class ClientHandler implements Runnable {
                 else if(input.getClass() == RaceUpdate.class) {
                     this.sendMessage((RaceUpdate) input);
                 }
+                else if(input.getClass() == Lobby.class) {
+                    this.sendMessage((Lobby) input);
+                }
+                else if(input.getClass() == String.class) {
+                    this.sendMessage((String) input);
+                }
+                else if(input.getClass() == User.class) {
+                    this.sendMessage((User) input);
+                }
+
             }
              catch (IOException e) {
                  closeClient();
@@ -86,7 +101,18 @@ public class ClientHandler implements Runnable {
 
         }
     }
+    public void sendMessage(String text) {
+        for (ClientHandler client : clients) {
+            try {
+                client.objectOutputStream.writeObject(text);
+                client.objectOutputStream.flush();
+            }
+            catch (IOException e) {
+                removeClient();
+            }
 
+        }
+    }
     /**
      * Sends a client user object to every other client.
      * @deprecated
@@ -117,6 +143,18 @@ public class ClientHandler implements Runnable {
             }
         }
     }
+    public void sendMessage(Lobby lobby) {
+        for (ClientHandler client : clients) {
+            try {
+                if(!client.clientUserName.equals(lobby.getLobbyHostName())) {
+                    client.objectOutputStream.writeObject(lobby);
+                    client.objectOutputStream.flush();
+                }
+            } catch (IOException e) {
+                removeClient();
+            }
+        }
+    }
 
     /**
      * Removes the ClientHandler from the clients list and releases the resources of the ClientHandler.
@@ -131,7 +169,8 @@ public class ClientHandler implements Runnable {
      * Releases the resources of the ClientHandler.
      */
     public void closeClient() {
-        removeClient();
+        removeClient(); //add something more robust to make sure that the metadata is correct.
+        clientEureka.updateLobby(lobby.getLobbyHostName(), lobby.getNumPlayers(), lobby.getActiveRace());
         try {
             if(objectOutputStream != null) {
                 objectOutputStream.close();
@@ -142,6 +181,8 @@ public class ClientHandler implements Runnable {
             if(socket != null) {
                 socket.close();
             }
+            lobby.decreaseNumPlayers();
+
         } catch (IOException e) {
             e.printStackTrace(); //add better logging
         }
