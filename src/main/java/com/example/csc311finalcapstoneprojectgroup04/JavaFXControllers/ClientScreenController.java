@@ -26,6 +26,7 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.ResourceBundle;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -54,7 +55,7 @@ public class ClientScreenController implements Initializable {
     private String[] raceWords;
     private double racePercentage;
     private int raceWordindex = 0;
-    private int raceIndex = 0;
+    private int raceLetterIndex = 0;
     private RaceUpdate raceUpdate;
     private Message message;
     private String typedString = "";
@@ -73,25 +74,29 @@ public class ClientScreenController implements Initializable {
 
     @FXML
     void sendRaceUpdate(KeyEvent event) {
-        System.out.println(event.getCode());
-        if(lobby.getActiveRace() && event.getCode() == KeyCode.SPACE) {
-            if (raceWords.length - 1 == raceWordindex) {
+        if(lobby.getActiveRace()) { //if it is an active race
+            //if the last letter was typed
+            if (raceWords.length - 1 == raceWordindex && Objects.equals(raceField.getText(), raceWords[raceWordindex])) {
                 if (raceField.getText()
                         .trim()
                         .equals(raceWords[raceWordindex])) {//if it's the last word
+                    typedText.setText(raceText);
+                    untypedText.setText("");
+                    //since raceupdate automatically tells if someone won and calls the
+                    //endRace method, we don't need to call it just update raceUpdate
                     raceUpdate.incrementWordIndex();
                     raceUpdate.setProgress(1);
                     raceUpdate.setWinner(true);
                     client.sendMessage(raceUpdate);
-                    typedText.setText(raceText);
-                    untypedText.setText("");
                 }
                 raceField.clear();
-            } else if (raceField.getText().trim().equals(raceWords[raceWordindex])) {
-                raceIndex += raceWords[raceWordindex].length() + 1;
+            }
+            //if its not the last letter and the word matches after space
+            else if (raceField.getText().trim().equals(raceWords[raceWordindex]) && event.getCode() == KeyCode.SPACE) {
+                raceLetterIndex += raceWords[raceWordindex].length() + 1;
                 //sets the untyped and typed messages to their respective new index
-                typedString = raceText.substring(0, raceIndex);
-                untypedString = raceText.substring(raceIndex);
+                typedString = raceText.substring(0, raceLetterIndex);
+                untypedString = raceText.substring(raceLetterIndex);
                 //updating values
                 raceWordindex++;
                 raceUpdate.incrementWordIndex();
@@ -105,6 +110,9 @@ public class ClientScreenController implements Initializable {
                 System.out.println(untypedString.toString() + " " + typedString.toString());
                 raceField.clear();
             }
+        }
+        if(!lobby.getActiveRace()) {
+            raceField.clear();
         }
     }
     public void endOfRace(RaceUpdate raceUpdate) {
@@ -122,15 +130,6 @@ public class ClientScreenController implements Initializable {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-    }
-    public void startRace() {
-        raceText = lobby.getText();
-        typedText.setText("");
-        untypedText.setText(raceText);
-        raceWords = raceText.split(" ");
-    }
-    public void endRace() {
-        System.out.println("end of race");
     }
 
     @Override
@@ -160,6 +159,15 @@ public class ClientScreenController implements Initializable {
                 startRace();
             }
         });
+    }
+    public void startRace() {
+        raceText = lobby.getText();
+        typedText.setText("");
+        untypedText.setText(raceText);
+        raceWords = raceText.split(" ");
+    }
+    public void endRace() {
+        System.out.println("end of race");
     }
 
 }

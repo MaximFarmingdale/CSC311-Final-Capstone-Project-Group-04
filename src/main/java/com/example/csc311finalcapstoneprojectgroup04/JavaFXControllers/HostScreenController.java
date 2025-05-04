@@ -27,6 +27,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.*;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 @Component
@@ -50,7 +51,7 @@ public class HostScreenController implements Initializable {
     private String[] raceWords;
     private double racePercentage;
     private int raceWordindex = 0;
-    private int raceIndex = 0;
+    private int raceLetterIndex = 0;
     private RaceUpdate raceUpdate;
     private Message message;
     private String typedString = "";
@@ -104,26 +105,31 @@ public class HostScreenController implements Initializable {
      */
     @FXML
     void sendRaceUpdate(KeyEvent event) {
-        System.out.println(event.getCode());
-        if(lobby.getActiveRace() && event.getCode() == KeyCode.SPACE) {
-            if (raceWords.length - 1 == raceWordindex) {
+        if(lobby.getActiveRace()) { //if it is an active race
+            //if the last letter was typed
+            if (raceWords.length - 1 == raceWordindex && Objects.equals(raceField.getText(), raceWords[raceWordindex])) {
                 if (raceField.getText()
                         .trim()
                         .equals(raceWords[raceWordindex])) {//if it's the last word
+                    lobby.setActiveRace(false);
+                    host.sendMessage(lobby);
+                    typedText.setText(raceText);
+                    untypedText.setText("");
+                    //since raceupdate automatically tells if someone won and calls the
+                    //endRace method we dont need to call it just update raceUpdate
                     raceUpdate.incrementWordIndex();
                     raceUpdate.setProgress(1);
                     raceUpdate.setWinner(true);
                     host.sendMessage(raceUpdate);
-                    endOfRace(raceUpdate);
-                    typedText.setText(raceText);
-                    untypedText.setText("");
                 }
                 raceField.clear();
-            } else if (raceField.getText().trim().equals(raceWords[raceWordindex])) {
-                raceIndex += raceWords[raceWordindex].length() + 1;
+            }
+            //if its not the last letter and the word matches after space
+            else if (raceField.getText().trim().equals(raceWords[raceWordindex]) && event.getCode() == KeyCode.SPACE) {
+                raceLetterIndex += raceWords[raceWordindex].length() + 1;
                 //sets the untyped and typed messages to their respective new index
-                typedString = raceText.substring(0, raceIndex);
-                untypedString = raceText.substring(raceIndex);
+                typedString = raceText.substring(0, raceLetterIndex);
+                untypedString = raceText.substring(raceLetterIndex);
                 //updating values
                 raceWordindex++;
                 raceUpdate.incrementWordIndex();
@@ -170,24 +176,24 @@ public class HostScreenController implements Initializable {
     }
     public void endOfRace(RaceUpdate update) {
         host.sendMessage(update.getUsername() + " Won!!!!!");
-        lobby.setActiveRace(false);
-        host.sendMessage(lobby);
         startRaceButton.setDisable(false);
     }
+
     /**
      * Starts the race by setting an active race in Lobby, resetting Labels
      * and calling the server start method
-     * @param event
      */
     @FXML
-    void startRace(ActionEvent event) {
-        lobby.setActiveRace(true);
+    void startRace() {
+        raceUpdate = new RaceUpdate(user.getUsername());
         lobby.generateNewText();
         raceText = lobby.getText();
+        raceWordindex = 0;
+        raceLetterIndex = 0;
         typedText.setText("");
         untypedText.setText(raceText);
-        host.startRace();
         raceWords = raceText.split(" ");
         startRaceButton.setDisable(true);
+        host.startRace();
     }
 }
