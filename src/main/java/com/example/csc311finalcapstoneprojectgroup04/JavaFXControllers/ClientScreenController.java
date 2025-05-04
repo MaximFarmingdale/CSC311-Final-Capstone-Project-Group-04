@@ -10,13 +10,12 @@ import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
@@ -27,8 +26,9 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.ResourceBundle;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 
 @Component
 public class ClientScreenController implements Initializable {
@@ -45,7 +45,7 @@ public class ClientScreenController implements Initializable {
     private ScrollPane messagefield;
 
     @FXML
-    private Label typedLabel, untypedLabel;
+    Text typedText, untypedText;
     private User user;
     private Lobby lobby;
     private Client client;
@@ -60,7 +60,7 @@ public class ClientScreenController implements Initializable {
     private String typedString = "";
     private String untypedString = "";
     private Socket socket;
-
+    private final ObjectProperty<Lobby> lobbyRead = new SimpleObjectProperty<>();
     private ObservableList<RaceUpdate> raceUpdates;
     @FXML
     void SendMessage(KeyEvent event) {
@@ -73,17 +73,21 @@ public class ClientScreenController implements Initializable {
 
     @FXML
     void sendRaceUpdate(KeyEvent event) {
-        if(lobby.getActiveRace()) {
+        System.out.println(event.getCode());
+        if(lobby.getActiveRace() && event.getCode() == KeyCode.SPACE) {
             if (raceWords.length - 1 == raceWordindex) {
                 if (raceField.getText()
                         .trim()
                         .equals(raceWords[raceWordindex])) {//if it's the last word
                     raceUpdate.incrementWordIndex();
                     raceUpdate.setProgress(1);
-                    //endOfRace(raceUpdate);
+                    raceUpdate.setWinner(true);
+                    client.sendMessage(raceUpdate);
+                    typedText.setText(raceText);
+                    untypedText.setText("");
                 }
                 raceField.clear();
-            } else if (raceField.getText().equals(raceWords[raceWordindex])) {
+            } else if (raceField.getText().trim().equals(raceWords[raceWordindex])) {
                 raceIndex += raceWords[raceWordindex].length() + 1;
                 //sets the untyped and typed messages to their respective new index
                 typedString = raceText.substring(0, raceIndex);
@@ -96,17 +100,21 @@ public class ClientScreenController implements Initializable {
                 //sending messages
                 client.sendMessage(raceUpdate);
                 //clearing the field
-                raceField.clear();
-                typedLabel.setText(typedString);
-                untypedLabel.setText(untypedString);
+                typedText.setText(typedString);
+                untypedText.setText(untypedString);
                 System.out.println(untypedString.toString() + " " + typedString.toString());
+                raceField.clear();
             }
         }
+    }
+    public void endOfRace(RaceUpdate raceUpdate) {
 
     }
+
     public void enterClientScreen(User user, Lobby lobby) {
         this.user = user;
         this.lobby = lobby;
+        lobbyRead.set(lobby);
         try {
             raceUpdates = FXCollections.observableArrayList(new ArrayList<>());
             socket = new Socket(lobby.getLobbyIP(),12345);
@@ -114,6 +122,12 @@ public class ClientScreenController implements Initializable {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+    public void startRace() {
+        raceText = lobby.getText();
+        typedText.setText("");
+        untypedText.setText(raceText);
+        raceWords = raceText.split(" ");
     }
 
     @Override
@@ -133,6 +147,14 @@ public class ClientScreenController implements Initializable {
                         System.out.println("updated");
                     }
                 }
+            }
+        });
+        lobbyRead.addListener((observable, oldValue, newValue) -> {
+            if(oldValue.getActiveRace() && !newValue.getActiveRace()) {
+                //end race
+            }
+            if(!oldValue.getActiveRace() && newValue.getActiveRace()) {
+                //start race
             }
         });
     }

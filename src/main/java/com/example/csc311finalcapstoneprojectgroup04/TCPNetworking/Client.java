@@ -54,6 +54,7 @@ public class Client implements Runnable{
             this.username = username;
             this.messageBox = messageBox;
             this.raceUpdates = raceUpdates;
+            lobbyRead.set(lobby);
         } catch (IOException e) {
             closeClient();
         }
@@ -148,11 +149,13 @@ public class Client implements Runnable{
     }
 
     /**
-     * Process a Lobby Object from the network
+     * Process a Lobby Object from the network, currently only changes
+     * current lobby if the active race is different
      * @param currentLobby
      */
     private void processMessage(Lobby currentLobby) {
-        lobbyRead.set(currentLobby);
+        lobby = currentLobby;
+        lobbyRead.set(lobby);
     }
 
     /**
