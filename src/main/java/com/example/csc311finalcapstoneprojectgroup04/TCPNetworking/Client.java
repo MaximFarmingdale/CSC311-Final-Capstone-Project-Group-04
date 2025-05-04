@@ -27,8 +27,8 @@ import java.util.List;
  * visually. Once a message is sent, it will be sent to
  */
 public class Client implements Runnable{
-    private Socket socket;
-    private ObjectOutputStream objectOutputStream;
+    protected Socket socket;
+    protected ObjectOutputStream objectOutputStream;
     private ObjectInputStream objectInputStream;
     private String username;
     private ObservableList<RaceUpdate> raceUpdates;

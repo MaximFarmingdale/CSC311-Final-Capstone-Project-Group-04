@@ -12,9 +12,7 @@ import java.net.Socket;
 
 public class Host extends Client{
     private Lobby lobby;
-    private Socket socket;
-    private ObjectOutputStream objectOutputStream;
-    private ObjectInputStream objectInputStream;
+
     /**
      * Constructs a client which uses a socket to make ObjectOutputStream and
      * ObjectOutputStream.
@@ -31,24 +29,26 @@ public class Host extends Client{
         this.lobby = lobby;
     }
     public void startRace() {
-        try {
-            String text = lobby.getText();
-            sendMessage("Race begins in 3");
-            Thread.sleep(1000);
-            sendMessage("Race begins in 2");
-            Thread.sleep(1000);
-            sendMessage("Race begins in 1");
-            Thread.sleep(1000);
-            sendMessage("Start!");
-            //send lobby
+        new Thread(() -> {
+            try {
+                sendMessage("Race begins in 3");
+                Thread.sleep(1000);
+                sendMessage("Race begins in 2");
+                Thread.sleep(1000);
+                sendMessage("Race begins in 1");
+                Thread.sleep(1000);
+                sendMessage("Start!");
+                sendMessage(lobby);
 
 
-        } catch (InterruptedException e) {
-            closeClient();
-        }
+            } catch (InterruptedException e) {
+                closeClient();
+            }
+        }).start();
+
     }
     public void sendMessage(Lobby lobby) {
-        if(socket.isConnected()) {
+        if(super.socket.isConnected()) {
             try {
                 objectOutputStream.writeObject(lobby);
                 objectOutputStream.flush();
