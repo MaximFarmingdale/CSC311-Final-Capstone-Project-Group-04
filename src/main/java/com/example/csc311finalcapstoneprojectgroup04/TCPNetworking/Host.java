@@ -5,13 +5,16 @@ import com.example.csc311finalcapstoneprojectgroup04.NetworkMessagesandUpdate.Ra
 import javafx.collections.ObservableList;
 import javafx.scene.layout.VBox;
 
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
 public class Host extends Client{
     private Lobby lobby;
-
+    private Socket socket;
+    private ObjectOutputStream objectOutputStream;
+    private ObjectInputStream objectInputStream;
     /**
      * Constructs a client which uses a socket to make ObjectOutputStream and
      * ObjectOutputStream.
@@ -42,6 +45,16 @@ public class Host extends Client{
 
         } catch (InterruptedException e) {
             closeClient();
+        }
+    }
+    public void sendMessage(Lobby lobby) {
+        if(socket.isConnected()) {
+            try {
+                objectOutputStream.writeObject(lobby);
+                objectOutputStream.flush();
+            } catch (IOException e) {
+                closeClient();
+            }
         }
     }
 }
