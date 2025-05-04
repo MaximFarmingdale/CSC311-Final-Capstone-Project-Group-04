@@ -1,24 +1,24 @@
 package com.example.csc311finalcapstoneprojectgroup04.JavaFXControllers;
 
+import com.example.csc311finalcapstoneprojectgroup04.Eureka.ClientEureka;
 import com.example.csc311finalcapstoneprojectgroup04.Lobby.Lobby;
 import com.example.csc311finalcapstoneprojectgroup04.NetworkMessagesandUpdate.Message;
 import com.example.csc311finalcapstoneprojectgroup04.NetworkMessagesandUpdate.RaceUpdate;
 import com.example.csc311finalcapstoneprojectgroup04.TCPNetworking.Host;
 import com.example.csc311finalcapstoneprojectgroup04.TCPNetworking.Server;
 import com.example.csc311finalcapstoneprojectgroup04.User;
-import com.netflix.appinfo.InstanceInfo;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Label;
+import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
@@ -27,7 +27,6 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.*;
-import java.util.List;
 import java.util.ResourceBundle;
 
 @Component
@@ -35,13 +34,17 @@ public class HostScreenController implements Initializable {
     private User user;
     private Lobby lobby;
     @Autowired
-    private ApplicationContext applicationContext;
+    ApplicationContext applicationContext;
+    @Autowired
+    ClientEureka clientEureka;
     @FXML
     private VBox messageVbox;
     @FXML
     private TextField messageField, raceField;
     @FXML
-    Label typedLabel, untypedLabel;
+    Text typedText, untypedText;
+    @FXML
+    Button startRaceButton;
     private Server server;
     private String raceText = "";
     private String[] raceWords;
@@ -57,7 +60,6 @@ public class HostScreenController implements Initializable {
     private Socket socket;
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
         raceUpdates.addListener(new ListChangeListener<RaceUpdate>() {
             @Override
             public void onChanged(Change<? extends RaceUpdate> c) {
@@ -102,6 +104,7 @@ public class HostScreenController implements Initializable {
      */
     @FXML
     void sendRaceUpdate(KeyEvent event) {
+        System.out.println(event.getCode());
         if(lobby.getActiveRace() && event.getCode() == KeyCode.SPACE) {
             if (raceWords.length - 1 == raceWordindex) {
                 if (raceField.getText()
@@ -110,8 +113,11 @@ public class HostScreenController implements Initializable {
                     raceUpdate.incrementWordIndex();
                     raceUpdate.setProgress(1);
                     endOfRace(raceUpdate);
+                    typedText.setText(raceText);
+                    untypedText.setText("");
                 }
-            } else if (raceField.getText().equals(raceWords[raceWordindex])) {
+                raceField.clear();
+            } else if (raceField.getText().trim().equals(raceWords[raceWordindex])) {
                 raceIndex += raceWords[raceWordindex].length() + 1;
                 //sets the untyped and typed messages to their respective new index
                 typedString = raceText.substring(0, raceIndex);
@@ -124,10 +130,10 @@ public class HostScreenController implements Initializable {
                 //sending messages
                 host.sendMessage(raceUpdate);
                 //clearing the field
-                raceField.clear();
-                typedLabel.setText(typedString);
-                untypedLabel.setText(untypedString);
+                typedText.setText(typedString);
+                untypedText.setText(untypedString);
                 System.out.println(untypedString.toString() + " " + typedString.toString());
+                raceField.clear();
             }
         }
     }
@@ -141,7 +147,7 @@ public class HostScreenController implements Initializable {
         message = new Message(currentUser.getUsername(),"");
         try {
             lobby = new Lobby(Inet4Address.getLocalHost().getHostAddress(), user.getUsername());
-            server = new Server(new ServerSocket(12345), user.getUsername(), lobby);
+            server = new Server(new ServerSocket(12345), user.getUsername(), lobby, clientEureka);
             new Thread(server).start();
             Thread.sleep(200);
             socket = new Socket("localhost", 12345);
@@ -170,9 +176,10 @@ public class HostScreenController implements Initializable {
         lobby.setActiveRace(true);
         lobby.generateNewText();
         raceText = lobby.getText();
-        typedLabel.setText("");
-        untypedLabel.setText(lobby.getText());
+        typedText.setText("");
+        untypedText.setText(raceText);
         host.startRace();
         raceWords = raceText.split(" ");
+        startRaceButton.setDisable(true);
     }
 }

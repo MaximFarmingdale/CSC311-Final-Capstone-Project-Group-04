@@ -82,6 +82,7 @@ public class ClientScreenController implements Initializable {
                     raceUpdate.setProgress(1);
                     //endOfRace(raceUpdate);
                 }
+                raceField.clear();
             } else if (raceField.getText().equals(raceWords[raceWordindex])) {
                 raceIndex += raceWords[raceWordindex].length() + 1;
                 //sets the untyped and typed messages to their respective new index
