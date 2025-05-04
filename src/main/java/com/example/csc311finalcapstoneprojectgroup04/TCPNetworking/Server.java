@@ -77,7 +77,7 @@ public class Server implements Runnable {
                         }
                         //if the application is just pinging the server to see if it works
                         if(object instanceof Ping) {
-                            pingResponse(socket);
+                            pingResponse(socket, OOS);
                             socket.close();
                         }
 
@@ -113,13 +113,14 @@ public class Server implements Runnable {
      * @param socket
      * sends a response ping of GameFull if the game is full and returns GameInProgress if the game is in progress
      */
-    private void pingResponse(Socket socket) {
+    private void pingResponse(Socket socket, ObjectOutputStream OOS) throws IOException {
         try {
-            ObjectOutputStream pingStream = new ObjectOutputStream(socket.getOutputStream());
             if (lobby.fullRace())
-                pingStream.writeObject(Ping.GameFull);
+                OOS.writeObject(Ping.GameFull);
             else if(lobby.getActiveRace())
-                pingStream.writeObject(Ping.GameInProgress);
+                OOS.writeObject(Ping.GameInProgress);
+            else
+                OOS.writeObject(lobby);
         }
         catch (IOException e) {
             stopServer();
