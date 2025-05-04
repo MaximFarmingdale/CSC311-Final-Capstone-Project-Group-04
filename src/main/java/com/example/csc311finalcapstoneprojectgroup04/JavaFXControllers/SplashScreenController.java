@@ -228,11 +228,6 @@ public class SplashScreenController implements Initializable {
 
     @FXML
     void debuglogin(MouseEvent event) throws IOException {
-        Stage stage = (Stage) signInButton.getScene().getWindow();
-        FXMLLoader fxmlLoader = new FXMLLoader(TypeApplication.class.getResource("MainMenuScreen.fxml"));//change to whatever fxml file you are testing
-        Scene scene = new Scene(fxmlLoader.load(), 1280, 720);
-        stage.setTitle("Type Application");
-        stage.setScene(scene);
-        stage.show();
+        changeController(new User("maxim", "password"));
     }
 }

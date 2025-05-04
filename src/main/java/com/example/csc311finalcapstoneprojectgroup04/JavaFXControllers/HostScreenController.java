@@ -138,6 +138,9 @@ public class HostScreenController implements Initializable {
                 raceField.clear();
             }
         }
+        if(!lobby.getActiveRace()) {
+            raceField.clear();
+        }
     }
     /**
      * Sends user information to HostScreenController
