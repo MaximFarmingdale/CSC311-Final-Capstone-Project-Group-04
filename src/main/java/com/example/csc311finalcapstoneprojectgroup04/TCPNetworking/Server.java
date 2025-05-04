@@ -71,9 +71,11 @@ public class Server implements Runnable {
                         Object object = OIS.readObject();
                         if(object instanceof Message) {
                             Message message = (Message) object;
-                            ClientHandler clientHandler = new ClientHandler(socket, OOS, OIS, message.getSender(), this);
+                            ClientHandler clientHandler = new ClientHandler(socket, OOS, OIS, message.getSender(), this, lobby, clientEureka);
                             Thread thread = new Thread(clientHandler);
                             thread.start();
+                            lobby.increaseNumPlayers();
+                            clientEureka.updateLobby(username,lobby.getCurrentPlayers(), lobby.getActiveRace());
                         }
                         //if the application is just pinging the server to see if it works
                         if(object instanceof Ping) {
