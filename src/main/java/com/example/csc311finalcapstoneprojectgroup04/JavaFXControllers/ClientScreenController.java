@@ -129,6 +129,9 @@ public class ClientScreenController implements Initializable {
         untypedText.setText(raceText);
         raceWords = raceText.split(" ");
     }
+    public void endRace() {
+        System.out.println("end of race");
+    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -151,10 +154,10 @@ public class ClientScreenController implements Initializable {
         });
         lobbyRead.addListener((observable, oldValue, newValue) -> {
             if(oldValue.getActiveRace() && !newValue.getActiveRace()) {
-                //end race
+                endRace();
             }
             if(!oldValue.getActiveRace() && newValue.getActiveRace()) {
-                //start race
+                startRace();
             }
         });
     }

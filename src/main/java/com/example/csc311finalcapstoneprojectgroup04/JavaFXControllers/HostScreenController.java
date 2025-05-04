@@ -112,6 +112,8 @@ public class HostScreenController implements Initializable {
                         .equals(raceWords[raceWordindex])) {//if it's the last word
                     raceUpdate.incrementWordIndex();
                     raceUpdate.setProgress(1);
+                    raceUpdate.setWinner(true);
+                    host.sendMessage(raceUpdate);
                     endOfRace(raceUpdate);
                     typedText.setText(raceText);
                     untypedText.setText("");
@@ -164,7 +166,10 @@ public class HostScreenController implements Initializable {
 
     }
     public void endOfRace(RaceUpdate update) {
-        System.out.println(update);
+        host.sendMessage(update.getUsername() + " Won!!!!!");
+        lobby.setActiveRace(false);
+        host.sendMessage(lobby);
+        startRaceButton.setDisable(false);
     }
     /**
      * Starts the race by setting an active race in Lobby, resetting Labels
