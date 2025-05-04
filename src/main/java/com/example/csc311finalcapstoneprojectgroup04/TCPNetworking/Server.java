@@ -1,5 +1,6 @@
 package com.example.csc311finalcapstoneprojectgroup04.TCPNetworking;
 
+import com.example.csc311finalcapstoneprojectgroup04.Eureka.ClientEureka;
 import com.example.csc311finalcapstoneprojectgroup04.Lobby.Lobby;
 import com.example.csc311finalcapstoneprojectgroup04.NetworkMessagesandUpdate.Message;
 import com.example.csc311finalcapstoneprojectgroup04.NetworkMessagesandUpdate.Ping;
@@ -10,6 +11,8 @@ import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -34,8 +37,7 @@ public class Server implements Runnable {
     private ServerSocket serverSocket;
     private String username;
     private Lobby lobby;
-
-
+    private ClientEureka clientEureka;
     /**
      * Allows you to construct a Server object using the following parameters.
      * @param serverSocket uses the serversocket to make a new socket that connects to it and creates an objectInputStream and objectOutputStream from it
@@ -44,10 +46,12 @@ public class Server implements Runnable {
      * the objectInputStream and objectOutputStream are to read the input from users and to output objects to users
      * it is used throughout the class for these functions
      */
-    public Server(ServerSocket serverSocket, String username, Lobby lobby) throws IOException {
+    public Server(ServerSocket serverSocket, String username, Lobby lobby, ClientEureka clientEureka) throws IOException {
         this.serverSocket = serverSocket;
         this.username = username;
         this.lobby = lobby;
+        this.clientEureka = clientEureka;
+        clientEureka.registerLobby(username);
     }
 
     /**
