@@ -13,6 +13,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 import java.io.*;
@@ -69,10 +70,12 @@ public class Client implements Runnable{
             if (socket.isConnected()) {
                 objectOutputStream.writeObject(message);
                 objectOutputStream.flush();
+                HBox hbox = new HBox();
+                hbox.setAlignment(Pos.CENTER_RIGHT);
                 Label label = new Label(message.getMessage());
-                label.setAlignment(Pos.BASELINE_RIGHT);
+                hbox.getChildren().add(label);
                 Platform.runLater(() -> {
-                    messageBox.getChildren().add(label);
+                    messageBox.getChildren().add(hbox);
                 });
             }
         } catch (IOException e) {
@@ -136,10 +139,12 @@ public class Client implements Runnable{
      * @param text
      */
     private void processMessage(String text) {
+        HBox hbox = new HBox();
+        hbox.setAlignment(Pos.CENTER_LEFT);
         Label label = new Label(text);
-        label.setAlignment(Pos.BASELINE_LEFT);
+        hbox.getChildren().add(label);
         Platform.runLater(() -> {
-            messageBox.getChildren().add(label);
+            messageBox.getChildren().add(hbox);
         });
     }
 
@@ -158,10 +163,12 @@ public class Client implements Runnable{
      * @param message
      */
     private void processMessage(Message message) {
+        HBox hbox = new HBox();
+        hbox.setAlignment(Pos.CENTER_LEFT);
         Label label = new Label(message.getSender() + ": " + message.getMessage());
-        label.setAlignment(Pos.BASELINE_LEFT);
+        hbox.getChildren().add(label);
         Platform.runLater(() -> {
-            messageBox.getChildren().add(label);
+            messageBox.getChildren().add(hbox);
         });
     }
 
