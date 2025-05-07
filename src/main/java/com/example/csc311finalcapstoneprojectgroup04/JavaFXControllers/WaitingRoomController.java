@@ -60,18 +60,6 @@ public class WaitingRoomController implements Initializable {
      * method to update the observable list only with new changes
      * Unfishinshed
      */
-    private void addChangesToList(){//in high likelihood I will not be able to implement this correctly in time
-        List<InstanceInfo> changes = clientEureka.fillList();
-        for (InstanceInfo i : changes) {
-            if (instancesMap.containsKey(i)) {
-
-            }
-            if(!instancesMap.containsKey(i)){
-
-            }
-
-        }
-    }
     @FXML
     void goToLobby(ActionEvent event) {
     }
@@ -198,7 +186,6 @@ public class WaitingRoomController implements Initializable {
                     List<InstanceInfo> latest = clientEureka.fillList();
                     if(latest != null) {
                         Platform.runLater(() -> {
-                            LobbyVbox.getChildren().clear();
                             updateLobbyList(latest);
                         });
                     }
@@ -246,7 +233,7 @@ public class WaitingRoomController implements Initializable {
                     hostLeft = false;
                     //if its the same lobby but different metadata
                     if (!oldInfo.getMetadata().equals(newInfo.getMetadata())) {
-                        instances.set(i, newInfo);
+                        updateInstance(i, newInfo);
                     }
                     break;
                 }
@@ -257,4 +244,14 @@ public class WaitingRoomController implements Initializable {
             }
         }
         }
+    private void updateInstance(int index, InstanceInfo newInfo) {
+        InstanceInfo oldInfo = instances.get(index);
+        HBox oldHbox = instancesMap.remove(oldInfo.getInstanceId());
+        if (oldHbox != null)
+            LobbyVbox.getChildren().remove(oldHbox);
+        HBox newHbox = addHbox(newInfo);
+        instancesMap.put(newInfo.getInstanceId(), newHbox);
+        LobbyVbox.getChildren().add(newHbox);
+        instances.set(index, newInfo);
+    }
     }
