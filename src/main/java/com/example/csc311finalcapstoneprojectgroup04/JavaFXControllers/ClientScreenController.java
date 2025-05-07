@@ -138,9 +138,7 @@ public class ClientScreenController implements Initializable {
     public void enterClientScreen(User user, Lobby lobby) {
         this.user = user;
         this.lobby = lobby;
-        lobbyRead.set(lobby);
         try {
-            raceUpdates = FXCollections.observableArrayList(new CopyOnWriteArrayList<>());
             socket = new Socket(lobby.getLobbyIP(),12345);
             new Thread(client = new Client(socket, new ObjectOutputStream(socket.getOutputStream()), new ObjectInputStream(socket.getInputStream()), user.getUsername(), messageVbox, raceUpdates));
         } catch (IOException e) {
@@ -150,6 +148,10 @@ public class ClientScreenController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        message = new Message(user.getUsername(), "");
+        raceUpdate = new RaceUpdate(user.getUsername());
+        raceUpdates = FXCollections.observableArrayList(new CopyOnWriteArrayList<>());
+        raceUpdates.add(raceUpdate);
         // adds a listener which can be used for animations.
         raceUpdates.addListener(new ListChangeListener<RaceUpdate>() {
             @Override
@@ -167,6 +169,8 @@ public class ClientScreenController implements Initializable {
                 }
             }
         });
+        lobbyRead.set(lobby);
+
         //ad a listener to the lobby to change status based on if the game is active or not
         lobbyRead.addListener((observable, oldValue, newValue) -> {
             //only checks for changes if the active race value changes
