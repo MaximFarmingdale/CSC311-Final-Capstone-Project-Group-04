@@ -16,7 +16,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * Only intended as a helper class for server.
  */
 public class ClientHandler implements Runnable {
-    public static List<ClientHandler> clients = new CopyOnWriteArrayList<>(); //change?
+    public static List<ClientHandler> clients = new CopyOnWriteArrayList<>();
     private Socket socket;
     public ObjectOutputStream objectOutputStream;
     private ObjectInputStream objectInputStream;
