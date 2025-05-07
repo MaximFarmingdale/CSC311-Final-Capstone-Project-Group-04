@@ -41,7 +41,7 @@ public class ClientHandler implements Runnable {
             this.server = server;
             this.lobby = lobby;
             clients.add(this);
-            sendMessage(new Message(clientUserName, clientUserName + " has entered the game"));
+            sendMessage(clientUserName + " has entered the game");
         } catch (Exception e) {
             removeClient();
         }

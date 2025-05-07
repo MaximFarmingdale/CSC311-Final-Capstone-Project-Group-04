@@ -188,6 +188,7 @@ public class ClientScreenController {
         });
     }
     public void startRace() {
+        lobby = lobbyRead.get();
         raceText = lobby.getText();
         typedText.setText("");
         untypedText.setText(raceText);
