@@ -101,6 +101,7 @@ public class WaitingRoomController implements Initializable {
             VBox v = (VBox) hbox2.getChildren().get(0);
             Label ip = (Label) v.getChildren().get(3);
             System.out.println(ip.getText());
+            new Thread(()-> {
             try {
                 Socket socket = new Socket(ip.getText(), 12345);
                 ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
@@ -110,10 +111,13 @@ public class WaitingRoomController implements Initializable {
                     Object receivedObject = in.readObject();
                     if(receivedObject instanceof Ping) {
                         Ping ping = (Ping) receivedObject;
+                        socket.close();
                         //todo- add ping response
                     }
                     if(receivedObject instanceof Lobby) {
-                        goToClientScreen(user, (Lobby) receivedObject);
+                        Platform.runLater(() -> {
+                            goToClientScreen(user, (Lobby) receivedObject);
+                        });
                     }
 
             } catch (IOException e) {
@@ -121,7 +125,9 @@ public class WaitingRoomController implements Initializable {
                 throw new RuntimeException(e);
             }
 
-        });
+        }).start();
+        }
+        );
         return hbox;
 
     }
@@ -173,10 +179,6 @@ public class WaitingRoomController implements Initializable {
                 }
 
             });
-            List<InstanceInfo> temp = clientEureka.fillList();
-            if (temp != null) { //making sure that the list is not null before you try to make the observable list access it
-                instances.setAll(clientEureka.fillList());
-            }
         }
         //refreshes lobbies every second
         new Thread(() -> {
@@ -254,4 +256,4 @@ public class WaitingRoomController implements Initializable {
         LobbyVbox.getChildren().add(newHbox);
         instances.set(index, newInfo);
     }
-    }
+}
