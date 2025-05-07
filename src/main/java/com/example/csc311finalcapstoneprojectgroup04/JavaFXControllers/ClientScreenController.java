@@ -148,6 +148,7 @@ public class ClientScreenController {
                     user.getUsername(), lobby, messageVbox, raceUpdates, lobbyRead)).start();
         } catch (IOException e) {
             throw new RuntimeException(e);
+
         }
         message = new Message(user.getUsername(), "");
         raceUpdate = new RaceUpdate(user.getUsername());

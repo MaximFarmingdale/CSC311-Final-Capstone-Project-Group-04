@@ -168,7 +168,7 @@ public class HostScreenController implements Initializable {
             new Thread(server).start();
             Thread.sleep(200);
             socket = new Socket("localhost", 12345);
-            host = new Host(socket, new ObjectOutputStream(socket.getOutputStream()), new ObjectInputStream(socket.getInputStream()), user.getUsername(), messageVbox, raceUpdates, lobby);
+            host = new Host(socket, new ObjectOutputStream(socket.getOutputStream()), new ObjectInputStream(socket.getInputStream()), lobby, user.getUsername(), messageVbox, raceUpdates);
             new Thread(host).start();
         } catch (IOException e) {
             throw new RuntimeException(e);

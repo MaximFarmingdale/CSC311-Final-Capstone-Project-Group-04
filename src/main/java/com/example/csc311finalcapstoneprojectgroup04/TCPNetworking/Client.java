@@ -35,7 +35,7 @@ public class Client implements Runnable{
     private ObservableList<RaceUpdate> raceUpdates;
     private Lobby lobby;
     private VBox messageBox;
-    private final ReadOnlyObjectWrapper<Lobby> lobbyRead = new ReadOnlyObjectWrapper<>();
+    private ReadOnlyObjectWrapper<Lobby> lobbyRead = new ReadOnlyObjectWrapper<>();
     /**
      * Constructs a client which uses a socket to make ObjectOutputStream and
      * ObjectOutputStream.
@@ -46,6 +46,24 @@ public class Client implements Runnable{
                   ObjectInputStream objectInputStream , String username,
                   Lobby lobby, VBox messageBox, ObservableList<RaceUpdate> raceUpdates,
                   ReadOnlyObjectWrapper<Lobby> lobbyRead) {
+        try {
+            this.socket = socket;
+            this.objectOutputStream = objectOutputStream;
+            this.objectInputStream = objectInputStream;
+            objectOutputStream.writeObject(new Message(username, "HI"));//check if it's necessary to send a new line
+            objectOutputStream.flush();
+            this.username = username;
+            this.messageBox = messageBox;
+            this.raceUpdates = raceUpdates;
+            this.lobbyRead = lobbyRead;
+            lobbyRead.set(lobby);
+        } catch (IOException e) {
+            closeClient();
+        }
+    }
+    public Client(Socket socket, ObjectOutputStream objectOutputStream,
+                  ObjectInputStream objectInputStream , String username,
+                  Lobby lobby, VBox messageBox, ObservableList<RaceUpdate> raceUpdates) {
         try {
             this.socket = socket;
             this.objectOutputStream = objectOutputStream;
@@ -205,22 +223,6 @@ public class Client implements Runnable{
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    /**
-     * Getter for ReadOnlyObjectProperty value
-     * @return value
-     */
-    public ReadOnlyObjectProperty<Lobby> lobbyProperty() {
-        return lobbyRead.getReadOnlyProperty();
-    }
-    //no setters needed
-    /**
-     * Getter for LobbyObservable
-     * @return LobbyObservable
-     */
-    public ObservableValue<Lobby> lobbyObservableProperty() {
-        return lobbyRead;
     }
 
 }

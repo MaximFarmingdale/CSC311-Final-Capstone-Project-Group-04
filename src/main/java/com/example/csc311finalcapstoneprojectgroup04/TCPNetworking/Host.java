@@ -24,8 +24,8 @@ public class Host extends Client{
      * @param messageBox
      * @param raceUpdates
      */
-    public Host(Socket socket, ObjectOutputStream objectOutputStream, ObjectInputStream objectInputStream, String username, VBox messageBox, ObservableList<RaceUpdate> raceUpdates, Lobby lobby) {
-        super(socket, objectOutputStream, objectInputStream, username, messageBox, raceUpdates);
+    public Host(Socket socket, ObjectOutputStream objectOutputStream, ObjectInputStream objectInputStream, Lobby lobby, String username, VBox messageBox, ObservableList<RaceUpdate> raceUpdates) {
+        super(socket, objectOutputStream, objectInputStream, username, lobby, messageBox, raceUpdates);
         this.lobby = lobby;
     }
     public void startRace() {
