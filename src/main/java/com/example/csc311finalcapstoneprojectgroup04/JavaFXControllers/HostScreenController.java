@@ -67,28 +67,28 @@ public class HostScreenController implements Initializable {
     private Socket socket;
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        raceUpdates.addListener(new ListChangeListener<RaceUpdate>() {
-            @Override
-            public void onChanged(Change<? extends RaceUpdate> c) {
-                while (c.next()) {
-                    if (c.wasAdded()) {
-                        for(RaceUpdate r : c.getAddedSubList()) {
-                            if(r.isWinner())
-                                endOfRace(r);
+        raceUpdates.addListener((ListChangeListener<RaceUpdate>) c -> {
+            while (c.next()) {
+                if (c.wasAdded()) {
+                    for(RaceUpdate r : c.getAddedSubList()) {
+                        if(r.isWinner()) {
+                            endOfRace(r);
+                            break;
                         }
                     }
-                    else if (c.wasPermutated())//check if this is needed
-                        System.out.println(c.getRemoved());
+                }
+                else if (c.wasPermutated())//check if this is needed
+                    System.out.println(c.getRemoved());
 
-                    else if (c.wasUpdated()) {
-                        for (RaceUpdate r : raceUpdates) {
-                            if(r.isWinner())
-                                endOfRace(r);
+                else if (c.wasUpdated()) {
+                    for (RaceUpdate r : raceUpdates) {
+                        if(r.isWinner()) {
+                            endOfRace(r);
+                            break;
                         }
                     }
                 }
             }
-
         });
     }
     /**
@@ -127,6 +127,8 @@ public class HostScreenController implements Initializable {
                     raceUpdate.setProgress(1);
                     raceUpdate.setWinner(true);
                     host.sendMessage(raceUpdate);
+                    System.out.println("done");
+                    endOfRace(raceUpdate);
                 }
                 raceField.clear();
             }
@@ -160,7 +162,6 @@ public class HostScreenController implements Initializable {
      */
     public void enterHostScreen(User currentUser) {
         user = currentUser;
-        raceUpdate = new RaceUpdate(user.getUsername());
         message = new Message(currentUser.getUsername(),"");
         try {
             lobby = new Lobby(publicIP(), user.getUsername());
@@ -174,8 +175,8 @@ public class HostScreenController implements Initializable {
             throw new RuntimeException(e);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
-
         }
+
 
     }
     public static String publicIP() throws MalformedURLException {
@@ -203,10 +204,7 @@ public class HostScreenController implements Initializable {
      */
     @FXML
     void startRace() {
-        //resetting the raceUpdate
-        raceUpdate.setProgress(0);
-        raceUpdate.setWinner(false);
-
+        raceUpdate = new RaceUpdate(user.getUsername());
         lobby.generateNewText();
         raceText = lobby.getText();
         raceWordindex = 0;
