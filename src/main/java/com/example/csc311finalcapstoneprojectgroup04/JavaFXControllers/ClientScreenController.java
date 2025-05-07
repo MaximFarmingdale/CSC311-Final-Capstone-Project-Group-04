@@ -102,6 +102,8 @@ public class ClientScreenController {
                     raceUpdate.setProgress(1);
                     raceUpdate.setWinner(true);
                     client.sendMessage(raceUpdate); //send race update to everyone else
+                    raceUpdate.setProgress(0);
+                    raceUpdate.setWinner(false);
                 }
                 raceField.clear();
             }
@@ -205,8 +207,6 @@ public class ClientScreenController {
     }
     public void endRace() {
         System.out.println("end of race");
-        raceUpdate.setProgress(0);
-        raceUpdate.setWinner(false);
     }
 
 }
