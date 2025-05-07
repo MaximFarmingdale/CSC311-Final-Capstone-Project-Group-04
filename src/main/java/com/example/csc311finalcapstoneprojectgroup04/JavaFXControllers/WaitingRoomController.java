@@ -89,7 +89,7 @@ public class WaitingRoomController implements Initializable {
         Label label1 = new Label(instance.getMetadata().get("host-name"));
         Label label2 = new Label(instance.getMetadata().get("current-players" ) + "/"+maxPlayers);
         Label label3 = new Label(instance.getMetadata().get("active-game"));
-        Label label4 = new Label(instance.getIPAddr());
+        Label label4 = new Label(instance.getMetadata().get("public-ip"));
         VBox vbox = new VBox();
         vbox.getChildren().addAll(label1, label2, label3, label4);
         HBox hbox = new HBox();
@@ -137,7 +137,6 @@ public class WaitingRoomController implements Initializable {
         Label hostName = (Label) vbox.getChildren().get(0);
         Label playerNum = (Label) vbox.getChildren().get(1);
         Label activeGame = (Label) vbox.getChildren().get(2);
-        hostName.setText(instance.getMetadata().get("host-name"));
         playerNum.setText(instance.getMetadata().get("current-players" ) + "/"+maxPlayers);
         activeGame.setText(instance.getMetadata().get("active-game"));
     }
