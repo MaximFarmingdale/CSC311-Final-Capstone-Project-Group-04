@@ -36,6 +36,7 @@ public class TypeApplication extends Application {
      */
     @Override
     public void start(Stage stage) throws IOException {
+
         applicationContext.publishEvent(new StageReadyEvent(stage));
         FXMLLoader loader = new FXMLLoader(TypeApplication.class.getResource("/com/example/JavaFX_FXML/SplashScreen.fxml"));//change to whatever fxml file you are testing
         loader.setControllerFactory(applicationContext::getBean); //gets beans from spring

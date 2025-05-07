@@ -62,15 +62,19 @@ public class ClientEureka {
             System.out.println(instanceInfo);
         }
     }
+    public void hide() {
+    }
 
     /**
      * fills the instances' list with EurekaClient instances
      */
     public List<InstanceInfo> fillList() {
         if (eurekaClient.getApplication("TYPING_RACE") != null) {
-            instances = eurekaClient.getApplication("TYPING_RACE").getInstances();
-            for (InstanceInfo info : instances) {
-                System.out.println("Found instance: " + info.getMetadata() + info.getIPAddr());
+            for (InstanceInfo instanceInfo : eurekaClient.getApplication("TYPING_RACE").getInstances()) {
+                if (instanceInfo.getStatus() == InstanceInfo.InstanceStatus.UP) {
+                    instances.add(instanceInfo);
+                    System.out.println("Found lobby: " + instanceInfo.getMetadata());
+                }
             }
         } else {
             System.out.println("No instances found.");
