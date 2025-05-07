@@ -1,16 +1,12 @@
 package com.example.csc311finalcapstoneprojectgroup04;
 
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.Slider;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
-import javafx.scene.Scene;
 import javafx.stage.Stage;
 import org.springframework.context.ApplicationContext;
 
@@ -21,7 +17,7 @@ import java.io.IOException;
 /// and this after loading the FXML
 /// loader.setControllerFactory(applicationContext::getBean);
 /// see the change Controller methods in SplashScreenController
-public class MainMenuScreenController {
+public class UNUSEDMainMenuScreenController {
 
 
 //    @FXML

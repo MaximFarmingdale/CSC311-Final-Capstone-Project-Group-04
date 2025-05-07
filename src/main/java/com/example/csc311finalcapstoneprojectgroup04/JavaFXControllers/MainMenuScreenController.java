@@ -28,13 +28,7 @@ public class MainMenuScreenController {
     private AnchorPane MainMenuAPane;
 
     @FXML
-    private CheckBox darkmode_Checkbox;
-
-    @FXML
     private Button exitButton;
-
-    @FXML
-    private Button optionsButton;
 
     @FXML
     private Button playButton;
@@ -58,16 +52,10 @@ public class MainMenuScreenController {
     private Text playMenu_selectModeText;
 
     @FXML
-    private Pane volumePane;
-
-
-    @FXML
     private BorderPane PlayMenuBPane;
 
-
-//    @FXML
-//    private AnchorPane MainMenuAPane;
-
+    @FXML
+    private Button playMenu_SoloButton;
 
     private User user;
 
@@ -90,14 +78,6 @@ public class MainMenuScreenController {
     int playmenuclickcount = 1;
     @FXML
     void openPlayMenu(MouseEvent event) {
-//        try {
-//            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/JavaFX_FXML/PlayMenu.fxml"));
-//            Parent playMenuPane = loader.load();
-//            MainMenuAPane.getChildren().add(playMenuPane);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-
 
         playButton.setOnAction(e -> {
             System.out.println(playmenuclickcount);
@@ -115,30 +95,26 @@ public class MainMenuScreenController {
         }
 
     }
-    int optionclicked = 1;
-    /**
-     * pulls up option menu pane
-     * @param event
-     */
-    @FXML
-    void optionPullUp(MouseEvent event) {
-        optionsButton.setOnAction(e -> {
-            optionclicked++;
-            optionsButton.getOnMouseClicked();
-        });
-    }
-        @FXML
-    void optionPullUp(ActionEvent event) {
-
-        if (optionclicked % 1 == 0) {
-            volumePane.setOpacity(1);
-            volumePane.setDisable(false);
-        }
-        if (optionclicked % 2 == 0) {
-            volumePane.setOpacity(0);
-            volumePane.setDisable(true);
-        }
-    }
+//    int optionclicked = 1; ~~~~~~~~~~~~~~~~~~~~~OPTIONS PANE DISCONTINUED~~~~~~~~~~~~~~~~~~~~~
+    //    @FXML
+//    void optionPullUp(MouseEvent event) {
+//        optionsButton.setOnAction(e -> {
+//            optionclicked++;
+//            optionsButton.getOnMouseClicked();
+//        });
+//    }
+//        @FXML
+//    void optionPullUp(ActionEvent event) {
+//
+//        if (optionclicked % 1 == 0) {
+//            volumePane.setOpacity(1);
+//            volumePane.setDisable(false);
+//        }
+//        if (optionclicked % 2 == 0) {
+//            volumePane.setOpacity(0);
+//            volumePane.setDisable(true);
+//        }
+//    } ~~~~~~~~~~~~~~~~~~~~~OPTIONS PANE DISCONTINUED~~~~~~~~~~~~~~~~~~~~~
 
     /**
      * Method to pass a user to MainMenuScreen
@@ -187,9 +163,8 @@ public class MainMenuScreenController {
         }
     }
 
-// todo
-    public void darkMode_Toggle(ActionEvent event) {
-    }
+//    public void darkMode_Toggle(ActionEvent event) {
+//    } ~~~~~~~~~~~~~~~~~~~~~OPTIONS PANE DISCONTINUED~~~~~~~~~~~~~~~~~~~~~
 
     /**
      * Sets the current scene to the HostScreen.
@@ -234,5 +209,13 @@ public class MainMenuScreenController {
     }
 
     public void playMenu_exitMenu(MouseEvent event) {
+        playmenuclickcount++;
+        playMenu_Pane.setOpacity(0);
+        playMenu_Pane.setDisable(true);
+    }
+
+    @FXML
+    void playMenu_SoloMode(MouseEvent event) {
+
     }
 }

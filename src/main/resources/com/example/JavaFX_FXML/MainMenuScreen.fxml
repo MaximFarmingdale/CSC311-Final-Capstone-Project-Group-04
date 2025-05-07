@@ -36,26 +36,31 @@
             </HBox>
          </bottom>
          <left>
-            <Pane fx:id="playMenu_Pane" disable="true" maxHeight="200.0" maxWidth="200.0" opacity="0.0" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #00bfff; -fx-border-color: #ffffff; -fx-border-width: 1.5;" translateX="540.0" BorderPane.alignment="CENTER">
+            <Pane fx:id="playMenu_Pane" maxHeight="200.0" maxWidth="200.0" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #00bfff; -fx-border-color: #000000; -fx-border-width: 1.5;" translateX="540.0" BorderPane.alignment="CENTER">
                <children>
-                  <Text fx:id="playMenu_selectModeText" fill="WHITE" layoutX="25.0" layoutY="40.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Select Mode" textAlignment="CENTER">
+                  <Text fx:id="playMenu_selectModeText" fill="WHITE" layoutX="25.0" layoutY="40.0" stroke="BLACK" strokeType="OUTSIDE" text="Select Mode" textAlignment="CENTER">
                      <font>
                         <Font name="Malgun Gothic Bold" size="25.0" />
                      </font>
                   </Text>
-                  <Button fx:id="playMenu_HostButton" mnemonicParsing="false" onMouseClicked="#playMenu_Host" prefWidth="60.0" style="-fx-background-color: #3da8f5;" text="Host" translateX="15.0" translateY="75.0">
+                  <Button fx:id="playMenu_HostButton" mnemonicParsing="false" onMouseClicked="#playMenu_Host" prefWidth="60.0" style="-fx-background-color: #013891;" text="Host" textFill="WHITE" translateX="15.0" translateY="65.0">
                      <font>
                         <Font name="OCR A Extended" size="14.0" />
                      </font>
                   </Button>
-                  <Button fx:id="playMenu_JoinButton" mnemonicParsing="false" onMouseClicked="#playMenu_Join" prefWidth="60.0" style="-fx-background-color: #3da8f5;" text="Join" translateX="125.0" translateY="75.0">
+                  <Button fx:id="playMenu_JoinButton" mnemonicParsing="false" onMouseClicked="#playMenu_Join" prefWidth="60.0" style="-fx-background-color: #013891;" text="Join" textFill="WHITE" translateX="125.0" translateY="65.0">
                      <font>
                         <Font name="OCR A Extended" size="14.0" />
                      </font>
                   </Button>
-                  <Button fx:id="playMenu_Exit" layoutX="5.0" layoutY="19.0" mnemonicParsing="false" onMouseClicked="#playMenu_exitMenu" prefHeight="35.0" style="-fx-background-color: #013891;" text="EXIT Window" textFill="WHITE" translateX="35.0" translateY="125.0">
+                  <Button fx:id="playMenu_Exit" layoutX="5.0" layoutY="25.0" mnemonicParsing="false" onMouseClicked="#playMenu_exitMenu" prefHeight="35.0" style="-fx-background-color: #013891;" text="EXIT Window" textFill="WHITE" translateX="35.0" translateY="125.0">
                      <font>
                         <Font name="OCR A Extended" size="15.0" />
+                     </font>
+                  </Button>
+                  <Button fx:id="playMenu_SoloButton" layoutX="47.0" layoutY="100.0" mnemonicParsing="false" onMouseClicked="#playMenu_SoloMode" prefHeight="25.0" prefWidth="105.0" style="-fx-background-color: #013891;" text="Solo Mode" textAlignment="CENTER" textFill="WHITE" wrapText="true">
+                     <font>
+                        <Font name="OCR A Extended" size="14.0" />
                      </font>
                   </Button>
                </children>
