@@ -190,7 +190,7 @@ public class WaitingRoomController implements Initializable {
                     if(latest != null) {
                         Platform.runLater(() -> {
                             LobbyVbox.getChildren().clear();
-                            instances.setAll(latest);
+                            updateLobbyList(latest);
                         });
                     }
                 }
@@ -205,4 +205,47 @@ public class WaitingRoomController implements Initializable {
             }
         }).start();
     }
-}
+    public void updateLobbyList(List<InstanceInfo> latest){
+
+        if(latest == null) { //if empty
+            instances.clear();
+            return;
+        }
+        //to get add new lobbies
+        for(InstanceInfo newInformation : latest ) {
+            boolean newLobby = true;
+            String newClientID = newInformation.getInstanceId();
+            for(InstanceInfo oldInformation : instances) {
+                String oldClientID = oldInformation.getInstanceId();
+                if(newClientID.equals(oldClientID)) { //if lobby is found
+                    newLobby = false;
+                    break;
+                }
+
+            }
+            if(newLobby)
+                instances.add(newInformation);
+        }
+        //to remove and update lobbies
+        for(int i = 0; i < instances.size(); i ++) {
+            boolean hostLeft = true; //if the lobby is gone
+            InstanceInfo oldInfo = instances.get(i);
+            String oldClientID = oldInfo.getInstanceId();
+            for (InstanceInfo newInfo : latest) {
+                String newClientID = newInfo.getInstanceId();
+                if (oldClientID.equals(newClientID)) {
+                    hostLeft = false;
+                    //if its the same lobby but different metadata
+                    if (!oldInfo.getMetadata().equals(newInfo.getMetadata())) {
+                        instances.set(i, newInfo);
+                    }
+                    break;
+                }
+            }
+            if (hostLeft) {
+                instances.remove(i);
+                i--;
+            }
+        }
+        }
+    }
