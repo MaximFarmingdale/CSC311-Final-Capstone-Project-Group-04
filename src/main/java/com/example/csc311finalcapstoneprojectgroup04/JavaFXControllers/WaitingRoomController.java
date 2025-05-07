@@ -42,7 +42,7 @@ import java.util.ResourceBundle;
  * and update the GUI.
  */
 @Component
-public class WaitingRoomController implements Initializable {
+public class WaitingRoomController{
     private User user;
     @FXML
     private VBox LobbyVbox;
@@ -77,6 +77,7 @@ public class WaitingRoomController implements Initializable {
             if(applicationContext == null){
                 System.out.println("ApplicationContext is null");
             }
+            configureLobbies();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -140,11 +141,7 @@ public class WaitingRoomController implements Initializable {
         playerNum.setText(instance.getMetadata().get("current-players" ) + "/"+maxPlayers);
         activeGame.setText(instance.getMetadata().get("active-game"));
     }
-
-
-
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
+    private void configureLobbies(){
         if(clientEureka != null) {
             instances.addListener(new ListChangeListener<InstanceInfo>() {
                 @Override
@@ -202,6 +199,10 @@ public class WaitingRoomController implements Initializable {
             }
         }).start();
     }
+
+
+
+
     public void updateLobbyList(List<InstanceInfo> latest){
 
         if(latest == null) { //if empty
