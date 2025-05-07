@@ -30,6 +30,14 @@ import java.net.*;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
+/**
+ * The Controller for the HostScreen.fxml file. Allows the user to send messages,
+ * make progress in the race and to start the race. The main differences between
+ * this and the ClientScreenController is that this class allows the user to start the
+ * race, and this class manages properties such as Lobbys, which clients cannot control.
+ * It also does not have a listener like ClientScreenController for lobbys, and this class
+ * also listens for the winner and ends the game when one is found.
+ */
 @Component
 public class HostScreenController implements Initializable {
     private User user;
@@ -164,16 +172,19 @@ public class HostScreenController implements Initializable {
             socket = new Socket("localhost", 12345);
             host = new Host(socket, new ObjectOutputStream(socket.getOutputStream()), new ObjectInputStream(socket.getInputStream()), user.getUsername(), messageVbox, raceUpdates, lobby);
             new Thread(host).start();
-        } catch (UnknownHostException e) {
-            throw new RuntimeException(e);
         } catch (IOException e) {
             throw new RuntimeException(e);
         } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+            Thread.currentThread().interrupt();
+
         }
-        Thread.currentThread().interrupt();
 
     }
+
+    /**
+     * method for ending the race
+     * @param update
+     */
     public void endOfRace(RaceUpdate update) {
         host.sendMessage(update.getUsername() + " Won!!!!!");
         startRaceButton.setDisable(false);
@@ -185,7 +196,10 @@ public class HostScreenController implements Initializable {
      */
     @FXML
     void startRace() {
-        raceUpdate = new RaceUpdate(user.getUsername());
+        //resetting the raceUpdate
+        raceUpdate.setProgress(0);
+        raceUpdate.setWinner(false);
+
         lobby.generateNewText();
         raceText = lobby.getText();
         raceWordindex = 0;

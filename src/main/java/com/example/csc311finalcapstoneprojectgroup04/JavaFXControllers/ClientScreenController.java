@@ -28,9 +28,21 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.ResourceBundle;
+import java.util.concurrent.CopyOnWriteArrayList;
+
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 
+/**
+ * This is the JavaFX controller that controls ClientScreen.fxml,
+ * it allows the user to complete in the type racing game and also
+ * type messages in the chat. There is also functionality for
+ * an end race effect after one ends. The class manages
+ * an array of RaceUpdates, however, it does not currently do anything
+ * with them and just waits for the Host to announce a winner. In the
+ *  future it could be used for animation.
+ *
+ */
 @Component
 public class ClientScreenController implements Initializable {
     @Autowired
@@ -41,10 +53,6 @@ public class ClientScreenController implements Initializable {
 
     @FXML
     private VBox messageVbox;
-
-    @FXML
-    private ScrollPane messagefield;
-
     @FXML
     Text typedText, untypedText;
     private User user;
@@ -63,6 +71,11 @@ public class ClientScreenController implements Initializable {
     private Socket socket;
     private final ObjectProperty<Lobby> lobbyRead = new SimpleObjectProperty<>();
     private ObservableList<RaceUpdate> raceUpdates;
+
+    /**
+     * To send chat messages to other users
+     * @param event
+     */
     @FXML
     void SendMessage(KeyEvent event) {
         if (event.getCode() == KeyCode.ENTER) {
@@ -78,7 +91,7 @@ public class ClientScreenController implements Initializable {
             //if the last letter was typed
             if (raceWords.length - 1 == raceWordindex && Objects.equals(raceField.getText(), raceWords[raceWordindex])) {
                 if (raceField.getText()
-                        .trim()
+                        .trim() //to get rid of any whitespace
                         .equals(raceWords[raceWordindex])) {//if it's the last word
                     typedText.setText(raceText);
                     untypedText.setText("");
@@ -87,7 +100,7 @@ public class ClientScreenController implements Initializable {
                     raceUpdate.incrementWordIndex();
                     raceUpdate.setProgress(1);
                     raceUpdate.setWinner(true);
-                    client.sendMessage(raceUpdate);
+                    client.sendMessage(raceUpdate); //send race update to everyone else
                 }
                 raceField.clear();
             }
@@ -112,19 +125,22 @@ public class ClientScreenController implements Initializable {
             }
         }
         if(!lobby.getActiveRace()) {
-            raceField.clear();
+            raceField.clear(); //to make sure the user isn't typing prematurely.
         }
     }
-    public void endOfRace(RaceUpdate raceUpdate) {
 
-    }
-
+    /**
+     * Method to send User and Lobby information to the ClientScreenController.
+     * It uses this information to make new Client as well as a
+     * @param user
+     * @param lobby
+     */
     public void enterClientScreen(User user, Lobby lobby) {
         this.user = user;
         this.lobby = lobby;
         lobbyRead.set(lobby);
         try {
-            raceUpdates = FXCollections.observableArrayList(new ArrayList<>());
+            raceUpdates = FXCollections.observableArrayList(new CopyOnWriteArrayList<>());
             socket = new Socket(lobby.getLobbyIP(),12345);
             new Thread(client = new Client(socket, new ObjectOutputStream(socket.getOutputStream()), new ObjectInputStream(socket.getInputStream()), user.getUsername(), messageVbox, raceUpdates));
         } catch (IOException e) {
@@ -151,7 +167,9 @@ public class ClientScreenController implements Initializable {
                 }
             }
         });
+        //ad a listener to the lobby to change status based on if the game is active or not
         lobbyRead.addListener((observable, oldValue, newValue) -> {
+            //only checks for changes if the active race value changes
             if(oldValue.getActiveRace() && !newValue.getActiveRace()) {
                 endRace();
             }
@@ -168,6 +186,8 @@ public class ClientScreenController implements Initializable {
     }
     public void endRace() {
         System.out.println("end of race");
+        raceUpdate.setProgress(0);
+        raceUpdate.setWinner(false);
     }
 
 }
