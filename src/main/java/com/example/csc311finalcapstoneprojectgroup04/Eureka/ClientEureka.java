@@ -34,17 +34,20 @@ public class ClientEureka {
     @Autowired
     private EurekaClient eurekaClient;
     List<InstanceInfo> instances = new ArrayList<>();;
+    String publicIP;
 
     /**
      * Registers a lobby to eureka for clients to find, adds information such as host username, current players
      * and if there is an active game to metadata.
      * @param username host username
      */
-    public void registerLobby(String username) {
+    public void registerLobby(String username, String ip) {
         Map<String, String> metadata = instance.getMetadataMap();
+        publicIP = ip;
         metadata.put("host-name", username);
         metadata.put("current-players", "1");
         metadata.put("active-game", "false");
+        metadata.put("public-ip", publicIP);
         instance.setMetadataMap(metadata);
         applicationInfoManager.registerAppMetadata(metadata);
         applicationInfoManager.setInstanceStatus(InstanceInfo.InstanceStatus.UP);
@@ -54,6 +57,7 @@ public class ClientEureka {
         metadata.put("host-name", username);
         metadata.put("current-players", String.valueOf(currentPlayers));
         metadata.put("active-game", String.valueOf(activeGame));
+        metadata.put("public-ip", publicIP);
         instance.setMetadataMap(metadata);
         applicationInfoManager.registerAppMetadata(metadata);
     }

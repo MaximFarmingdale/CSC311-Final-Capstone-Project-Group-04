@@ -51,7 +51,7 @@ public class Server implements Runnable {
         this.username = username;
         this.lobby = lobby;
         this.clientEureka = clientEureka;
-        clientEureka.registerLobby(username);
+        clientEureka.registerLobby(username, lobby.getLobbyIP());
     }
 
     /**

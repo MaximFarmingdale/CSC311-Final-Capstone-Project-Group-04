@@ -23,9 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.net.*;
 import java.util.Objects;
 import java.util.ResourceBundle;
@@ -165,7 +163,7 @@ public class HostScreenController implements Initializable {
         raceUpdate = new RaceUpdate(user.getUsername());
         message = new Message(currentUser.getUsername(),"");
         try {
-            lobby = new Lobby(Inet4Address.getLocalHost().getHostAddress(), user.getUsername());
+            lobby = new Lobby(publicIP(), user.getUsername());
             server = new Server(new ServerSocket(12345), user.getUsername(), lobby, clientEureka);
             new Thread(server).start();
             Thread.sleep(200);
@@ -179,6 +177,15 @@ public class HostScreenController implements Initializable {
 
         }
 
+    }
+    public static String publicIP() throws MalformedURLException {
+        String urlString = "http://checkip.amazonaws.com/";
+        URL url = new URL(urlString);
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(url.openStream()))) {
+            return br.readLine();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**

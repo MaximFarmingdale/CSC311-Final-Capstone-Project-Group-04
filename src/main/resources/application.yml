@@ -19,5 +19,6 @@ eureka:
       host-name: "Max"
       current-players: "2"
       active-game: "true"
+      public-ip: "00.00.000"
     hostname: "max"
     initial-status: DOWN
