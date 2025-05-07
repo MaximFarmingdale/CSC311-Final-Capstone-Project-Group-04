@@ -139,6 +139,10 @@ public class ClientScreenController {
     public void enterClientScreen(User user, Lobby lobby) {
         this.user = user;
         this.lobby = lobby;
+        raceUpdates = FXCollections.observableArrayList(new CopyOnWriteArrayList<>());
+        raceUpdate = new RaceUpdate(user.getUsername());
+        raceUpdates.add(raceUpdate);
+        message = new Message(user.getUsername(), "");
         try {
             socket = new Socket(lobby.getLobbyIP(),12345);
             lobbyRead.set(lobby);
@@ -150,10 +154,6 @@ public class ClientScreenController {
             throw new RuntimeException(e);
 
         }
-        message = new Message(user.getUsername(), "");
-        raceUpdate = new RaceUpdate(user.getUsername());
-        raceUpdates = FXCollections.observableArrayList(new CopyOnWriteArrayList<>());
-        raceUpdates.add(raceUpdate);
         configureListeners();
     }
 
@@ -179,9 +179,16 @@ public class ClientScreenController {
         //ad a listener to the lobby to change status based on if the game is active or not
         lobbyRead.addListener((observable, oldValue, newValue) -> {
             //only checks for changes if the active race value changes
+            if (oldValue == null) {
+                if (newValue.getActiveRace()) {
+                    startRace();
+                }
+                return;
+            }
             if(oldValue.getActiveRace() && !newValue.getActiveRace()) {
                 endRace();
             }
+
             if(!oldValue.getActiveRace() && newValue.getActiveRace()) {
                 startRace();
             }
@@ -193,6 +200,8 @@ public class ClientScreenController {
         typedText.setText("");
         untypedText.setText(raceText);
         raceWords = raceText.split(" ");
+        raceWordindex = 0;
+        raceLetterIndex = 0;
     }
     public void endRace() {
         System.out.println("end of race");
