@@ -162,7 +162,6 @@ public class ClientHandler implements Runnable {
     public void removeClient() {
         clients.remove(this);
         sendMessage(new Message(clientUserName, "user: " + clientUserName + " has left!"));
-        closeClient();
     }
 
     /**
