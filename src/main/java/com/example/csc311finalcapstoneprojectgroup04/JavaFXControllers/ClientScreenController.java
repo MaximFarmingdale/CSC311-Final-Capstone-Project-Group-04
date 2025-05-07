@@ -5,6 +5,7 @@ import com.example.csc311finalcapstoneprojectgroup04.NetworkMessagesandUpdate.Me
 import com.example.csc311finalcapstoneprojectgroup04.NetworkMessagesandUpdate.RaceUpdate;
 import com.example.csc311finalcapstoneprojectgroup04.TCPNetworking.Client;
 import com.example.csc311finalcapstoneprojectgroup04.User;
+import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -69,7 +70,7 @@ public class ClientScreenController {
     private String typedString = "";
     private String untypedString = "";
     private Socket socket;
-    private final ObjectProperty<Lobby> lobbyRead = new SimpleObjectProperty<>();
+    private final ReadOnlyObjectWrapper<Lobby> lobbyRead = new ReadOnlyObjectWrapper<>();
     private ObservableList<RaceUpdate> raceUpdates;
 
     /**
@@ -140,7 +141,11 @@ public class ClientScreenController {
         this.lobby = lobby;
         try {
             socket = new Socket(lobby.getLobbyIP(),12345);
-            new Thread(client = new Client(socket, new ObjectOutputStream(socket.getOutputStream()), new ObjectInputStream(socket.getInputStream()), user.getUsername(), messageVbox, raceUpdates));
+            lobbyRead.set(lobby);
+            new Thread(client = new Client(socket, new ObjectOutputStream(
+                    socket.getOutputStream()),
+                    new ObjectInputStream(socket.getInputStream()),
+                    user.getUsername(), lobby, messageVbox, raceUpdates, lobbyRead)).start();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -170,8 +175,6 @@ public class ClientScreenController {
                 }
             }
         });
-        lobbyRead.set(lobby);
-
         //ad a listener to the lobby to change status based on if the game is active or not
         lobbyRead.addListener((observable, oldValue, newValue) -> {
             //only checks for changes if the active race value changes

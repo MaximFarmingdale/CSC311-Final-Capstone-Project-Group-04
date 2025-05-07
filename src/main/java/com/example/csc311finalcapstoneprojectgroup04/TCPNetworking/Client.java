@@ -42,7 +42,10 @@ public class Client implements Runnable{
      * @param socket the provided socket.
      * @param username the username from username.
      */
-    public Client(Socket socket, ObjectOutputStream objectOutputStream, ObjectInputStream objectInputStream , String username, VBox messageBox, ObservableList<RaceUpdate> raceUpdates) {
+    public Client(Socket socket, ObjectOutputStream objectOutputStream,
+                  ObjectInputStream objectInputStream , String username,
+                  Lobby lobby, VBox messageBox, ObservableList<RaceUpdate> raceUpdates,
+                  ReadOnlyObjectWrapper<Lobby> lobbyRead) {
         try {
             this.socket = socket;
             this.objectOutputStream = objectOutputStream;
