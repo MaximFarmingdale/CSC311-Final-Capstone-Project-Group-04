@@ -16,6 +16,7 @@ import org.springframework.cloud.netflix.eureka.EurekaInstanceConfigBean;
 import org.springframework.cloud.netflix.eureka.server.EnableEurekaServer;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -32,7 +33,7 @@ public class ClientEureka {
     private ApplicationInfoManager applicationInfoManager;
     @Autowired
     private EurekaClient eurekaClient;
-    List<InstanceInfo> instances;
+    List<InstanceInfo> instances = new ArrayList<>();;
 
     /**
      * Registers a lobby to eureka for clients to find, adds information such as host username, current players
@@ -69,6 +70,7 @@ public class ClientEureka {
      * fills the instances' list with EurekaClient instances
      */
     public List<InstanceInfo> fillList() {
+
         if (eurekaClient.getApplication("TYPING_RACE") != null) {
             for (InstanceInfo instanceInfo : eurekaClient.getApplication("TYPING_RACE").getInstances()) {
                 if (instanceInfo.getStatus() == InstanceInfo.InstanceStatus.UP) {
