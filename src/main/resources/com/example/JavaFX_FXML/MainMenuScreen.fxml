@@ -36,7 +36,7 @@
             </HBox>
          </bottom>
          <left>
-            <Pane fx:id="playMenu_Pane" maxHeight="200.0" maxWidth="200.0" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #00bfff; -fx-border-color: #000000; -fx-border-width: 1.5;" translateX="540.0" BorderPane.alignment="CENTER">
+            <Pane fx:id="playMenu_Pane" maxHeight="200.0" maxWidth="200.0" opacity="0.0" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #00bfff; -fx-border-color: #000000; -fx-border-width: 1.5;" translateX="540.0" BorderPane.alignment="CENTER">
                <children>
                   <Text fx:id="playMenu_selectModeText" fill="WHITE" layoutX="25.0" layoutY="40.0" stroke="BLACK" strokeType="OUTSIDE" text="Select Mode" textAlignment="CENTER">
                      <font>
