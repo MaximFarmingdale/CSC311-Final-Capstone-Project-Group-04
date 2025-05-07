@@ -155,7 +155,6 @@ public class MainMenuScreenController {
     @FXML
     void goToWaitingRoom(ActionEvent event) {
         try {
-
             Stage stage = (Stage) PlayMenuBPane.getScene().getWindow();
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/JavaFX_FXML/WaitingRoom.fxml"));
             loader.setControllerFactory(applicationContext::getBean); //gets beans from spring
@@ -171,10 +170,6 @@ public class MainMenuScreenController {
         }
     }
 
-    /**
-     * Sets the current scene to the HostScreen.
-     * @param event
-     */
     @FXML
     void goToHostScreen(ActionEvent event) {
         try {
@@ -196,6 +191,10 @@ public class MainMenuScreenController {
     public void darkMode_Toggle(ActionEvent event) {
     }
 
+    /**
+     * Sets the current scene to the HostScreen.
+     * @param event
+     */
     public void playMenu_Host(MouseEvent event) {
         try {
             Stage stage =(Stage) PlayMenuBPane.getScene().getWindow();
@@ -212,6 +211,10 @@ public class MainMenuScreenController {
         }
     }
 
+    /**
+     * Sets the current scene to the WaitingRoom.
+     * @param event
+     */
     public void playMenu_Join(MouseEvent event) {
         try {
 

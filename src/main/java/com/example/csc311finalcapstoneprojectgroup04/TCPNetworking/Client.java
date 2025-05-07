@@ -13,6 +13,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 import java.io.*;
@@ -27,8 +28,8 @@ import java.util.List;
  * visually. Once a message is sent, it will be sent to
  */
 public class Client implements Runnable{
-    private Socket socket;
-    private ObjectOutputStream objectOutputStream;
+    protected Socket socket;
+    protected ObjectOutputStream objectOutputStream;
     private ObjectInputStream objectInputStream;
     private String username;
     private ObservableList<RaceUpdate> raceUpdates;
@@ -44,15 +45,17 @@ public class Client implements Runnable{
      * @param socket the provided socket.
      * @param username the username from username.
      */
-    public Client(Socket socket, String username, VBox messageBox, ObservableList<RaceUpdate> raceUpdates) {
+    public Client(Socket socket, ObjectOutputStream objectOutputStream, ObjectInputStream objectInputStream , String username, VBox messageBox, ObservableList<RaceUpdate> raceUpdates) {
         try {
             this.socket = socket;
-            this.objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
-            this.objectInputStream = new ObjectInputStream(socket.getInputStream());
-            this.username = username;
-            objectOutputStream.writeObject(username);//check if it's necessary to send a new line
+            this.objectOutputStream = objectOutputStream;
+            this.objectInputStream = objectInputStream;
+            objectOutputStream.writeObject(new Message(username, "HI"));//check if it's necessary to send a new line
             objectOutputStream.flush();
+            this.username = username;
             this.messageBox = messageBox;
+            this.raceUpdates = raceUpdates;
+            lobbyRead.set(lobby);
         } catch (IOException e) {
             closeClient();
         }
@@ -67,21 +70,25 @@ public class Client implements Runnable{
             if (socket.isConnected()) {
                 objectOutputStream.writeObject(message);
                 objectOutputStream.flush();
+                HBox hbox = new HBox();
+                hbox.setAlignment(Pos.CENTER_RIGHT);
+                Label label = new Label(message.getMessage());
+                hbox.getChildren().add(label);
+                Platform.runLater(() -> {
+                    messageBox.getChildren().add(hbox);
+                });
             }
         } catch (IOException e) {
             closeClient();
         }
     }
 
-    /**
-     * @deprecated
-     * Allows the client to send users to all other clients and the host.
-     * @param user user message.
-     */
-    public void sendMessage(User user) {
+    public void sendMessage(String message) {
         try {
-            objectOutputStream.writeObject(user);
-            objectOutputStream.flush();
+            if (socket.isConnected()) {
+                objectOutputStream.writeObject(message);
+                objectOutputStream.flush();
+            }
         } catch (IOException e) {
             closeClient();
         }
@@ -92,12 +99,13 @@ public class Client implements Runnable{
      * @param raceUpdate
      */
     public void sendMessage(RaceUpdate raceUpdate) {
-        try {
-            objectOutputStream.writeObject(raceUpdate);
-            objectOutputStream.flush();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        for (int i = 0; i < raceUpdates.size(); i++) {
+            if (raceUpdates.get(i).getUsername().equals(raceUpdate.getUsername())) {
+                raceUpdates.set(i, raceUpdate);
+                return;
+            }
         }
+        raceUpdates.add(raceUpdate);
     }
 
     /**
@@ -108,10 +116,7 @@ public class Client implements Runnable{
         try {
             while (true) {
                 Object receivedObject = objectInputStream.readObject();
-                if(receivedObject instanceof User) {
-                    processMessage((User) receivedObject);
-                }
-                else if(receivedObject instanceof String) {
+                if(receivedObject instanceof String) {
                     processMessage((String) receivedObject);
                 }
                 else if(receivedObject instanceof Message) {
@@ -131,31 +136,26 @@ public class Client implements Runnable{
 
     /**
      * Process a String Object from the network and adds it to the GUI
-     * @param message
+     * @param text
      */
-    private void processMessage(String message) {
-        Label label = new Label(message);
-        label.setAlignment(Pos.BASELINE_LEFT);
+    private void processMessage(String text) {
+        HBox hbox = new HBox();
+        hbox.setAlignment(Pos.CENTER_LEFT);
+        Label label = new Label(text);
+        hbox.getChildren().add(label);
         Platform.runLater(() -> {
-            messageBox.getChildren().add(label);
+            messageBox.getChildren().add(hbox);
         });
     }
 
     /**
-     * @deprecated
-     * Process a User Object from the network
-     * @param currentUser
-     */
-    private void processMessage(User currentUser) {
-        user = user;
-    }
-
-    /**
-     * Process a Lobby Object from the network
+     * Process a Lobby Object from the network, currently only changes
+     * current lobby if the active race is different
      * @param currentLobby
      */
     private void processMessage(Lobby currentLobby) {
-        lobbyRead.set(currentLobby);
+        lobby = currentLobby;
+        lobbyRead.set(lobby);
     }
 
     /**
@@ -163,10 +163,12 @@ public class Client implements Runnable{
      * @param message
      */
     private void processMessage(Message message) {
+        HBox hbox = new HBox();
+        hbox.setAlignment(Pos.CENTER_LEFT);
         Label label = new Label(message.getSender() + ": " + message.getMessage());
-        label.setAlignment(Pos.BASELINE_LEFT);
+        hbox.getChildren().add(label);
         Platform.runLater(() -> {
-            messageBox.getChildren().add(label);
+            messageBox.getChildren().add(hbox);
         });
     }
 

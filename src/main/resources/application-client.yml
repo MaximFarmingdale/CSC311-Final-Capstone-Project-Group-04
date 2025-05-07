@@ -9,9 +9,9 @@ server:
 eureka:
   client:
     #set register to false in the future
-    register-with-eureka: true
+    register-with-eureka: false
     fetch-registry: true
-    registry-fetch-interval-seconds: 5
+    registry-fetch-interval-seconds: 1
     service-url:
       defaultZone: http://100.38.237.126:8090/eureka
 

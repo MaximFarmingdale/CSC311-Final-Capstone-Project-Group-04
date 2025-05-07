@@ -1,5 +1,6 @@
 package com.example.csc311finalcapstoneprojectgroup04.TCPNetworking;
 
+import com.example.csc311finalcapstoneprojectgroup04.Eureka.ClientEureka;
 import com.example.csc311finalcapstoneprojectgroup04.Lobby.Lobby;
 import com.example.csc311finalcapstoneprojectgroup04.NetworkMessagesandUpdate.Message;
 import com.example.csc311finalcapstoneprojectgroup04.NetworkMessagesandUpdate.Ping;
@@ -10,6 +11,8 @@ import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -33,33 +36,22 @@ import static com.example.csc311finalcapstoneprojectgroup04.TCPNetworking.Client
 public class Server implements Runnable {
     private ServerSocket serverSocket;
     private String username;
-    private Socket socketServer;
-    private ObjectOutputStream objectOutputStream;
-    private ObjectInputStream objectInputStream;
     private Lobby lobby;
-    private ObjectOutputStream pingStream;
-    private VBox messageBox;
-    private ObservableList<RaceUpdate> raceUpdates;
-
-
+    private ClientEureka clientEureka;
     /**
      * Allows you to construct a Server object using the following parameters.
      * @param serverSocket uses the serversocket to make a new socket that connects to it and creates an objectInputStream and objectOutputStream from it
      * @param username username from the user object of the host
-     * @param lobby lobby object that the host is also using
      * @throws IOException Incase there is an error with the objectInputStream and objectOutputStream
      * the objectInputStream and objectOutputStream are to read the input from users and to output objects to users
      * it is used throughout the class for these functions
      */
-    public Server(ServerSocket serverSocket, String username, Lobby lobby, VBox messageBox, ObservableList<RaceUpdate> raceUpdates) throws IOException {
+    public Server(ServerSocket serverSocket, String username, Lobby lobby, ClientEureka clientEureka) throws IOException {
         this.serverSocket = serverSocket;
         this.username = username;
-        this.socketServer = new Socket("localhost", 1234);
-        this.objectInputStream = new ObjectInputStream(socketServer.getInputStream());
-        this.objectOutputStream = new ObjectOutputStream(socketServer.getOutputStream());
         this.lobby = lobby;
-        this.messageBox = messageBox;
-        this.raceUpdates = this.raceUpdates;
+        this.clientEureka = clientEureka;
+        clientEureka.registerLobby(username);
     }
 
     /**
@@ -71,28 +63,30 @@ public class Server implements Runnable {
         try {
             while (!serverSocket.isClosed()) {
                 Socket socket = serverSocket.accept();
+                ObjectOutputStream OOS = new ObjectOutputStream(socket.getOutputStream());
+                OOS.flush();//to flush metadata
+                ObjectInputStream OIS = new ObjectInputStream(socket.getInputStream());
                 System.out.println("Accepted connection from " + socket.getRemoteSocketAddress());
-                while (true) {
                     try {
-                        Object object = objectInputStream.readObject();
+                        Object object = OIS.readObject();
                         if(object instanceof Message) {
                             Message message = (Message) object;
-                            ClientHandler clientHandler = new ClientHandler(socket, message.getSender(), this);
+                            ClientHandler clientHandler = new ClientHandler(socket, OOS, OIS, message.getSender(), this, lobby, clientEureka);
                             Thread thread = new Thread(clientHandler);
                             thread.start();
-                            break;
+                            lobby.increaseNumPlayers();
+                            clientEureka.updateLobby(username,lobby.getCurrentPlayers(), lobby.getActiveRace());
                         }
                         //if the application is just pinging the server to see if it works
                         if(object instanceof Ping) {
-                            pingResponse(socket);
+                            pingResponse(socket, OOS);
                             socket.close();
-                            break;
                         }
 
                     } catch (ClassNotFoundException e) {
                         throw new RuntimeException(e);
                     }
-                }
+
             }
         } catch (IOException e) {
             stopServer();
@@ -110,205 +104,28 @@ public class Server implements Runnable {
             for (ClientHandler client : clients) {
                 client.closeClient(); // assume ClientHandler has this method
             }
-            if(pingStream != null) {
-                pingStream.close();
-            }
-            if(socketServer != null) {
-                closeSocket();
-            }
-        } catch (IOException e) {
-            closeSocket();
-        }
-    }
-
-    /**
-     * Allows the host to send Text to the user
-     * @param text
-     */
-    public void sendMessage(String text) {
-        try {
-            for (ClientHandler clientHandler : clients) {
-                clientHandler.objectOutputStream.writeObject(text);
-            }
         }
         catch (IOException e) {
-            closeSocket();
+            e.printStackTrace();
         }
 
     }
-
-    /**
-     * Allows the host to send a message to all clients
-     * @param message
-     */
-    public void sendMessage(Message message) {
-        try {
-            for (ClientHandler clientHandler : clients) {
-                clientHandler.objectOutputStream.writeObject(message);
-            }
-        }
-        catch (IOException e) {
-            closeSocket();
-        }
-
-    }
-
-    /**
-     * Allows the host to send a user to all clients
-     * @param user
-     */
-    public void sendMessage(User user) {
-        try {
-            for (ClientHandler clientHandler : clients) {
-                clientHandler.objectOutputStream.writeObject(user);
-            }
-        }
-        catch (IOException e) {
-            closeSocket();
-        }
-
-    }
-
-    /**
-     *  Allows the host to send a lobby to all clients
-     * @param lobby
-     */
-    public void sendMessage(Lobby lobby) {
-        try {
-            for (ClientHandler clientHandler : clients) {
-                clientHandler.objectOutputStream.writeObject(lobby);
-            }
-        }
-        catch (IOException e) {
-            closeSocket();
-        }
-    }
-
-    /**\
-     * Starts the race by sending messages signfiying the beginning of the race,
-     * then sends the lobby to users.
-     */
-    public void startRace() {
-        try {
-            lobby.generateNewText();
-            String text = lobby.getText();
-            sendMessage("Race begins in 3");
-            Thread.sleep(1000);
-            sendMessage("Race begins in 2");
-            Thread.sleep(1000);
-            sendMessage("Race begins in 1");
-            Thread.sleep(1000);
-            sendMessage("Start!");
-            //send lobby
-
-
-        } catch (InterruptedException e) {
-            closeSocket();
-        }
-
-
-    }
-
-    /**
-     * Allows the host to send a ping to all clients
-     * @param ping
-     */
-    public void sendMessage(Ping ping) {
-        try {
-            for (ClientHandler clientHandler : clients) {
-                clientHandler.objectOutputStream.writeObject(ping);
-            }
-        }
-        catch (IOException e) {
-            closeSocket();
-        }
-
-    }
-
-    /**
-     * Allows the host to send a RaceUpdate to all clients
-     * @param raceUpdate
-     */
-    public void sendMessage(RaceUpdate raceUpdate) {
-        try {
-            for (ClientHandler clientHandler : clients) {
-                clientHandler.objectOutputStream.writeObject(raceUpdate);
-            }
-        }
-        catch (IOException e) {
-            closeSocket();
-        }
-    }
-
     /**
      * internal helper method to respond to pings
      * @param socket
      * sends a response ping of GameFull if the game is full and returns GameInProgress if the game is in progress
      */
-    private void pingResponse(Socket socket) {
+    private void pingResponse(Socket socket, ObjectOutputStream OOS) throws IOException {
         try {
-            pingStream = new ObjectOutputStream(socket.getOutputStream());
             if (lobby.fullRace())
-                pingStream.writeObject(Ping.GameFull);
+                OOS.writeObject(Ping.GameFull);
             else if(lobby.getActiveRace())
-                pingStream.writeObject(Ping.GameInProgress);
+                OOS.writeObject(Ping.GameInProgress);
+            else
+                OOS.writeObject(lobby);
         }
         catch (IOException e) {
-            closeSocket();
+            stopServer();
         }
-    }
-
-    /**
-     * Processes an input of Messsage and adds it to the messageBox as a new label
-     * @param message
-     */
-    public void processMessage(Message message) {
-        Label label = new Label(message.getSender() + ": " + message.getMessage());
-        label.setAlignment(Pos.BASELINE_LEFT);
-        Platform.runLater(() -> {
-            messageBox.getChildren().add(label);
-        });
-    }
-
-    /**
-     * Process a RaceUpdate input and adds it to raceUpdates list if it's a race update from a
-     * new user or updates an existing RaceUpdate. Also calls winner method if it is a winning update
-     * @param raceUpdate
-     */
-    public void processMessage(RaceUpdate raceUpdate) {
-        if(raceUpdate.isWinner())
-            //call winner method
-            System.out.println("Winner");
-        boolean wasAdded = false;
-        for (RaceUpdate r : raceUpdates) {
-            if (r.getUsername().equals(raceUpdate.getUsername())) {
-                r = raceUpdate;
-                wasAdded = true;
-            }
-        }
-        if(wasAdded)
-            raceUpdates.add(raceUpdate);
-    }
-
-    /**
-     * Closes the socket that the server class uses for ObjectOutputStream and ObjectInputStream and frees up resources
-     */
-    public void closeSocket() {
-        try {
-            if (objectOutputStream != null) {
-                objectOutputStream.close();
-            }
-            if(objectInputStream != null) {
-                objectInputStream.close();
-            }
-            if(socketServer != null) {
-                socketServer.close();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-    public List<RaceUpdate> getRaceUpdates() {
-        return raceUpdates;
     }
 }

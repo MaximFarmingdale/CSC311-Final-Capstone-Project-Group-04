@@ -10,23 +10,26 @@ import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Objects;
 import java.util.ResourceBundle;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 
 @Component
 public class ClientScreenController implements Initializable {
@@ -43,7 +46,7 @@ public class ClientScreenController implements Initializable {
     private ScrollPane messagefield;
 
     @FXML
-    private Label typedLabel, untypedLabel;
+    Text typedText, untypedText;
     private User user;
     private Lobby lobby;
     private Client client;
@@ -52,12 +55,13 @@ public class ClientScreenController implements Initializable {
     private String[] raceWords;
     private double racePercentage;
     private int raceWordindex = 0;
-    private int raceIndex = 0;
+    private int raceLetterIndex = 0;
     private RaceUpdate raceUpdate;
     private Message message;
     private String typedString = "";
     private String untypedString = "";
-
+    private Socket socket;
+    private final ObjectProperty<Lobby> lobbyRead = new SimpleObjectProperty<>();
     private ObservableList<RaceUpdate> raceUpdates;
     @FXML
     void SendMessage(KeyEvent event) {
@@ -70,20 +74,29 @@ public class ClientScreenController implements Initializable {
 
     @FXML
     void sendRaceUpdate(KeyEvent event) {
-        if(lobby.getActiveRace()) {
-            if (raceWords.length - 1 == raceWordindex) {
+        if(lobby.getActiveRace()) { //if it is an active race
+            //if the last letter was typed
+            if (raceWords.length - 1 == raceWordindex && Objects.equals(raceField.getText(), raceWords[raceWordindex])) {
                 if (raceField.getText()
                         .trim()
                         .equals(raceWords[raceWordindex])) {//if it's the last word
+                    typedText.setText(raceText);
+                    untypedText.setText("");
+                    //since raceupdate automatically tells if someone won and calls the
+                    //endRace method, we don't need to call it just update raceUpdate
                     raceUpdate.incrementWordIndex();
                     raceUpdate.setProgress(1);
-                    //endOfRace(raceUpdate);
+                    raceUpdate.setWinner(true);
+                    client.sendMessage(raceUpdate);
                 }
-            } else if (raceField.getText().equals(raceWords[raceWordindex])) {
-                raceIndex += raceWords[raceWordindex].length() + 1;
+                raceField.clear();
+            }
+            //if its not the last letter and the word matches after space
+            else if (raceField.getText().trim().equals(raceWords[raceWordindex]) && event.getCode() == KeyCode.SPACE) {
+                raceLetterIndex += raceWords[raceWordindex].length() + 1;
                 //sets the untyped and typed messages to their respective new index
-                typedString = raceText.substring(0, raceIndex);
-                untypedString = raceText.substring(raceIndex);
+                typedString = raceText.substring(0, raceLetterIndex);
+                untypedString = raceText.substring(raceLetterIndex);
                 //updating values
                 raceWordindex++;
                 raceUpdate.incrementWordIndex();
@@ -92,20 +105,28 @@ public class ClientScreenController implements Initializable {
                 //sending messages
                 client.sendMessage(raceUpdate);
                 //clearing the field
-                raceField.clear();
-                typedLabel.setText(typedString);
-                untypedLabel.setText(untypedString);
+                typedText.setText(typedString);
+                untypedText.setText(untypedString);
                 System.out.println(untypedString.toString() + " " + typedString.toString());
+                raceField.clear();
             }
         }
+        if(!lobby.getActiveRace()) {
+            raceField.clear();
+        }
+    }
+    public void endOfRace(RaceUpdate raceUpdate) {
 
     }
+
     public void enterClientScreen(User user, Lobby lobby) {
         this.user = user;
         this.lobby = lobby;
+        lobbyRead.set(lobby);
         try {
             raceUpdates = FXCollections.observableArrayList(new ArrayList<>());
-            new Thread(client = new Client(new Socket(lobby.getLobbyIP(),12345), user.getUsername(), raceUpdates));
+            socket = new Socket(lobby.getLobbyIP(),12345);
+            new Thread(client = new Client(socket, new ObjectOutputStream(socket.getOutputStream()), new ObjectInputStream(socket.getInputStream()), user.getUsername(), messageVbox, raceUpdates));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -130,6 +151,23 @@ public class ClientScreenController implements Initializable {
                 }
             }
         });
+        lobbyRead.addListener((observable, oldValue, newValue) -> {
+            if(oldValue.getActiveRace() && !newValue.getActiveRace()) {
+                endRace();
+            }
+            if(!oldValue.getActiveRace() && newValue.getActiveRace()) {
+                startRace();
+            }
+        });
+    }
+    public void startRace() {
+        raceText = lobby.getText();
+        typedText.setText("");
+        untypedText.setText(raceText);
+        raceWords = raceText.split(" ");
+    }
+    public void endRace() {
+        System.out.println("end of race");
     }
 
 }

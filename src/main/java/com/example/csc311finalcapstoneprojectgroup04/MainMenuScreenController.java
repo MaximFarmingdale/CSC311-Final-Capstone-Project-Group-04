@@ -12,8 +12,15 @@ import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import java.io.IOException;
+import org.springframework.context.ApplicationContext;
 
+import java.io.IOException;
+/// why does this exist use the mainMenuScreenController in the JavaFXController Class
+/// Also if you are going to make a new Controller class add this variable
+/// ApplicationContext applicationContext;
+/// and this after loading the FXML
+/// loader.setControllerFactory(applicationContext::getBean);
+/// see the change Controller methods in SplashScreenController
 public class MainMenuScreenController {
 
     @FXML
@@ -57,6 +64,7 @@ public class MainMenuScreenController {
 
     @FXML
     private Text volumePane_Text;
+    ApplicationContext applicationContext; //KEEP THIS IN ALL CONTROLLERS
 
     @FXML
     void exitProgram(MouseEvent event) {

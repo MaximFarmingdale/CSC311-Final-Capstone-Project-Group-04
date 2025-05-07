@@ -1,32 +1,33 @@
 package com.example.csc311finalcapstoneprojectgroup04.JavaFXControllers;
 
+import com.example.csc311finalcapstoneprojectgroup04.Eureka.ClientEureka;
 import com.example.csc311finalcapstoneprojectgroup04.Lobby.Lobby;
 import com.example.csc311finalcapstoneprojectgroup04.NetworkMessagesandUpdate.Message;
 import com.example.csc311finalcapstoneprojectgroup04.NetworkMessagesandUpdate.RaceUpdate;
+import com.example.csc311finalcapstoneprojectgroup04.TCPNetworking.Host;
 import com.example.csc311finalcapstoneprojectgroup04.TCPNetworking.Server;
 import com.example.csc311finalcapstoneprojectgroup04.User;
-import com.netflix.appinfo.InstanceInfo;
+import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Label;
+import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.net.Inet4Address;
-import java.net.ServerSocket;
-import java.net.URL;
-import java.net.UnknownHostException;
-import java.util.List;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.*;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 @Component
@@ -34,35 +35,32 @@ public class HostScreenController implements Initializable {
     private User user;
     private Lobby lobby;
     @Autowired
-    private ApplicationContext applicationContext;
+    ApplicationContext applicationContext;
+    @Autowired
+    ClientEureka clientEureka;
     @FXML
     private VBox messageVbox;
     @FXML
     private TextField messageField, raceField;
     @FXML
-    Label typedLabel, untypedLabel;
+    Text typedText, untypedText;
+    @FXML
+    Button startRaceButton;
     private Server server;
-    private String raceText;
+    private String raceText = "";
     private String[] raceWords;
     private double racePercentage;
     private int raceWordindex = 0;
-    private int raceIndex = 0;
+    private int raceLetterIndex = 0;
     private RaceUpdate raceUpdate;
     private Message message;
     private String typedString = "";
     private String untypedString = "";
-    private ObservableList<RaceUpdate> raceUpdates;
+    private ObservableList<RaceUpdate> raceUpdates = FXCollections.observableArrayList();
+    private Host host;
+    private Socket socket;
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        try {
-            lobby = new Lobby(Inet4Address.getLocalHost().getHostAddress(), user.getUsername());
-            server = new Server(new ServerSocket(12345), user.getUsername(), lobby, messageVbox, raceUpdates);
-            new Thread(server).start();
-        } catch (UnknownHostException e) {
-            throw new RuntimeException(e);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
         raceUpdates.addListener(new ListChangeListener<RaceUpdate>() {
             @Override
             public void onChanged(Change<? extends RaceUpdate> c) {
@@ -92,10 +90,12 @@ public class HostScreenController implements Initializable {
      * @param event
      */
     @FXML
-    void SendMessage(KeyEvent event) {
+    void sendMessage(KeyEvent event) {
+        messageField.requestFocus();
         if (event.getCode() == KeyCode.ENTER) {
             message.setMessage(messageField.getText());
-            server.sendMessage(message);
+            host.sendMessage(message);
+            System.out.println(messageField.getText());
             messageField.clear();
         }
     }
@@ -105,33 +105,47 @@ public class HostScreenController implements Initializable {
      */
     @FXML
     void sendRaceUpdate(KeyEvent event) {
-        if(lobby.getActiveRace()) {
-            if (raceWords.length - 1 == raceWordindex) {
+        if(lobby.getActiveRace()) { //if it is an active race
+            //if the last letter was typed
+            if (raceWords.length - 1 == raceWordindex && Objects.equals(raceField.getText(), raceWords[raceWordindex])) {
                 if (raceField.getText()
                         .trim()
                         .equals(raceWords[raceWordindex])) {//if it's the last word
+                    lobby.setActiveRace(false);
+                    host.sendMessage(lobby);
+                    typedText.setText(raceText);
+                    untypedText.setText("");
+                    //since raceupdate automatically tells if someone won and calls the
+                    //endRace method we dont need to call it just update raceUpdate
                     raceUpdate.incrementWordIndex();
                     raceUpdate.setProgress(1);
-                    endOfRace(raceUpdate);
+                    raceUpdate.setWinner(true);
+                    host.sendMessage(raceUpdate);
                 }
-            } else if (raceField.getText().equals(raceWords[raceWordindex])) {
-                raceIndex += raceWords[raceWordindex].length() + 1;
+                raceField.clear();
+            }
+            //if its not the last letter and the word matches after space
+            else if (raceField.getText().trim().equals(raceWords[raceWordindex]) && event.getCode() == KeyCode.SPACE) {
+                raceLetterIndex += raceWords[raceWordindex].length() + 1;
                 //sets the untyped and typed messages to their respective new index
-                typedString = raceText.substring(0, raceIndex);
-                untypedString = raceText.substring(raceIndex);
+                typedString = raceText.substring(0, raceLetterIndex);
+                untypedString = raceText.substring(raceLetterIndex);
                 //updating values
                 raceWordindex++;
                 raceUpdate.incrementWordIndex();
                 racePercentage = (double) raceWordindex / raceWords.length;
                 raceUpdate.setProgress(racePercentage);
                 //sending messages
-                server.sendMessage(raceUpdate);
+                host.sendMessage(raceUpdate);
                 //clearing the field
-                raceField.clear();
-                typedLabel.setText(typedString);
-                untypedLabel.setText(untypedString);
+                typedText.setText(typedString);
+                untypedText.setText(untypedString);
                 System.out.println(untypedString.toString() + " " + typedString.toString());
+                raceField.clear();
             }
+        }
+        if(!lobby.getActiveRace()) {
+            raceField.clear();
         }
     }
     /**
@@ -142,22 +156,44 @@ public class HostScreenController implements Initializable {
         user = currentUser;
         raceUpdate = new RaceUpdate(user.getUsername());
         message = new Message(currentUser.getUsername(),"");
-    }
-    public void endOfRace(RaceUpdate update) {
+        try {
+            lobby = new Lobby(Inet4Address.getLocalHost().getHostAddress(), user.getUsername());
+            server = new Server(new ServerSocket(12345), user.getUsername(), lobby, clientEureka);
+            new Thread(server).start();
+            Thread.sleep(200);
+            socket = new Socket("localhost", 12345);
+            host = new Host(socket, new ObjectOutputStream(socket.getOutputStream()), new ObjectInputStream(socket.getInputStream()), user.getUsername(), messageVbox, raceUpdates, lobby);
+            new Thread(host).start();
+        } catch (UnknownHostException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        Thread.currentThread().interrupt();
 
     }
+    public void endOfRace(RaceUpdate update) {
+        host.sendMessage(update.getUsername() + " Won!!!!!");
+        startRaceButton.setDisable(false);
+    }
+
     /**
      * Starts the race by setting an active race in Lobby, resetting Labels
      * and calling the server start method
-     * @param event
      */
     @FXML
-    void startRace(ActionEvent event) {
-        lobby.setActiveRace(true);
+    void startRace() {
+        raceUpdate = new RaceUpdate(user.getUsername());
         lobby.generateNewText();
-        typedLabel.setText("");
-        untypedLabel.setText(lobby.getText());
-        server.startRace();
+        raceText = lobby.getText();
+        raceWordindex = 0;
+        raceLetterIndex = 0;
+        typedText.setText("");
+        untypedText.setText(raceText);
         raceWords = raceText.split(" ");
+        startRaceButton.setDisable(true);
+        host.startRace();
     }
 }

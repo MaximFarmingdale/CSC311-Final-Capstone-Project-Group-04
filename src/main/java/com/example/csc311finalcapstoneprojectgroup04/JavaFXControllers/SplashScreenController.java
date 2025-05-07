@@ -24,6 +24,9 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 /// controller for the first screen the user sees, before they log in or start a match etc.
 @Component
 public class SplashScreenController implements Initializable {
@@ -60,7 +63,9 @@ public class SplashScreenController implements Initializable {
     private HBox hbox;
     @Autowired
     private ApplicationContext applicationContext;
-
+    private Pattern usernamePattern = Pattern.compile("^[a-zA-Z0-9]{2,16}");
+    private Pattern passwordPattern = Pattern.compile("^[a-zA-Z0-9]{4,16}"); //change the pattern to have one special character.
+    private Matcher matcher;
     /**
      * Method that on button clickchecks if the user is typing in correct sign-up or
      * login information. Adds signups to the database and pass it to the MainMenuScreen
@@ -70,24 +75,24 @@ public class SplashScreenController implements Initializable {
     @FXML
     void login(ActionEvent event) {
         //null-pointer check
-        if(usernameField.getText().equals("")) {
-            problemText.setText("Username is empty!");
+        String username = usernameField.getText();
+        String password = passwordField.getText();
+        matcher = usernamePattern.matcher(username);
+        if(!matcher.matches()) {
+            problemText.setText("Make Username Between 2-16 Characters");
             errorColor(usernameField);
             return;
         }
-        String username = usernameField.getText();
-        if(passwordField.getText().equals("")) {
-            problemText.setText("Password is empty!");
+        matcher = passwordPattern.matcher(password);
+        if(!matcher.matches()) {
+            problemText.setText("Make Password Between 4-16 Characters");
             errorColor(passwordField);
             return;
         }
-        String password = passwordField.getText();
         User currentUser = new User(username, password);
         //if the user is signing up
         if(newUser) {
             if (checkUniqueUsername(username)) {
-                users.add(currentUser); //get rid of later
-                changeController(currentUser);
                 changeController(currentUser);
             } else {
                 problemText.setText("Username is already taken or invalid!");
@@ -223,11 +228,6 @@ public class SplashScreenController implements Initializable {
 
     @FXML
     void debuglogin(MouseEvent event) throws IOException {
-        Stage stage = (Stage) signInButton.getScene().getWindow();
-        FXMLLoader fxmlLoader = new FXMLLoader(TypeApplication.class.getResource("MainMenuScreen.fxml"));//change to whatever fxml file you are testing
-        Scene scene = new Scene(fxmlLoader.load(), 1280, 720);
-        stage.setTitle("Type Application");
-        stage.setScene(scene);
-        stage.show();
+        changeController(new User("maxim", "password"));
     }
 }

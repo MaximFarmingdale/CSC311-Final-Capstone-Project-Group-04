@@ -21,7 +21,7 @@ public final class Lobby implements Serializable {
     }
     public void generateNewText(){
         Faker faker = new Faker();
-        text = faker.hitchhikersGuideToTheGalaxy().quote();
+        text = faker.twinPeaks().quote();
     }
     public int getCurrentPlayers() {
         return currentPlayers;
