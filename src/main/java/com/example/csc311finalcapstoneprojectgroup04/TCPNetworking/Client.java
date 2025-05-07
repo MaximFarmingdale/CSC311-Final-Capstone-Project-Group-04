@@ -33,10 +33,7 @@ public class Client implements Runnable{
     private ObjectInputStream objectInputStream;
     private String username;
     private ObservableList<RaceUpdate> raceUpdates;
-    private Message message;
     private Lobby lobby;
-    private String text;
-    private User user;
     private VBox messageBox;
     private final ReadOnlyObjectWrapper<Lobby> lobbyRead = new ReadOnlyObjectWrapper<>();
     /**
@@ -99,13 +96,14 @@ public class Client implements Runnable{
      * @param raceUpdate
      */
     public void sendMessage(RaceUpdate raceUpdate) {
-        for (int i = 0; i < raceUpdates.size(); i++) {
-            if (raceUpdates.get(i).getUsername().equals(raceUpdate.getUsername())) {
-                raceUpdates.set(i, raceUpdate);
-                return;
+        try {
+            if (socket.isConnected()) {
+                objectOutputStream.writeObject(raceUpdate);
+                objectOutputStream.flush();
             }
+        } catch (IOException e) {
+            closeClient();
         }
-        raceUpdates.add(raceUpdate);
     }
 
     /**
@@ -177,15 +175,15 @@ public class Client implements Runnable{
      * @param currentRaceUpdate
      */
     private void processMessage(RaceUpdate currentRaceUpdate) {
-        boolean wasAdded = false;
-        for (RaceUpdate r : raceUpdates) {
-            if (r.getUsername().equals(currentRaceUpdate.getUsername())) {
-                r = currentRaceUpdate;
-                wasAdded = true;
+        Platform.runLater(() -> {
+            for (int i = 0; i < raceUpdates.size(); i++) {
+                if (raceUpdates.get(i).getUsername().equals(currentRaceUpdate.getUsername())) {
+                    raceUpdates.set(i, currentRaceUpdate);
+                    return;
+                }
             }
-        }
-        if(wasAdded)
             raceUpdates.add(currentRaceUpdate);
+        });
     }
     /**
      * Releases the resources of Client.
