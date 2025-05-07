@@ -44,7 +44,7 @@ import javafx.beans.property.SimpleObjectProperty;
  *
  */
 @Component
-public class ClientScreenController implements Initializable {
+public class ClientScreenController {
     @Autowired
     private ApplicationContext applicationContext;
 
@@ -144,14 +144,15 @@ public class ClientScreenController implements Initializable {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
         message = new Message(user.getUsername(), "");
         raceUpdate = new RaceUpdate(user.getUsername());
         raceUpdates = FXCollections.observableArrayList(new CopyOnWriteArrayList<>());
         raceUpdates.add(raceUpdate);
+        configureListeners();
+    }
+
+
+    public void configureListeners() {
         // adds a listener which can be used for animations.
         raceUpdates.addListener(new ListChangeListener<RaceUpdate>() {
             @Override
