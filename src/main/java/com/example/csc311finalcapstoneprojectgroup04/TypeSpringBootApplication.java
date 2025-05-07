@@ -12,8 +12,6 @@ import org.springframework.context.ConfigurableApplicationContext;
 @SpringBootApplication
 @EnableDiscoveryClient
 public class TypeSpringBootApplication {
-    @Autowired
-    static ClientEureka clientEureka;
     private static ConfigurableApplicationContext applicationContext;
     public static void main(String[] args) {
         applicationContext = new SpringApplicationBuilder(TypeSpringBootApplication.class).run(args);
