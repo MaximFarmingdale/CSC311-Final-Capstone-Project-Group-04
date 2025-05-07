@@ -51,7 +51,7 @@ public class WaitingRoomController implements Initializable {
     @Autowired
     private ClientEureka clientEureka; //it is not loading the client correctly, I think?
     private ObservableList<InstanceInfo> instances = FXCollections.observableArrayList();
-    private HashMap<InstanceInfo, HBox> instancesMap = new HashMap<>();
+    private HashMap<String, HBox> instancesMap = new HashMap<>();
     private final int maxPlayers = 8;
     public void enterWaitingRoom(User currentUser) {
         user = currentUser;
@@ -95,16 +95,16 @@ public class WaitingRoomController implements Initializable {
     }
     /**
      * Updates individual Hboxes with lobbies
-     * @param hbox
-     * @param i
+     * @param instance
      */
-    private void updateHbox(HBox hbox, InstanceInfo i) {
-        Label label1 = new Label(i.getMetadata().get("host-name"));
-        Label label2 = new Label(i.getMetadata().get("current-players" ) + "/"+maxPlayers);
-        Label label3 = new Label(i.getMetadata().get("active-game"));
-        Label label4 = new Label(i.getIPAddr());
+    private HBox addHbox(InstanceInfo instance) {
+        Label label1 = new Label(instance.getMetadata().get("host-name"));
+        Label label2 = new Label(instance.getMetadata().get("current-players" ) + "/"+maxPlayers);
+        Label label3 = new Label(instance.getMetadata().get("active-game"));
+        Label label4 = new Label(instance.getIPAddr());
         VBox vbox = new VBox();
         vbox.getChildren().addAll(label1, label2, label3, label4);
+        HBox hbox = new HBox();
         hbox.getChildren().add(vbox);
         hbox.setStyle("-fx-background-color: #bf1616");
         hbox.setStyle("-fx-border-color: #16bf8c");
@@ -119,7 +119,6 @@ public class WaitingRoomController implements Initializable {
                 ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
                 out.writeObject(Ping.UserPing);
                 out.flush();
-                while(true){
                     Object receivedObject = in.readObject();
                     if(receivedObject instanceof Ping) {
                         Ping ping = (Ping) receivedObject;
@@ -128,7 +127,6 @@ public class WaitingRoomController implements Initializable {
                     if(receivedObject instanceof Lobby) {
                         goToClientScreen(user, (Lobby) receivedObject);
                     }
-                }
 
             } catch (IOException e) {
             } catch (ClassNotFoundException e) {
@@ -136,6 +134,18 @@ public class WaitingRoomController implements Initializable {
             }
 
         });
+        return hbox;
+
+    }
+    public void updateHbox(InstanceInfo instance) {
+        HBox hBox = instancesMap.get(instance);
+        VBox vbox = (VBox) hBox.getChildren().get(0);
+        Label hostName = (Label) vbox.getChildren().get(0);
+        Label playerNum = (Label) vbox.getChildren().get(1);
+        Label activeGame = (Label) vbox.getChildren().get(2);
+        hostName.setText(instance.getMetadata().get("host-name"));
+        playerNum.setText(instance.getMetadata().get("current-players" ) + "/"+maxPlayers);
+        activeGame.setText(instance.getMetadata().get("active-game"));
     }
 
 
@@ -149,26 +159,25 @@ public class WaitingRoomController implements Initializable {
                     while (c.next()) {
                         if (c.wasAdded()) {
                             for (InstanceInfo addedInstance : c.getAddedSubList()) {//if elements are added to the list
-                                HBox hbox = new HBox();
-                                updateHbox(hbox, addedInstance);
-                                instancesMap.put(addedInstance, hbox);
+                                HBox hbox = addHbox(addedInstance);
+                                instancesMap.put(addedInstance.getInstanceId(), hbox);
                                 LobbyVbox.getChildren().add(hbox);
                             }
                         } else if (c.wasRemoved()) { //if elements were removed from the list, currently unused?
                             for (InstanceInfo removedInstance : c.getRemoved()) {
-                                HBox hbox = instancesMap.remove(removedInstance);
+                                HBox hbox = instancesMap.remove(removedInstance.getInstanceId());
                                 if (hbox != null) {
                                     LobbyVbox.getChildren().remove(hbox);
                                 }
                             }
                         } else if (c.wasPermutated())//check if this is needed
                             ;
-                        else if (c.wasUpdated()) {//currently impossible to reach until I update the lobby refresh
+                        else if (c.wasUpdated()) {
                             for (InstanceInfo updatedInstance : instances) {
-                                HBox hbox = instancesMap.get(updatedInstance);
+                                HBox hbox = instancesMap.get(updatedInstance.getInstanceId());
                                 if (hbox != null) {
                                     hbox.getChildren().clear();
-                                    updateHbox(hbox, updatedInstance);
+                                    updateHbox(updatedInstance);
                                 }
                             }
                         }
