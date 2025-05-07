@@ -60,12 +60,12 @@
                            <children>
                               <Text fx:id="typedText" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-fill: GREEN;">
                                  <font>
-                                    <Font size="15.0" />
+                                    <Font size="17.0" />
                                  </font>
                               </Text>
                               <Text fx:id="untypedText" strokeType="OUTSIDE" strokeWidth="0.0">
                                  <font>
-                                    <Font size="15.0" />
+                                    <Font size="17.0" />
                                  </font>
                               </Text>
                            </children>
