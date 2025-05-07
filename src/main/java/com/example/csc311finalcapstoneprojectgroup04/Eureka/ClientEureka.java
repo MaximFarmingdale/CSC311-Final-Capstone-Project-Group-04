@@ -24,7 +24,6 @@ import java.util.Map;
  * and also lets hosts register their lobbies to Eureka and update the metadata when the lobby changes.
  */
 @Service
-@EnableDiscoveryClient
 public class ClientEureka {
     @Autowired
     private EurekaInstanceConfigBean instance;
@@ -68,8 +67,8 @@ public class ClientEureka {
      * fills the instances' list with EurekaClient instances
      */
     public List<InstanceInfo> fillList() {
-        if (eurekaClient.getApplication("EUREKACLIENTTEST") != null) {
-            instances = eurekaClient.getApplication("EUREKACLIENTTEST").getInstances();
+        if (eurekaClient.getApplication("TYPING_RACE") != null) {
+            instances = eurekaClient.getApplication("TYPING_RACE").getInstances();
             for (InstanceInfo info : instances) {
                 System.out.println("Found instance: " + info.getMetadata() + info.getIPAddr());
             }
