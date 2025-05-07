@@ -19,6 +19,9 @@ public final class Lobby implements Serializable {
         this.LobbyIP = LobbyIP;
         this.LobbyHostName = LobbyHostName;
     }
+    public void setText(String text) {
+        this.text = text;
+    }
     public void generateNewText(){
         Faker faker = new Faker();
         text = faker.twinPeaks().quote();

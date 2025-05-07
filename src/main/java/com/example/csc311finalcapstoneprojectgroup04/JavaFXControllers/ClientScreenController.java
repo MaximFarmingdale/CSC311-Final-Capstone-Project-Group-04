@@ -139,10 +139,6 @@ public class ClientScreenController {
     public void enterClientScreen(User user, Lobby lobby) {
         this.user = user;
         this.lobby = lobby;
-        raceUpdates = FXCollections.observableArrayList(new CopyOnWriteArrayList<>());
-        raceUpdate = new RaceUpdate(user.getUsername());
-        raceUpdates.add(raceUpdate);
-        message = new Message(user.getUsername(), "");
         try {
             socket = new Socket(lobby.getLobbyIP(),12345);
             lobbyRead.set(lobby);
@@ -154,6 +150,10 @@ public class ClientScreenController {
             throw new RuntimeException(e);
 
         }
+        message = new Message(user.getUsername(), "");
+        raceUpdate = new RaceUpdate(user.getUsername());
+        raceUpdates = FXCollections.observableArrayList(new CopyOnWriteArrayList<>());
+        raceUpdates.add(raceUpdate);
         configureListeners();
     }
 
