@@ -102,6 +102,7 @@ public class HostScreenController {
                     raceUpdate.setWinner(true);
                     host.sendMessage(raceUpdate);
                     System.out.println("done");
+                    endOfRace(raceUpdate);
                 }
                 raceField.clear();
             }
@@ -193,8 +194,6 @@ public class HostScreenController {
      * @param update
      */
     public void endOfRace(RaceUpdate update) {
-        if(update == raceUpdate)
-            raceUpdate = new RaceUpdate(user.getUsername());
         host.sendMessage(update.getUsername() + " Won!!!!!");
         startRaceButton.setDisable(false);
     }
