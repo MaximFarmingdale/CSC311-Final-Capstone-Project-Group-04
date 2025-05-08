@@ -101,6 +101,7 @@ public class SoloModeController {
             return;
         }
 
+        // main loop -- for every word in the word pool, if the list isnt exhausted, pull up the next word and prompt to type
         for (String word : wordPool) {
             if (!usedWords.contains(word)) {
                 currentWord = word;
@@ -118,7 +119,10 @@ public class SoloModeController {
      * handles input and checks whethered entered word correctly matches prompted word on pressing the spacebar
      */
     private void handleInput() {
-        if (currentWord == null || correctCount >= winThreshold || attemptCount >= maxWords) return;
+
+        if (currentWord == null || correctCount >= winThreshold || attemptCount >= maxWords){
+            return;
+        }
 
         String typed = enterWordField.getText().trim();
 
