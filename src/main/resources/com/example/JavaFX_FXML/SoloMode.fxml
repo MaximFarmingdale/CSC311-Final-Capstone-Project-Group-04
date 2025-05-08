@@ -6,6 +6,7 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.shape.Line?>
@@ -56,12 +57,12 @@
          <right>
             <VBox alignment="CENTER" prefHeight="398.0" prefWidth="300.0" style="-fx-background-color: #cccccc;" BorderPane.alignment="CENTER">
                <children>
-                  <Text fill="WHITE" stroke="BLACK" strokeType="OUTSIDE" text="Score:">
+                  <Text fill="WHITE" stroke="BLACK" strokeType="OUTSIDE" text="Words Entered:">
                      <font>
                         <Font name="MS Gothic" size="32.0" />
                      </font>
                   </Text>
-                  <Text fill="WHITE" stroke="BLACK" strokeType="OUTSIDE" text="0" underline="true">
+                  <Text fx:id="wordsEnteredCounter" fill="WHITE" stroke="BLACK" strokeType="OUTSIDE" text="0" underline="true">
                      <font>
                         <Font name="MS PGothic" size="32.0" />
                      </font>
@@ -72,8 +73,27 @@
          <center>
             <VBox alignment="CENTER" prefHeight="173.0" prefWidth="764.0" spacing="20.0" style="-fx-background-color: #222021; -fx-border-width: 4; -fx-border-color: #FFD700;" BorderPane.alignment="CENTER">
                <children>
-                  <Circle fill="WHITE" radius="27.0" stroke="RED" strokeType="INSIDE" strokeWidth="3.0" translateX="-300.0" />
+                  <Text fx:id="youNodetext" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="You" textAlignment="CENTER" translateX="-300.0">
+                     <font>
+                        <Font name="MS PGothic" size="27.0" />
+                     </font>
+                  </Text>
+                  <Circle fx:id="youNode" fill="WHITE" radius="27.0" stroke="RED" strokeType="INSIDE" strokeWidth="3.0" translateX="-300.0" />
                   <Line endX="506.2333068847656" endY="1.831054760259576E-5" fill="WHITE" startX="-100.0" stroke="WHITE" strokeLineCap="BUTT" strokeWidth="3.0" style="-fx-stroke-dash-array: 10;" />
+                  <HBox alignment="CENTER" prefHeight="30.0" prefWidth="672.0" spacing="500.0">
+                     <children>
+                        <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Start" translateX="-15.0">
+                           <font>
+                              <Font name="MS PGothic" size="31.0" />
+                           </font>
+                        </Text>
+                        <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="End" translateX="15.0">
+                           <font>
+                              <Font name="MS PGothic" size="31.0" />
+                           </font>
+                        </Text>
+                     </children>
+                  </HBox>
                </children>
             </VBox>
          </center>
