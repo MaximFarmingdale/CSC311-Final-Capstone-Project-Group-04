@@ -138,11 +138,13 @@ public class HostScreenController {
         this.message = new Message(currentUser.getUsername(),"");
         try {
             this.lobby = new Lobby(publicIP(), user.getUsername());
-            this.server = new Server(new ServerSocket(12345), user.getUsername(), lobby, clientEureka);
+            this.server = new Server(new ServerSocket(12345), user.getUsername(), lobby, clientEureka, raceUpdates);
             new Thread(server).start();
             Thread.sleep(200);
             this.socket = new Socket("localhost", 12345);
             this.host = new Host(socket, new ObjectOutputStream(socket.getOutputStream()), new ObjectInputStream(socket.getInputStream()), lobby, user.getUsername(), messageVbox, this.raceUpdates);
+            raceUpdate = new RaceUpdate(user.getUsername());
+            raceUpdates.add(raceUpdate);
             new Thread(host).start();
         } catch (IOException e) {
             throw new RuntimeException(e);

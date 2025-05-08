@@ -7,6 +7,7 @@ import com.example.csc311finalcapstoneprojectgroup04.NetworkMessagesandUpdate.Pi
 import com.example.csc311finalcapstoneprojectgroup04.NetworkMessagesandUpdate.RaceUpdate;
 import com.example.csc311finalcapstoneprojectgroup04.User;
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
@@ -38,6 +39,8 @@ public class Server implements Runnable {
     private String username;
     private Lobby lobby;
     private ClientEureka clientEureka;
+    private ObservableList<RaceUpdate> raceUpdates = FXCollections.observableArrayList(); {
+    }
     /**
      * Allows you to construct a Server object using the following parameters.
      * @param serverSocket uses the serversocket to make a new socket that connects to it and creates an objectInputStream and objectOutputStream from it
@@ -46,7 +49,7 @@ public class Server implements Runnable {
      * the objectInputStream and objectOutputStream are to read the input from users and to output objects to users
      * it is used throughout the class for these functions
      */
-    public Server(ServerSocket serverSocket, String username, Lobby lobby, ClientEureka clientEureka) throws IOException {
+    public Server(ServerSocket serverSocket, String username, Lobby lobby, ClientEureka clientEureka, ObservableList<RaceUpdate> raceUpdates) throws IOException {
         this.serverSocket = serverSocket;
         this.username = username;
         this.lobby = lobby;
@@ -71,7 +74,7 @@ public class Server implements Runnable {
                         Object object = OIS.readObject();
                         if(object instanceof Message) {
                             Message message = (Message) object;
-                            ClientHandler clientHandler = new ClientHandler(socket, OOS, OIS, message.getSender(), this, lobby, clientEureka);
+                            ClientHandler clientHandler = new ClientHandler(socket, OOS, OIS, message.getSender(), this, lobby, clientEureka, raceUpdates);
                             Thread thread = new Thread(clientHandler);
                             thread.start();
                             lobby.increaseNumPlayers();
