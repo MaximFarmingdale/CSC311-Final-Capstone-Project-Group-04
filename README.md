@@ -16,6 +16,7 @@ JavaFX - for GUI elements<p>
 Spring Boot - For autoconfiguration and general ease of use.<p>
 Spring Cloud - Client Eureka and Server Eureka for client discovery <p>
 Java-Faker - for generating race text.<p>
+Azure Database for MySQL <p>
 ## Setup 
 1. Clone this [ServerEureka repository](https://github.com/MaximFarmingdale/ServerEureka)
 2. [Port forward](https://learn.g2.com/port-forwarding) the ports: 8761 and 12345 on your router (Only forward 12345 if you are planning on hosting!)
