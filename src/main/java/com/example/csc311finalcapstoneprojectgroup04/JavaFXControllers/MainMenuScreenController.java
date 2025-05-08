@@ -209,12 +209,20 @@ public class MainMenuScreenController {
         }
     }
 
+    /**
+     * alternative way to exit the play menu pane
+     * @param event
+     */
     public void playMenu_exitMenu(MouseEvent event) {
         playmenuclickcount++;
         playMenu_Pane.setOpacity(0);
         playMenu_Pane.setDisable(true);
     }
 
+    /**
+     * enters solo mode
+     * @param event
+     */
     @FXML
     void playMenu_SoloMode(MouseEvent event) {
         try {

@@ -35,8 +35,10 @@ public class SoloModeController {
 
     private List<String> wordPool;
 
+    // hashset for words already used from list
     private Set<String> usedWords = new HashSet<>();
 
+    // observablelist to help with wordlist updating current word needed to spell
     private final ObservableList<String> displayList = FXCollections.observableArrayList();
 
     private int correctCount = 0;
@@ -49,6 +51,9 @@ public class SoloModeController {
 
     private String currentWord;
 
+    /**
+     * functionality for the start button -- starts practice mode
+     */
     @FXML
     public void initialize() {
         startButton.setOnAction(e -> startGame());
@@ -59,6 +64,9 @@ public class SoloModeController {
         });
     }
 
+    /**
+     * starts game and initalizes the wordpool with 20 predetermined words. words are selected from random
+     */
     private void startGame() {
         correctCount = 0;
         attemptCount = 0;
@@ -83,6 +91,9 @@ public class SoloModeController {
         loadNextWord();
     }
 
+    /**
+     * loads next word after word is checked and auto scrolls down after new word in loaded into the list
+     */
     private void loadNextWord() {
         if (usedWords.size() >= maxWords) {
             endGame();
@@ -102,6 +113,9 @@ public class SoloModeController {
         endGame();
     }
 
+    /**
+     * handles input and checks whethered entered word correctly matches prompted word on pressing the spacebar
+     */
     private void handleInput() {
         if (currentWord == null || correctCount >= winThreshold || attemptCount >= maxWords) return;
 
@@ -126,6 +140,9 @@ public class SoloModeController {
         }
     }
 
+    /**
+     * method to move the youNode and youNodeText with each correct word entered
+     */
     private void moveNode() {
         double progress = (double) correctCount / winThreshold;
         double newTranslateX = -300 + progress * 600;
@@ -134,6 +151,9 @@ public class SoloModeController {
         youNodetext.setTranslateX(newTranslateX);
     }
 
+    /**
+     * ends the game after 10 correct words or all the words in the list have been checked
+     */
     private void endGame() {
         enterWordField.setDisable(true);
         if (correctCount >= winThreshold) {
