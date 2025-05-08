@@ -1,47 +1,82 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
-
 
 <AnchorPane prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.csc311finalcapstoneprojectgroup04.JavaFXControllers.SoloModeController">
    <children>
       <BorderPane prefHeight="720.0" prefWidth="1280.0">
          <top>
-            <VBox alignment="CENTER" prefHeight="121.0" prefWidth="1280.0" BorderPane.alignment="CENTER">
+            <VBox alignment="CENTER" prefHeight="200.0" prefWidth="1280.0" spacing="30.0" style="-fx-background-color: #337ef5;" BorderPane.alignment="CENTER">
                <children>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Solo Mode">
+                  <Text fill="WHITE" stroke="BLACK" strokeType="OUTSIDE" text="Solo Mode">
                      <font>
-                        <Font size="50.0" />
+                        <Font name="MS Outlook" size="50.0" />
                      </font>
                   </Text>
+                  <Button fx:id="startButton" mnemonicParsing="false" style="-fx-background-color: #ffffff;" text="Start!" textAlignment="CENTER">
+                     <font>
+                        <Font name="MS Outlook" size="21.0" />
+                     </font>
+                  </Button>
                </children>
+               <BorderPane.margin>
+                  <Insets />
+               </BorderPane.margin>
             </VBox>
          </top>
          <bottom>
-            <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+            <VBox alignment="CENTER" prefHeight="300.0" prefWidth="1280.0" spacing="30.0" style="-fx-background-color: #5a8b5d;" BorderPane.alignment="CENTER">
                <children>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Enter Word">
+                  <Text fill="WHITE" stroke="BLACK" strokeType="OUTSIDE" text="Enter Word">
                      <font>
-                        <Font size="29.0" />
+                        <Font name="MS Outlook" size="40.0" />
                      </font>
                   </Text>
-                  <TextField alignment="CENTER" maxWidth="200.0" prefWidth="0.0" promptText="ENTER HERE">
+                  <TextField fx:id="enterWordField" alignment="CENTER" maxWidth="200.0" prefWidth="0.0" promptText="ENTER HERE">
                      <font>
-                        <Font size="14.0" />
+                        <Font name="MS Outlook" size="14.0" />
                      </font>
                   </TextField>
                </children>
             </VBox>
          </bottom>
          <left>
-            <ListView prefHeight="261.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+            <ListView fx:id="wordList" prefHeight="398.0" prefWidth="300.0" BorderPane.alignment="CENTER" />
          </left>
+         <right>
+            <VBox alignment="CENTER" prefHeight="398.0" prefWidth="300.0" style="-fx-background-color: #cccccc;" BorderPane.alignment="CENTER">
+               <children>
+                  <Text fill="WHITE" stroke="BLACK" strokeType="OUTSIDE" text="Score:">
+                     <font>
+                        <Font name="MS Gothic" size="32.0" />
+                     </font>
+                  </Text>
+                  <Text fill="WHITE" stroke="BLACK" strokeType="OUTSIDE" text="0" underline="true">
+                     <font>
+                        <Font name="MS PGothic" size="32.0" />
+                     </font>
+                  </Text>
+               </children>
+            </VBox>
+         </right>
+         <center>
+            <VBox alignment="CENTER" prefHeight="173.0" prefWidth="764.0" spacing="20.0" style="-fx-background-color: #222021; -fx-border-width: 4; -fx-border-color: #FFD700;" BorderPane.alignment="CENTER">
+               <children>
+                  <Circle fill="WHITE" radius="27.0" stroke="RED" strokeType="INSIDE" strokeWidth="3.0" translateX="-300.0" />
+                  <Line endX="506.2333068847656" endY="1.831054760259576E-5" fill="WHITE" startX="-100.0" stroke="WHITE" strokeLineCap="BUTT" strokeWidth="3.0" style="-fx-stroke-dash-array: 10;" />
+               </children>
+            </VBox>
+         </center>
       </BorderPane>
    </children>
 </AnchorPane>
