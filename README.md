@@ -11,11 +11,11 @@ There are 8 units in CSC311, and this project uses concepts from the first 7, in
 7: Network Programming
 There is a particular skew toward Networking and Concurrency as the main showcase of this project is client discovery, as well as making use of Concurrency to host a lobby with multiple Users. JavaFX is also another important element as the entire UI utilizes it.
 ## Technologies
-Java - main language used
-JavaFX - for GUI elements
-Spring Boot - 
-Spring Cloud - Client Eureka and Server Eureka for client discovery 
-Java-Faker - for generating race text.
+Java - main language used <p>
+JavaFX - for GUI elements<p>
+Spring Boot - For autoconfiguration and general ease of use.<p>
+Spring Cloud - Client Eureka and Server Eureka for client discovery <p>
+Java-Faker - for generating race text.<p>
 ## Setup 
 1. Clone this [ServerEureka repository](https://github.com/MaximFarmingdale/ServerEureka)
 2. [Port forward](https://learn.g2.com/port-forwarding) the ports: 8761 and 12345 on your router (Only forward 12345 if you are planning on hosting!)
