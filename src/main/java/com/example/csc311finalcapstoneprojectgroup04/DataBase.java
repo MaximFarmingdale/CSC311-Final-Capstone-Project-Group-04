@@ -15,21 +15,19 @@ public class DataBase {
     /**
      * creates the database
      */
-    public  void connectToDatabase() {
+    public void connectToDatabase() {
         try {
             Connection conn = DriverManager.getConnection(MYSQL_SERVER_URL, USERNAME, PASSWORD);
             Statement statement = conn.createStatement();
             statement.executeUpdate("CREATE DATABASE IF NOT EXISTS Capstone");
             statement.close();
             conn.close();
-
             conn = DriverManager.getConnection(DB_URL, USERNAME, PASSWORD);
             statement = conn.createStatement();
             String sql = "CREATE TABLE IF NOT EXISTS users ("
                     + "username VARCHAR(200) NOT NULL PRIMARY KEY,"
                     + "password VARCHAR(200) NOT NULL UNIQUE)";
             statement.executeUpdate(sql);
-
             statement.close();
             conn.close();
 
@@ -76,9 +74,11 @@ public class DataBase {
             PreparedStatement statement = conn.prepareStatement(sql);
             statement.setString(1, username);
             ResultSet rs = statement.executeQuery();
-            if(rs.next())
-                return true;
-            return false;
+            boolean distinct = !rs.next();
+            rs.close();
+            statement.close();
+            conn.close();
+            return  distinct;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -94,14 +94,16 @@ public class DataBase {
     public boolean validLogin(String username, String password) {
         try {
             Connection conn = DriverManager.getConnection(DB_URL, USERNAME, PASSWORD);
-            String sql = "SELECT username FROM users WHERE username = ? AND password = ?";
+            String sql = "SELECT username FROM users WHERE (username = ? AND password = ?)";
             PreparedStatement statement = conn.prepareStatement(sql);
             statement.setString(1, username);
-            statement.setString(1, password);
+            statement.setString(2, password);
             ResultSet rs = statement.executeQuery();
-            if(rs.next())
-                return true;
-            return false;
+            Boolean valid = rs.next();
+            rs.close();
+            statement.close();
+            conn.close();
+            return valid;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

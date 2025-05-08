@@ -1,5 +1,6 @@
 package com.example.csc311finalcapstoneprojectgroup04.JavaFXControllers;
 
+import com.example.csc311finalcapstoneprojectgroup04.DataBase;
 import com.example.csc311finalcapstoneprojectgroup04.TypeApplication;
 import com.example.csc311finalcapstoneprojectgroup04.User;
 import javafx.event.ActionEvent;
@@ -30,9 +31,6 @@ import java.util.regex.Pattern;
 /// controller for the first screen the user sees, before they log in or start a match etc.
 @Component
 public class SplashScreenController implements Initializable {
-    private List<User> users = new ArrayList<>();
-    // this user only exists for debugging get rid of it in the final version
-    private User user;
     private boolean newUser = false;
 
     @FXML
@@ -66,6 +64,7 @@ public class SplashScreenController implements Initializable {
     private Pattern usernamePattern = Pattern.compile("^[a-zA-Z0-9]{2,16}");
     private Pattern passwordPattern = Pattern.compile("^[a-zA-Z0-9]{4,16}"); //change the pattern to have one special character.
     private Matcher matcher;
+    private DataBase dataBase = new DataBase();
     /**
      * Method that on button clickchecks if the user is typing in correct sign-up or
      * login information. Adds signups to the database and pass it to the MainMenuScreen
@@ -76,7 +75,8 @@ public class SplashScreenController implements Initializable {
     void login(ActionEvent event) {
         //null-pointer check
         String username = usernameField.getText();
-        String password = passwordField.getText();
+        String hashCode = String.valueOf(passwordField.getText().hashCode());//keep for now
+        String password = String.valueOf(passwordField.getText());
         matcher = usernamePattern.matcher(username);
         if(!matcher.matches()) {
             problemText.setText("Make Username Between 2-16 Characters");
@@ -92,7 +92,8 @@ public class SplashScreenController implements Initializable {
         User currentUser = new User(username, password);
         //if the user is signing up
         if(newUser) {
-            if (checkUniqueUsername(username)) {
+            if (dataBase.checkDistinct(username)) {
+                dataBase.addUser(username, hashCode);
                 changeController(currentUser);
             } else {
                 problemText.setText("Username is already taken or invalid!");
@@ -101,9 +102,8 @@ public class SplashScreenController implements Initializable {
         }
         //if the user is logging in
         else {
-            if (!checkUniqueUsername(username)) {
-                if(getUser(username).checkPassword(password)) {
-                    System.out.println(getUser(username)); //get rid of later
+            if (!dataBase.checkDistinct(username)) {
+                if(dataBase.validLogin(username, hashCode)) {
                     changeController(currentUser);
                 }
                 else {
@@ -117,38 +117,6 @@ public class SplashScreenController implements Initializable {
             }
         }
     }
-
-    /**
-     * Checks if a username is unique.
-     * @param username
-     * @return boolean if its true or not.
-     */
-    private boolean checkUniqueUsername(String username) {
-        if (username == null || username.trim().isEmpty()) {
-            return false;
-        }
-        for (User user : users) {
-            if (user.getUsername().equals(username)) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    /**
-     * Helper method to get current User from an array of users by username.
-     * @param username
-     * @return current user
-     */
-    private User getUser(String username) {
-        for (User user : users) {
-            if(user.getUsername().equals(username)) {
-                return user;
-            }
-        }
-        return null;
-    }
-
     /**
      * Makes either the username or password text field light up red to signify a
      * problem.
@@ -220,10 +188,7 @@ public class SplashScreenController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        //add code to get user class from a database
-        //for now use this hard coded user
-        user = new User("maxim", "password");
-        users.add(user);
+        dataBase.connectToDatabase();
     }
 
     @FXML
