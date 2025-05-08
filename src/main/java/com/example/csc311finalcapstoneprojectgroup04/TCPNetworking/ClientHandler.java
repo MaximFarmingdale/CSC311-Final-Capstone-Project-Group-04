@@ -1,6 +1,7 @@
 package com.example.csc311finalcapstoneprojectgroup04.TCPNetworking;
 
 import com.example.csc311finalcapstoneprojectgroup04.Eureka.ClientEureka;
+import com.example.csc311finalcapstoneprojectgroup04.JavaFXControllers.HostScreenController;
 import com.example.csc311finalcapstoneprojectgroup04.Lobby.Lobby;
 import com.example.csc311finalcapstoneprojectgroup04.NetworkMessagesandUpdate.Message;
 import com.example.csc311finalcapstoneprojectgroup04.NetworkMessagesandUpdate.RaceUpdate;
@@ -24,6 +25,7 @@ public class ClientHandler implements Runnable {
     private Server server;
     private Lobby lobby;
     private ClientEureka clientEureka;
+    private HostScreenController hostController;
 
     /**
      * Allows you to construct a new ClientHandler for managing multiple connections to a server.
@@ -45,6 +47,9 @@ public class ClientHandler implements Runnable {
         } catch (Exception e) {
             removeClient();
         }
+    }
+    public void hostController(HostScreenController hostController){
+        this.hostController = hostController;
     }
 
     /**
@@ -138,6 +143,11 @@ public class ClientHandler implements Runnable {
                     client.objectOutputStream.writeObject(raceUpdate);
                     client.objectOutputStream.flush();
                 }
+                //if the controller is initialized and the raceUpdate is a winner during an active game.
+                if(hostController != null && raceUpdate.isWinner() && lobby.getActiveRace()) {
+                    hostController.endOfRace(raceUpdate);
+                }
+
             } catch (IOException e) {
                 removeClient();
             }
