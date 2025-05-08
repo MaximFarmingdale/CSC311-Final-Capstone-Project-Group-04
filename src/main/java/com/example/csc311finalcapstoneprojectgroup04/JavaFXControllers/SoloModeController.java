@@ -31,7 +31,7 @@ public class SoloModeController {
 
     private User user;
 
-    @FXML private Text enterWordLabel;  // Make sure this has fx:id="enterWordLabel" in your FXML
+    @FXML private Text enterWordLabel;
 
     private List<String> wordPool;
 
@@ -81,6 +81,7 @@ public class SoloModeController {
         youNode.setTranslateX(-300);
         youNodetext.setTranslateX(-300);
 
+        // predetermined word pool
         wordPool = new ArrayList<>(List.of(
                 "fountain", "famine", "keyboard", "plateau", "class", "java", "steam", "extradite", "expedition", "mountain",
                 "determination", "array", "string", "integer", "training", "switch", "discovery", "boolean", "application", "eureka"
