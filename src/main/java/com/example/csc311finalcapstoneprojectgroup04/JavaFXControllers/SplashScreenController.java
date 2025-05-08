@@ -30,7 +30,7 @@ import java.util.regex.Pattern;
 
 /// controller for the first screen the user sees, before they log in or start a match etc.
 @Component
-public class SplashScreenController implements Initializable {
+public class SplashScreenController {
     private boolean newUser = false;
 
     @FXML
@@ -186,10 +186,6 @@ public class SplashScreenController implements Initializable {
         }
     }
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        dataBase.connectToDatabase();
-    }
 
     @FXML
     void debuglogin(MouseEvent event) throws IOException {
