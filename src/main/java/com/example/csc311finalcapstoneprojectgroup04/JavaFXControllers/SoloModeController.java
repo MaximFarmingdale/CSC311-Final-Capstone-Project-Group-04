@@ -1,5 +1,6 @@
 package com.example.csc311finalcapstoneprojectgroup04.JavaFXControllers;
 
+import com.example.csc311finalcapstoneprojectgroup04.User;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
@@ -26,5 +27,11 @@ public class SoloModeController {
 
     @FXML
     private Text youNodetext;
+
+    private User user;
+
+    public void enterSoloMode(User currentUser) {
+        user = currentUser;
+    }
 
 }

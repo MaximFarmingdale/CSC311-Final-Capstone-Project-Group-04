@@ -94,6 +94,7 @@ public class MainMenuScreenController {
             playMenu_Pane.setDisable(true);
         }
 
+
     }
 //    int optionclicked = 1; ~~~~~~~~~~~~~~~~~~~~~OPTIONS PANE DISCONTINUED~~~~~~~~~~~~~~~~~~~~~
     //    @FXML
@@ -216,6 +217,18 @@ public class MainMenuScreenController {
 
     @FXML
     void playMenu_SoloMode(MouseEvent event) {
-
+        try {
+            Stage stage =(Stage) PlayMenuBPane.getScene().getWindow();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/JavaFX_FXML/SoloMode.fxml"));
+            loader.setControllerFactory(applicationContext::getBean); //gets beans from spring
+            Parent newRoot = loader.load();
+            SoloModeController controller = loader.getController();
+            controller.enterSoloMode(user);
+            Scene scene = new Scene(newRoot, 1270, 720);
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
