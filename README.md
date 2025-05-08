@@ -22,7 +22,7 @@ Azure Database for MySQL <p>
 
 ## Setup 
 1. Clone this [ServerEureka repository](https://github.com/MaximFarmingdale/ServerEureka)
-2. [Port forward](https://learn.g2.com/port-forwarding) the ports: 8761 and 12345 on your router (Only forward 12345 if you are planning on hosting!)
+2. [Port forward](https://learn.g2.com/port-forwarding) the ports: 8761 and 12345 on your router (Only forward 12345 if you are planning on hosting and 8761 if you are planning on running the server on your network! People are not doing those things do not need to port foward)
 3. Clone the current repository 
 4. Change the defaultZone URL in application-client.yml in the main project and in ServerEureka to match the IP of where you are running the Eureka Server. (Set the one in the main project to be your public IP and the one in the server to be your private one.)
 5. Run the ServerEureka project (The game will only work if this is running)
