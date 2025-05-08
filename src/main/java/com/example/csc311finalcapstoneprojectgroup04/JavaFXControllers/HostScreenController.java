@@ -37,7 +37,7 @@ import java.util.ResourceBundle;
  * also listens for the winner and ends the game when one is found.
  */
 @Component
-public class HostScreenController implements Initializable {
+public class HostScreenController {
     private User user;
     private Lobby lobby;
     @Autowired
@@ -65,32 +65,6 @@ public class HostScreenController implements Initializable {
     private ObservableList<RaceUpdate> raceUpdates = FXCollections.observableArrayList();
     private Host host;
     private Socket socket;
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        raceUpdates.addListener((ListChangeListener<RaceUpdate>) c -> {
-            while (c.next()) {
-                if (c.wasAdded()) {
-                    for(RaceUpdate r : c.getAddedSubList()) {
-                        if(r.isWinner()) {
-                            endOfRace(r);
-                            break;
-                        }
-                    }
-                }
-                else if (c.wasPermutated())//check if this is needed
-                    System.out.println(c.getRemoved());
-
-                else if (c.wasUpdated()) {
-                    for (RaceUpdate r : raceUpdates) {
-                        if(r.isWinner()) {
-                            endOfRace(r);
-                            break;
-                        }
-                    }
-                }
-            }
-        });
-    }
     /**
      * Sends a message to all clients and adds Message to messageVbox
      * @param event
@@ -161,23 +135,47 @@ public class HostScreenController implements Initializable {
      * @param currentUser
      */
     public void enterHostScreen(User currentUser) {
-        user = currentUser;
-        message = new Message(currentUser.getUsername(),"");
+        this.user = currentUser;
+        this.message = new Message(currentUser.getUsername(),"");
         try {
-            lobby = new Lobby(publicIP(), user.getUsername());
-            server = new Server(new ServerSocket(12345), user.getUsername(), lobby, clientEureka);
+            this.lobby = new Lobby(publicIP(), user.getUsername());
+            this.server = new Server(new ServerSocket(12345), user.getUsername(), lobby, clientEureka);
             new Thread(server).start();
             Thread.sleep(200);
-            socket = new Socket("localhost", 12345);
-            host = new Host(socket, new ObjectOutputStream(socket.getOutputStream()), new ObjectInputStream(socket.getInputStream()), lobby, user.getUsername(), messageVbox, raceUpdates);
+            this.socket = new Socket("localhost", 12345);
+            this.host = new Host(socket, new ObjectOutputStream(socket.getOutputStream()), new ObjectInputStream(socket.getInputStream()), lobby, user.getUsername(), messageVbox, this.raceUpdates);
             new Thread(host).start();
         } catch (IOException e) {
             throw new RuntimeException(e);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
+        addListener();
+    }
+    public void addListener(){
+        this.raceUpdates.addListener((ListChangeListener<RaceUpdate>) c -> {
+            while (c.next()) {
+                if (c.wasAdded()) {
+                    for(RaceUpdate r : c.getAddedSubList()) {
+                        if(r.isWinner()) {
+                            endOfRace(r);
+                            break;
+                        }
+                    }
+                }
+                else if (c.wasPermutated())//check if this is needed
+                    System.out.println(c.getRemoved());
 
-
+                else if (c.wasUpdated()) {
+                    for (RaceUpdate r : raceUpdates) {
+                        if(r.isWinner()) {
+                            endOfRace(r);
+                            break;
+                        }
+                    }
+                }
+            }
+        });
     }
     public static String publicIP() throws MalformedURLException {
         String urlString = "http://checkip.amazonaws.com/";
