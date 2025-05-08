@@ -27,7 +27,12 @@ Azure Database for MySQL <p>
 
 # Overlook
 ## Splash Screen
+The splash screen serves as a log in screen. The user is prompted to log in via their username and password. If it is their first time entering the app, you will need to sign up, which can be done by clicking the sign up button. This prompts you to create your account with a unique username and password. After this, it will store the user info, sign you in, and direct you to the Main Menu screen.
+
+
+## Solo (Practice) Mode
 # Hashim, add some GIFs in this section and also talk about the UI here 
+
 # Sean talk about the database here 
 #Main Menu
 After signing in, the user is prompted to play or quit, or configure settings, and after the user clicks the play button, they are prompted to either host or join. 
