@@ -52,7 +52,7 @@
                      <children>
                         <TextFlow prefHeight="437.0" prefWidth="503.0">
                            <children>
-                              <Text fx:id="typedText" strokeType="OUTSIDE" strokeWidth="0.0" style="fx-fi: GREEN;">
+                              <Text fx:id="typedText" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-fill: GREEN;">
                                  <font>
                                     <Font size="17.0" />
                                  </font>
