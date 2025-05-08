@@ -19,7 +19,7 @@
          <top>
             <VBox alignment="CENTER" prefHeight="200.0" prefWidth="1280.0" spacing="30.0" style="-fx-background-color: #337ef5;" BorderPane.alignment="CENTER">
                <children>
-                  <Text fill="WHITE" stroke="BLACK" strokeType="OUTSIDE" text="Solo Mode">
+                  <Text fill="WHITE" stroke="BLACK" strokeType="OUTSIDE" text="Practice Mode">
                      <font>
                         <Font name="MS Outlook" size="50.0" />
                      </font>
@@ -38,7 +38,7 @@
          <bottom>
             <VBox alignment="CENTER" prefHeight="300.0" prefWidth="1280.0" spacing="30.0" style="-fx-background-color: #5a8b5d;" BorderPane.alignment="CENTER">
                <children>
-                  <Text fill="WHITE" stroke="BLACK" strokeType="OUTSIDE" text="Enter Word">
+                  <Text fx:id="enterWordLabel" fill="WHITE" stroke="BLACK" strokeType="OUTSIDE" text="Enter Word">
                      <font>
                         <Font name="MS Outlook" size="40.0" />
                      </font>
@@ -55,14 +55,19 @@
             <ListView fx:id="wordList" prefHeight="398.0" prefWidth="300.0" BorderPane.alignment="CENTER" />
          </left>
          <right>
-            <VBox alignment="CENTER" prefHeight="398.0" prefWidth="300.0" style="-fx-background-color: #cccccc;" BorderPane.alignment="CENTER">
+            <VBox alignment="CENTER" prefHeight="398.0" prefWidth="300.0" spacing="10.0" style="-fx-background-color: #cccccc;" BorderPane.alignment="CENTER">
                <children>
-                  <Text fill="WHITE" stroke="BLACK" strokeType="OUTSIDE" text="Words Entered:">
+                  <Text fill="WHITE" stroke="BLACK" strokeType="OUTSIDE" text="Correct Words" underline="true">
                      <font>
                         <Font name="MS Gothic" size="32.0" />
                      </font>
                   </Text>
-                  <Text fx:id="wordsEnteredCounter" fill="WHITE" stroke="BLACK" strokeType="OUTSIDE" text="0" underline="true">
+                  <Text fx:id="wordsEnteredCounter" fill="WHITE" stroke="BLACK" strokeType="OUTSIDE" text="0">
+                     <font>
+                        <Font name="MS PGothic" size="32.0" />
+                     </font>
+                  </Text>
+                  <Text fill="WHITE" stroke="BLACK" strokeType="OUTSIDE" text="Out Of 10">
                      <font>
                         <Font name="MS PGothic" size="32.0" />
                      </font>
