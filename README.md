@@ -47,8 +47,8 @@ Once the user clicks on a lobby, they can now race against other users once the 
 ## HostRaceView
 The host view to the race is very similar, the only differences are that the host was taken straight to the screen from the main menu, and that the host can control when the game starts.
 
-# <s>Sean</s> talk about the database here 
-
+## DataBase
+Stores new user information such as username and password, and checks if users signing in have the right password and username. Passwords are hashed before being added.
 ## Reflections 
 This project was a lot of fun to make, although many elements were quite tough to implement, like Eureka Client Discovery since it is not supported in new versions of Spring Cloud and the networking, as it required two devices to debug and needed port forwarding to host or run the Eureka Server. If I had to do it again, I would change or include many elements - such as adding a prompt for the user to host if they are in the waiting room and no one is hosting and a drop-down to choose what the topic of the prompt text is. In general, Java Faker is not great for the specific purpose of generating text for a race, and I would recommend people who are trying to do something similar to use something else, like get prompt text from [Project Gutenberg](https://www.gutenberg.org/), or another source. I would also have used something other than Eureka for client discovery, like a [Redis database](https://redis.io/), which would work much better and in general, be much more eloquent. I would have also liked to have had an animation for race progress as that would be a great indicator, and would add a lot more tension to the game. It would have also been better to use something other than raw TCP sockets for communication, such as [Rsockets](https://rsocket.io/). All in all, I am very happy with this project, especially because we were relatively new to Java Spring, concurrency, JavaFX, and Networking, and this project is heavily dependent on those topics, using them quite effectively. It was a great learning experience and we look forward to making similar projects like this in the future.
 
