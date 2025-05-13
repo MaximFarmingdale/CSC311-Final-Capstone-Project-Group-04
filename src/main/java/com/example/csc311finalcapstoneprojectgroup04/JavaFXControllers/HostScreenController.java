@@ -100,9 +100,14 @@ public class HostScreenController {
                     raceUpdate.incrementWordIndex();
                     raceUpdate.setProgress(1);
                     raceUpdate.setWinner(true);
+                    for (int i = 0; i < raceUpdates.size(); i++) {
+                        if (raceUpdates.get(i).getUsername().equals(raceUpdate.getUsername())) {
+                            raceUpdates.set(i, raceUpdate);
+                            break;
+                        }
+                    }
                     host.sendMessage(raceUpdate);
                     System.out.println("done");
-                    endOfRace(raceUpdate);
                 }
                 raceField.clear();
             }

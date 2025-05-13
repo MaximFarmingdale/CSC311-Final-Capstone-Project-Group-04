@@ -1,7 +1,6 @@
 package com.example.csc311finalcapstoneprojectgroup04.TCPNetworking;
 
 import com.example.csc311finalcapstoneprojectgroup04.Eureka.ClientEureka;
-import com.example.csc311finalcapstoneprojectgroup04.JavaFXControllers.HostScreenController;
 import com.example.csc311finalcapstoneprojectgroup04.Lobby.Lobby;
 import com.example.csc311finalcapstoneprojectgroup04.NetworkMessagesandUpdate.Message;
 import com.example.csc311finalcapstoneprojectgroup04.NetworkMessagesandUpdate.RaceUpdate;
@@ -139,23 +138,16 @@ public class ClientHandler implements Runnable {
         }
     }
     public void sendMessage(RaceUpdate raceUpdate) {
-        int homeUpdate = 0;
-        for(int i = 0; i < raceUpdates.size(); i++) {
-            if(raceUpdates.get(i).getUsername().equals(raceUpdate.getUsername())) {
-                homeUpdate = i;
-                break;
+        for (ClientHandler client : clients) {
+            try {
+                if(!client.clientUserName.equals(lobby.getLobbyHostName())) {
+                    client.objectOutputStream.writeObject(raceUpdate);
+                    client.objectOutputStream.flush();
+                }
+            } catch (IOException e) {
+                removeClient();
             }
         }
-        //https://stackoverflow.com/questions/34865383/variable-used-in-lambda-expression-should-be-final-or-effectively-final
-        //Variable used in lambda expression should be final or effectively final
-        int finalHomeUpdate = homeUpdate;
-        Platform.runLater(()-> {
-            if (finalHomeUpdate > -1 && finalHomeUpdate < raceUpdates.size()) {
-                raceUpdates.set(finalHomeUpdate, raceUpdate);
-            } else {
-                raceUpdates.add(raceUpdate);
-            }
-        });
     }
     public void sendMessage(Lobby lobby) {
         for (ClientHandler client : clients) {
