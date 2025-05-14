@@ -7,7 +7,7 @@ import java.sql.*;
  * a name is unique.
  */
 public class DataBase {
-    final String MYSQL_SERVER_URL = "jdbc:mysql://csc311nikiforov18.mysql.database.azure.com/";
+    final String MYSQL_SERVER_URL = "jdbc:mysql://nikiforovcsc311.mysql.database.azure.com/";
     final String DB_URL =  MYSQL_SERVER_URL + "Capstone";
     final String USERNAME = "nikim";
     final String PASSWORD = "CSC311password";
