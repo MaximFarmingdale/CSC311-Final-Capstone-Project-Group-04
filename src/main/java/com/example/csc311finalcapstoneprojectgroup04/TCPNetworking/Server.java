@@ -74,7 +74,7 @@ public class Server implements Runnable {
                         Object object = OIS.readObject();
                         if(object instanceof Message) {
                             Message message = (Message) object;
-                            ClientHandler clientHandler = new ClientHandler(socket, OOS, OIS, message.getSender(), this, lobby, clientEureka, raceUpdates);
+                            ClientHandler clientHandler = new ClientHandler(socket, OOS, OIS, message.getSender(), lobby, clientEureka, raceUpdates);
                             Thread thread = new Thread(clientHandler);
                             thread.start();
                             lobby.increaseNumPlayers();

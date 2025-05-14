@@ -24,7 +24,6 @@ public class ClientHandler implements Runnable {
     public ObjectOutputStream objectOutputStream;
     private ObjectInputStream objectInputStream;
     public String clientUserName;
-    private Server server;
     private Lobby lobby;
     private ClientEureka clientEureka;
 
@@ -36,13 +35,12 @@ public class ClientHandler implements Runnable {
      * @param clientUserName The client username which the server gets from the join message.
      *
      */
-    public ClientHandler(Socket socket, ObjectOutputStream objectOutputStream, ObjectInputStream objectInputStream, String clientUserName, Server server, Lobby lobby, ClientEureka clientEureka, ObservableList<RaceUpdate> raceUpdates) {
+    public ClientHandler(Socket socket, ObjectOutputStream objectOutputStream, ObjectInputStream objectInputStream, String clientUserName, Lobby lobby, ClientEureka clientEureka, ObservableList<RaceUpdate> raceUpdates) {
         try {
             this.socket = socket;
             this.objectOutputStream = objectOutputStream;
             this.objectInputStream = objectInputStream;
             this.clientUserName = clientUserName;
-            this.server = server;
             this.lobby = lobby;
             clients.add(this);
             this.clientEureka = clientEureka;
@@ -102,7 +100,7 @@ public class ClientHandler implements Runnable {
                 }
             }
             catch (IOException e) {
-                removeClient();
+                closeClient();
             }
 
         }
@@ -114,7 +112,7 @@ public class ClientHandler implements Runnable {
                 client.objectOutputStream.flush();
             }
             catch (IOException e) {
-                removeClient();
+                closeClient();
             }
 
         }
@@ -133,7 +131,7 @@ public class ClientHandler implements Runnable {
                 }
             }
             catch (IOException e) {
-                removeClient();
+                closeClient();
             }
         }
     }
@@ -145,19 +143,19 @@ public class ClientHandler implements Runnable {
                     client.objectOutputStream.flush();
                 }
             } catch (IOException e) {
-                removeClient();
+                closeClient();
             }
         }
     }
     public void sendMessage(Lobby lobby) {
         for (ClientHandler client : clients) {
             try {
-                if(!client.clientUserName.equals(clientUserName)) {
+                if(!client.clientUserName.equals(lobby.getLobbyHostName())) {
                     client.objectOutputStream.writeObject(lobby);
                     client.objectOutputStream.flush();
                 }
             } catch (IOException e) {
-                removeClient();
+                closeClient();
             }
         }
     }

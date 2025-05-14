@@ -106,7 +106,10 @@ public class HostScreenController {
                             break;
                         }
                     }
-                    host.sendMessage(raceUpdate);
+                    RaceUpdate winnerUpdate = new RaceUpdate(raceUpdate.getUsername());
+                    winnerUpdate.setProgress(1);
+                    winnerUpdate.setWinner(true);
+                    host.sendMessage(winnerUpdate);
                     System.out.println("done");
                 }
                 raceField.clear();

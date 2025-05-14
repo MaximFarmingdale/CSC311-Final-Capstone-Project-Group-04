@@ -195,7 +195,7 @@ public class ClientScreenController {
                 endRace();
             }
 
-            if(!oldValue.getActiveRace() && newValue.getActiveRace()) {
+            if(!Objects.equals(oldValue.getText(), oldValue.getText())) {
                 startRace();
             }
         });
