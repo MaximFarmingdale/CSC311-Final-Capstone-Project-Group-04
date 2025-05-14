@@ -28,7 +28,7 @@ public class ClientHandler implements Runnable {
     private Lobby lobby;
     private ClientEureka clientEureka;
 
-    private ObservableList<RaceUpdate> raceUpdates = FXCollections.observableArrayList();
+    private ObservableList<RaceUpdate> raceUpdates;
     /**
      * Allows you to construct a new ClientHandler for managing multiple connections to a server.
      * @param socket The socket that the server accepts. The constructor uses the socket to make an
@@ -48,6 +48,7 @@ public class ClientHandler implements Runnable {
             this.clientEureka = clientEureka;
             this.raceUpdates = raceUpdates;
             sendMessage(clientUserName + " has entered the game");
+            this.raceUpdates = raceUpdates;
         } catch (Exception e) {
             removeClient();
         }

@@ -39,8 +39,7 @@ public class Server implements Runnable {
     private String username;
     private Lobby lobby;
     private ClientEureka clientEureka;
-    private ObservableList<RaceUpdate> raceUpdates = FXCollections.observableArrayList(); {
-    }
+    private ObservableList<RaceUpdate> raceUpdates;
     /**
      * Allows you to construct a Server object using the following parameters.
      * @param serverSocket uses the serversocket to make a new socket that connects to it and creates an objectInputStream and objectOutputStream from it
@@ -55,6 +54,7 @@ public class Server implements Runnable {
         this.lobby = lobby;
         this.clientEureka = clientEureka;
         clientEureka.registerLobby(username, lobby.getLobbyIP());
+        this.raceUpdates = raceUpdates;
     }
 
     /**
