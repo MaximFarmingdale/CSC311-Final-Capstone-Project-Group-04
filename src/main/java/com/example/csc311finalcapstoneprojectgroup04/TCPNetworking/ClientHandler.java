@@ -48,7 +48,6 @@ public class ClientHandler implements Runnable {
             this.clientEureka = clientEureka;
             this.raceUpdates = raceUpdates;
             sendMessage(clientUserName + " has entered the game");
-            this.raceUpdates = raceUpdates;
         } catch (Exception e) {
             removeClient();
         }
@@ -141,7 +140,7 @@ public class ClientHandler implements Runnable {
     public void sendMessage(RaceUpdate raceUpdate) {
         for (ClientHandler client : clients) {
             try {
-                if(!client.clientUserName.equals(lobby.getLobbyHostName())) {
+                if(!client.clientUserName.equals(clientUserName)) {
                     client.objectOutputStream.writeObject(raceUpdate);
                     client.objectOutputStream.flush();
                 }
@@ -153,7 +152,7 @@ public class ClientHandler implements Runnable {
     public void sendMessage(Lobby lobby) {
         for (ClientHandler client : clients) {
             try {
-                if(!client.clientUserName.equals(lobby.getLobbyHostName())) {
+                if(!client.clientUserName.equals(clientUserName)) {
                     client.objectOutputStream.writeObject(lobby);
                     client.objectOutputStream.flush();
                 }
