@@ -13,11 +13,11 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.csc311finalcapstoneprojectgroup04.JavaFXControllers.SoloModeController">
+<AnchorPane prefHeight="720.0" prefWidth="1280.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.csc311finalcapstoneprojectgroup04.JavaFXControllers.SoloModeController">
    <children>
       <BorderPane prefHeight="720.0" prefWidth="1280.0">
          <top>
-            <VBox alignment="CENTER" prefHeight="200.0" prefWidth="1280.0" spacing="30.0" style="-fx-background-color: #337ef5;" BorderPane.alignment="CENTER">
+            <VBox alignment="CENTER" prefHeight="200.0" prefWidth="1280.0" spacing="30.0" styleClass="backgroundColor" BorderPane.alignment="CENTER">
                <children>
                   <Text fill="WHITE" stroke="BLACK" strokeType="OUTSIDE" text="Practice Mode">
                      <font>
@@ -36,7 +36,7 @@
             </VBox>
          </top>
          <bottom>
-            <VBox alignment="CENTER" prefHeight="300.0" prefWidth="1280.0" spacing="30.0" style="-fx-background-color: #5a8b5d;" BorderPane.alignment="CENTER">
+            <VBox alignment="CENTER" prefHeight="300.0" prefWidth="1280.0" spacing="30.0" styleClass="grass" BorderPane.alignment="CENTER">
                <children>
                   <Text fx:id="enterWordLabel" fill="WHITE" stroke="BLACK" strokeType="OUTSIDE" text="Enter Word">
                      <font>
