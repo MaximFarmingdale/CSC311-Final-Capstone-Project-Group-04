@@ -1,0 +1,6 @@
+.backgroundColor{
+    -fx-background-color: linear-gradient(to top, #337ef5, #5394f6, #cfeafc);
+}
+.grass{
+    -fx-background-color: linear-gradient(to top,  #008004, #03A809,  #4CAF50);
+}
