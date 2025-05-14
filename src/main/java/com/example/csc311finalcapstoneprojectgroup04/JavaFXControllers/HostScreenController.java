@@ -92,7 +92,11 @@ public class HostScreenController {
                         .trim()
                         .equals(raceWords[raceWordindex])) {//if it's the last word
                     lobby.setActiveRace(false);
-                    host.sendMessage(lobby);
+                    Lobby temp = new Lobby(lobby.getLobbyIP(), lobby.getLobbyHostName());
+                    temp.setCurrentPlayers(lobby.getCurrentPlayers());
+                    temp.setText(lobby.getText());
+                    temp.setActiveRace(false);
+                    host.sendMessage(temp);
                     typedText.setText(raceText);
                     untypedText.setText("");
                     //since raceupdate automatically tells if someone won and calls the
