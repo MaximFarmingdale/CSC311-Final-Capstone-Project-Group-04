@@ -186,15 +186,17 @@ public class ClientScreenController {
         lobbyRead.addListener((observable, oldValue, newValue) -> {
             //only checks for changes if the active race value changes
             if (oldValue == null) {
-                startRace();
-                System.out.println("new game");
+                if(newValue.getActiveRace()) {
+                    startRace();
+                    System.out.println("new game");
+                }
             }
             else if(oldValue.getActiveRace() && !newValue.getActiveRace()) {
                 endRace();
                 System.out.println("end game");
             }
 
-            else if(!Objects.equals(oldValue.getText(), oldValue.getText())) {
+            else if(!oldValue.getActiveRace() && newValue.getActiveRace()) {
                 startRace();
                 System.out.println("new text");
 

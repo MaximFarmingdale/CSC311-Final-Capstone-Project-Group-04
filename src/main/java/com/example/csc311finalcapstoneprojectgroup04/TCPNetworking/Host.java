@@ -41,10 +41,9 @@ public class Host extends Client{
                 Lobby temp = new Lobby(lobby.getLobbyIP(), lobby.getLobbyHostName());
                 temp.setCurrentPlayers(lobby.getCurrentPlayers());
                 temp.setText(lobby.getText());
+                temp.setActiveRace(true);
                 sendMessage(temp);
                 lobby.setActiveRace(true);
-                sendMessage(temp);
-
 
 
             } catch (InterruptedException e) {
