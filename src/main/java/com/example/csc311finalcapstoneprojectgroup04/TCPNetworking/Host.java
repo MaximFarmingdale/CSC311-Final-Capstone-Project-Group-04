@@ -31,10 +31,6 @@ public class Host extends Client{
     public void startRace() {
         new Thread(() -> {
             try {
-                Lobby temp = new Lobby(lobby.getLobbyIP(), lobby.getLobbyHostName());
-                temp.setCurrentPlayers(lobby.getCurrentPlayers());
-                temp.setText(lobby.getText());
-                sendMessage(temp);
                 sendMessage("Race begins in 3");
                 Thread.sleep(1000);
                 sendMessage("Race begins in 2");
@@ -42,8 +38,12 @@ public class Host extends Client{
                 sendMessage("Race begins in 1");
                 Thread.sleep(1000);
                 sendMessage("Start!");
+                Lobby temp = new Lobby(lobby.getLobbyIP(), lobby.getLobbyHostName());
+                temp.setCurrentPlayers(lobby.getCurrentPlayers());
+                temp.setText(lobby.getText());
+                sendMessage(temp);
                 lobby.setActiveRace(true);
-                sendMessage(lobby);
+                sendMessage(temp);
 
 
 
