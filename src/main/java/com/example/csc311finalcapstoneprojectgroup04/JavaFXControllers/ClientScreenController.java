@@ -101,7 +101,10 @@ public class ClientScreenController {
                     raceUpdate.incrementWordIndex();
                     raceUpdate.setProgress(1);
                     raceUpdate.setWinner(true);
-                    client.sendMessage(raceUpdate); //send race update to everyone else
+                    RaceUpdate winnerUpdate = new RaceUpdate(raceUpdate.getUsername());
+                    winnerUpdate.setProgress(1);
+                    winnerUpdate.setWinner(true);
+                    client.sendMessage(winnerUpdate);
                     raceUpdate.setProgress(0);
                     raceUpdate.setWinner(false);
                 }
