@@ -211,6 +211,7 @@ public class ClientScreenController {
         raceWords = raceText.split(" ");
         raceWordindex = 0;
         raceLetterIndex = 0;
+        System.out.println(raceText);
     }
     public void endRace() {
         System.out.println("end of race");
