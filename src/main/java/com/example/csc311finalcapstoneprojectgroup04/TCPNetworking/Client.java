@@ -173,8 +173,10 @@ public class Client implements Runnable{
      * @param currentLobby
      */
     private void processMessage(Lobby currentLobby) {
-        lobby = currentLobby;
-        lobbyRead.set(lobby);
+        Platform.runLater(() -> {
+            lobby = currentLobby;
+            lobbyRead.set(lobby);
+        });
     }
 
     /**
