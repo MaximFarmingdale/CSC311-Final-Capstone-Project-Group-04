@@ -4,3 +4,7 @@
 .grass{
     -fx-background-color: linear-gradient(to top,  #008004, #03A809,  #4CAF50);
 }
+
+.misc{
+    -fx-background-color: linear-gradient(from 100.0% 100.0% to 100.0% 6.4394%, #ffffff 0.0%, #82cdf5 100.0%)
+}
