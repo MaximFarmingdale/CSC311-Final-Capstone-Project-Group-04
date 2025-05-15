@@ -34,6 +34,7 @@ The splash screen serves as a log in screen. The user is prompted to log in via 
 
 ## Main Menu
 After signing in, the user is prompted to play or quit, or configure settings, and after the user clicks the play button, they are prompted to either host a lobby, join a lobby, or enter the solo mode.
+![Main Menu](https://github.com/MaximFarmingdale/CSC311-Final-Capstone-Project-Group-04/blob/master/src/main/resources/mainmenu.png "Main Menu")
 
 ## Solo (Practice) Mode
 Solo mode (currently only mode working) is a practice room. It simulates how you would be moving during a real game in the multiplayer modes. There is a list of predetermined words, shuffled, so you can practice honing your typing speed and skills. The simulation will end after you win by typing 10 correct words, or by running through all 20 words on the list and getting at most only 9 words correct.
