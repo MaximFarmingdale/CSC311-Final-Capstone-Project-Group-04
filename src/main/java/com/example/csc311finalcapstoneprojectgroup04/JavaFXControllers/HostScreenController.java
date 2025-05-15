@@ -10,12 +10,7 @@ import com.example.csc311finalcapstoneprojectgroup04.User;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
@@ -226,7 +221,8 @@ public class HostScreenController {
      */
     @FXML
     void startRace() {
-        lobby.setCurrentSource(textSourceBox.getValue());
+        if(textSourceBox.getValue() != null)
+            lobby.setCurrentSource(textSourceBox.getValue());
         raceUpdate = new RaceUpdate(user.getUsername());
         lobby.generateNewText();
         raceText = lobby.getText();
