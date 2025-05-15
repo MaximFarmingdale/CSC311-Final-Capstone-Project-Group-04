@@ -7,6 +7,5 @@ import java.io.Serializable;
         UserPing, //standard user ping
         //server responses
         GameInProgress,
-        GameFull,
-        LobbyFull,
+        LobbyFull
     }

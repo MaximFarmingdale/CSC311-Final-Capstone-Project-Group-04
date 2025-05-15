@@ -121,7 +121,7 @@ public class Server implements Runnable {
     private void pingResponse(Socket socket, ObjectOutputStream OOS) throws IOException {
         try {
             if (lobby.fullRace())
-                OOS.writeObject(Ping.GameFull);
+                OOS.writeObject(Ping.LobbyFull);
             else if(lobby.getActiveRace())
                 OOS.writeObject(Ping.GameInProgress);
             else

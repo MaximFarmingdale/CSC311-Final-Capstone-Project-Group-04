@@ -99,7 +99,7 @@
         </AnchorPane>
     </center>
    <bottom>
-      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+      <HBox alignment="CENTER" maxWidth="270.0" prefHeight="100.0" prefWidth="479.0" BorderPane.alignment="CENTER">
          <children>
                 <Button fx:id="startRaceButton" mnemonicParsing="false" onAction="#startRace" prefHeight="90.0" prefWidth="119.0" styleClass="misc" stylesheets="@style.css" text="Start Race" textAlignment="CENTER">
                     <font>
