@@ -45,7 +45,7 @@ If the user clicks join, they are sent to a waiting room where Eureka Client fet
 Once the user clicks on a lobby, they can now race against other users once the host starts the game. They can chat to their opponents using the chat on the bottom right side of the application, and they can also see a countdown to the game starting as well as join messages. Before the game starts, they can only type in the chat; the textfield that is used to race will not let premature typing before the game starts. After the game starts, the prompt text is updated to be Java Faker-generated text, and a countdown starts in chat. Then the user can start typing in the textfield that clears itself every time a word is typed after a space, except for the final word, which is cleared on the last letter. The race prompt text is updated to reflect current progress through the changing of text color on the completion of a word. After someone wins the race, a message announcing the win is sent in the chat.
 
 ## HostRaceView
-The host view to the race is very similar, the only differences are that the host was taken straight to the screen from the main menu, and that the host can control when the game starts.
+The host view to the race is very similar, the only differences are that the host was taken straight to the screen from the main menu, and that the host can control when the game starts. You can also choose a source from a dropdown from which the racetext is taken from.
 
 ## DataBase
 Stores new user information such as username and password, and checks if users signing in have the right password and username. Passwords are hashed before being added.
