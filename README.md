@@ -2,14 +2,14 @@
 This is the final capstone project for group 4 of CSC311 (Advanced Programming) at Farmingdale University, which is a pure Java full-stack implementation of a typing race game. It is a desktop implementation of play.typeracer.com, which has been used by millions of users and lets users race other users online by allowing users to host or join a lobby, after which they can race to see who can type a string of text faster. Type Racer allows you to join a random lobby or make a custom one, which you can send the link to other people for them to join. Our implementation is different - instead, there is a screen that shows you lobbies that are currently hosted and their current status, since the traffic will be much lower than our inspiration. Our implementation also uses a locally hosted Eureka client discovery server, which means that it will only work when that server is running.
 
 ## Connections to CSC311 
-There are 8 units in CSC311, and this project uses concepts from the first 7, including 
-1: Version Control
-2: GUI and JavaFX
-3: Collections, Generics, and Documentations
-4: Functional Programming, Streams and Databases
-5: RegEx
-6: Concurrency 
-7: Network Programming
+There are 8 units in CSC311, and this project uses concepts from the first 7, including <p>
+1: Version Control <p>
+2: GUI and JavaFX <p>
+3: Collections, Generics, and Documentations <p>
+4: Functional Programming, Streams and Databases <p>
+5: RegEx <p>
+6: Concurrency  <p>
+7: Network Programming <p>
 There is a particular skew toward Networking and Concurrency as the main showcase of this project is client discovery, as well as making use of Concurrency to host a lobby with multiple Users. JavaFX is also another important element as the entire UI utilizes it.
 
 ## Technologies
