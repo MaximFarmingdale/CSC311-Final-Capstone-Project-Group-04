@@ -196,10 +196,9 @@ public class ClientScreenController {
                 System.out.println("end game");
             }
 
-            else if(!oldValue.getActiveRace() && newValue.getActiveRace()) {
+            else if(oldValue.getText() != newValue.getText()) {
                 startRace();
                 System.out.println("new text");
-
             }
         });
     }
