@@ -31,6 +31,7 @@ Azure Database for MySQL <p>
 # Overlook
 ## Splash Screen
 The splash screen serves as a log in screen. The user is prompted to log in via their username and password. If it is their first time entering the app, you will need to sign up, which can be done by clicking the sign up button. This prompts you to create your account with a unique username and password. After this, it will store the user info, sign you in, and direct you to the Main Menu screen.
+![Login Menu](https://github.com/MaximFarmingdale/CSC311-Final-Capstone-Project-Group-04/blob/master/src/main/resources/splash.png "Login Menu")
 
 ## Main Menu
 After signing in, the user is prompted to play or quit, or configure settings, and after the user clicks the play button, they are prompted to either host a lobby, join a lobby, or enter the solo mode.
@@ -38,6 +39,7 @@ After signing in, the user is prompted to play or quit, or configure settings, a
 
 ## Solo (Practice) Mode
 Solo mode (currently only mode working) is a practice room. It simulates how you would be moving during a real game in the multiplayer modes. There is a list of predetermined words, shuffled, so you can practice honing your typing speed and skills. The simulation will end after you win by typing 10 correct words, or by running through all 20 words on the list and getting at most only 9 words correct.
+![Practice Menu](https://github.com/MaximFarmingdale/CSC311-Final-Capstone-Project-Group-04/blob/master/src/main/resources/solomode.png "Solo")
 
 ## Waiting Room
 If the user clicks join, they are sent to a waiting room where Eureka Client fetches a list of registered applications, which in this case are people hosting lobbies, and it fetches lobby information from metadata. It uses this lobby data to populate GUI elements. This list is refreshed every second and updates the current lobby information as it changes. Once a user clicks on a lobby, they are sent to the lobby to race.
@@ -47,6 +49,7 @@ Once the user clicks on a lobby, they can now race against other users once the 
 
 ## HostRaceView
 The host view to the race is very similar, the only differences are that the host was taken straight to the screen from the main menu, and that the host can control when the game starts. You can also choose a source from a dropdown from which the racetext is taken from.
+![Host Menu](https://github.com/MaximFarmingdale/CSC311-Final-Capstone-Project-Group-04/blob/master/src/main/resources/hostscreen.png "Host Menu")
 
 ## DataBase
 Stores new user information such as username and password, and checks if users signing in have the right password and username. Passwords are hashed before being added.
