@@ -55,4 +55,5 @@ This project was a lot of fun to make, although many elements were quite tough t
 [Mid Point Slides](https://docs.google.com/presentation/d/1LtVscQ258Jy4mNOMbNNi2wt_KSN-9shdBOoK-nbkl9o/edit?usp=sharing) <p>
 [Final Slides](https://docs.google.com/presentation/d/1-MvwyREiJPGI3uQ2MFU7JcivcuNpyygnb_nAN-OpJ6o/edit?usp=sharing) <p>
 [Solo Demo](https://www.youtube.com/watch?v=57nfFke-G5E) <p>
-[Multiplayer Demo](https://www.youtube.com/watch?v=Bbk1AV47-Z4) <p>
+[Early Multiplayer Demo](https://www.youtube.com/watch?v=Bbk1AV47-Z4) <p>
+[Later Multiplayer Demo](https://youtu.be/Hc6HTVyDgss)
