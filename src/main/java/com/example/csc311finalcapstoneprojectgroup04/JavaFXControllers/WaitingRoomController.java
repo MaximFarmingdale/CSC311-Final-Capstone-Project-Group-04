@@ -15,6 +15,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
@@ -86,10 +87,10 @@ public class WaitingRoomController implements Initializable{
      * @param instance
      */
     private HBox addHbox(InstanceInfo instance) {
-        Label label1 = new Label(instance.getMetadata().get("host-name"));
-        Label label2 = new Label(instance.getMetadata().get("current-players" ) + "/"+maxPlayers);
-        Label label3 = new Label(instance.getMetadata().get("active-game"));
-        Label label4 = new Label(instance.getMetadata().get("public-ip"));
+        Label label1 = new Label("host name: " + instance.getMetadata().get("host-name"));
+        Label label2 = new Label("current players: " + instance.getMetadata().get("current-players" ) + "/"+maxPlayers);
+        Label label3 = new Label("active game?: " + instance.getMetadata().get("active-game"));
+        Label label4 = new Label("lobby ip: " + instance.getMetadata().get("public-ip"));
         VBox vbox = new VBox();
         vbox.getChildren().addAll(label1, label2, label3, label4);
         HBox hbox = new HBox();
@@ -112,7 +113,10 @@ public class WaitingRoomController implements Initializable{
                     if(receivedObject instanceof Ping) {
                         Ping ping = (Ping) receivedObject;
                         socket.close();
-                        //todo- add ping response
+                        if(ping == Ping.GameInProgress)
+                            new Alert(Alert.AlertType.ERROR, "This Lobby Is Currently Mid-game!");
+                        if(ping == Ping.LobbyFull)
+                            new Alert(Alert.AlertType.ERROR, "This Lobby Is Full!");
                     }
                     if(receivedObject instanceof Lobby) {
                         Platform.runLater(() -> {
