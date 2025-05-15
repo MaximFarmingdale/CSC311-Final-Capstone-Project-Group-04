@@ -12,13 +12,19 @@ import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+
+import javafx.stage.Stage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
@@ -52,6 +58,8 @@ public class HostScreenController {
     Text typedText, untypedText;
     @FXML
     Button startRaceButton;
+    @FXML
+    private ChoiceBox<Lobby.TextSource> textSourceBox;
     private Server server;
     private String raceText = "";
     private String[] raceWords;
@@ -65,6 +73,7 @@ public class HostScreenController {
     private ObservableList<RaceUpdate> raceUpdates = FXCollections.observableArrayList();
     private Host host;
     private Socket socket;
+
     /**
      * Sends a message to all clients and adds Message to messageVbox
      * @param event
@@ -147,6 +156,7 @@ public class HostScreenController {
      * @param currentUser
      */
     public void enterHostScreen(User currentUser) {
+        textSourceBox.getItems().setAll(Lobby.TextSource.values());
         this.user = currentUser;
         this.message = new Message(currentUser.getUsername(),"");
         try {
@@ -216,6 +226,7 @@ public class HostScreenController {
      */
     @FXML
     void startRace() {
+        lobby.setCurrentSource(textSourceBox.getValue());
         raceUpdate = new RaceUpdate(user.getUsername());
         lobby.generateNewText();
         raceText = lobby.getText();
@@ -227,4 +238,5 @@ public class HostScreenController {
         startRaceButton.setDisable(true);
         host.startRace();
     }
+
 }

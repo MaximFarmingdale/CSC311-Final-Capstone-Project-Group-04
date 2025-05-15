@@ -1,18 +1,15 @@
 package com.example.csc311finalcapstoneprojectgroup04.JavaFXControllers;
 
 import com.example.csc311finalcapstoneprojectgroup04.DataBase;
-import com.example.csc311finalcapstoneprojectgroup04.TypeApplication;
 import com.example.csc311finalcapstoneprojectgroup04.User;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -21,10 +18,6 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.ResourceBundle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -94,7 +87,7 @@ public class SplashScreenController {
         if(newUser) {
             if (dataBase.checkDistinct(username)) {
                 dataBase.addUser(username, hashCode);
-                changeController(currentUser);
+                goToMainMenu(currentUser);
             } else {
                 problemText.setText("Username is already taken or invalid!");
                 errorColor(usernameField);
@@ -104,7 +97,7 @@ public class SplashScreenController {
         else {
             if (!dataBase.checkDistinct(username)) {
                 if(dataBase.validLogin(username, hashCode)) {
-                    changeController(currentUser);
+                    goToMainMenu(currentUser);
                 }
                 else {
                     problemText.setText("Password is incorrect!");
@@ -167,7 +160,7 @@ public class SplashScreenController {
      * Changes the scene to MainMenu
      * @param currentUser
      */
-    public void changeController(User currentUser) {
+    public void goToMainMenu(User currentUser) {
         try {
             Stage stage = (Stage) signInButton.getScene().getWindow();
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/JavaFX_FXML/MainMenuScreen.fxml"));
@@ -189,6 +182,6 @@ public class SplashScreenController {
 
     @FXML
     void debuglogin(MouseEvent event) throws IOException {
-        changeController(new User("maxim", "password"));
+        goToMainMenu(new User("maxim", "password"));
     }
 }
