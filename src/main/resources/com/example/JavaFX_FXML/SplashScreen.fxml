@@ -2,6 +2,7 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
@@ -36,11 +37,15 @@
                <font>
                   <Font name="MS Outlook" size="16.0" />
                </font>
+               <VBox.margin>
+                  <Insets bottom="13.0" />
+               </VBox.margin>
             </Text>
-            <TextField fx:id="passwordField" alignment="CENTER" maxWidth="250.0" translateY="15.0">
+            <PasswordField fx:id="passwordField" alignment="CENTER" maxWidth="250.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="25.0" prefWidth="615.0">
                <VBox.margin>
                   <Insets />
-               </VBox.margin></TextField>
+               </VBox.margin>
+            </PasswordField>
             <Button fx:id="signInButton" mnemonicParsing="false" onAction="#login" prefHeight="25.0" prefWidth="349.0" style="-fx-background-color: #FFD700;" text="Sign in" translateY="60.0" />
             <Text fx:id="problemText" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" />
             <HBox fx:id="hbox" alignment="CENTER" prefHeight="75.0" prefWidth="1280.0" translateY="100.0">
